@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/home/johannes/test_scala_play/delphi-management/app/controllers/HomeController.java:18:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   class html[0m
+[0m[[0m[31merror[0m] [0m[0m  location: package views[0m
+[0m[[0m[31merror[0m] [0m[0m        return ok(views.html.index("Your new application is ready.").render());[0m

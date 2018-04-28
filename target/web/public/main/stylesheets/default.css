@@ -1,0 +1,62 @@
+body {
+  font-family: 'Source Serif Pro', serif;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+}
+
+header {
+  margin-top: 56px;
+}
+
+h1, h2, h3, h4, h5, h6, nav {
+  font-family: 'Source Serif Pro', serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  /* text-shadow: 1px 1px 2px #AAA; */
+}
+
+body header {
+  margin-bottom: 25px;
+  background-color: #e9ecef;
+  padding-right: 20px;
+}
+
+
+body header h1,
+body header p
+{
+  text-align: right;
+  font-size: 10pt;
+}
+
+body header img {
+  float:left;
+}
+body footer {
+  background-color: #e9ecef;
+  padding: 5px 5px 5px 5px;
+}
+
+body footer p {
+  font-size: 8pt;
+}
+
+nav {
+  background-color: #444;
+}
+
+a {
+  color: #FF0000;
+}
+
+a:hover {
+  color: #DD0000;
+}
+main  {
+  margin-bottom: 50px;
+}
+
+nav {
+    background-color: #e9ecef;
+}
