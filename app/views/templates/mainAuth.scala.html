@@ -1,0 +1,9 @@
+@(title: String, tab: String = "")(content: Html)(implicit messages:Messages)
+
+@navbarContent = {
+  <ul class="nav navbar-nav">
+    <li><a href="@routes.HomeController.index">@Messages("navbar.index")</a></li>
+  </ul>
+}
+
+@main(title, navbarContent)(content)

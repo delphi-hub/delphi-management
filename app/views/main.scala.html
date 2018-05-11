@@ -1,12 +1,6 @@
-@*
-* This template is called from the `index` template. This template
-* handles the rendering of the page header and body tags. It takes
-* two arguments, a `String` for the title of the page and an `Html`
-* object to insert into the body of the page.
-*@
-@(title: String)(content: Html)
+@import com.mohiva.play.silhouette.api.LoginInfo
+@(title:String, loggedUser: Option[User], loginInfo:Option[LoginInfo])(content:Html)(implicit messages:Messages)
 
-<!DOCTYPE html>
 <html lang="en-US">
 <head>
     <meta charset="utf-8">
@@ -22,6 +16,13 @@
     <a class="navbar-brand py-0" href="#">
         <img src="assets/images/logo.svg" height=30  class="d-inline-block align-top" alt="">
     </a>
+    @loggedUser.map { user =>
+    @loginInfo.map { loginInfo =>
+
+    <li class="navbar-text">@Messages("navbar.username", user.fullName(loginInfo).getOrElse(Messages("navbar.none")))</li>
+    }
+    <li><a href="@routes.Auth.signOut">@Messages("navbar.signout")</a></li>
+    }
     <!--<a href="/" class="nav-link active py-0">Home</a>
     <a href="team.html" class="nav-link py-0">Team</a>
     <!--| <a href="documentation.html">Documentation</a>

@@ -1,0 +1,8 @@
+@(msg:String, key:String)
+@alertType = @{"alert-" + (if (key == "error") "danger" else key)}
+<div class="alert @alertType alert-dismissable" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  @msg
+</div>

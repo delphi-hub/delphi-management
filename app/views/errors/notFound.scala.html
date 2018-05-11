@@ -1,0 +1,6 @@
+@(request:RequestHeader)(implicit messages:Messages)
+
+@views.html.templates.main(Messages("error.notFound")) {
+  <h4>@Messages("error.notFound")</h4>
+  <div class="alert alert-danger" role="alert">@Messages("error.notFound.details", request.path)</div>
+}

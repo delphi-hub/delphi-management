@@ -1,0 +1,20 @@
+@import com.mohiva.play.silhouette.api.LoginInfo
+
+@(title: String, tab: String = "", loggedUser: Option[User], loginInfo:Option[LoginInfo] = None)(content: Html)(implicit messages:Messages)
+
+@navbarContent = {
+  <ul class="nav navbar-nav">
+    <li class="@("active".when(tab == "index"))"><a href="@routes.HomeController.index">@Messages("navbar.index")</a></li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    @loggedUser.map { user =>
+      @loginInfo.map { loginInfo =>
+
+        <li class="navbar-text">@Messages("navbar.username", user.fullName(loginInfo).getOrElse(Messages("navbar.none")))</li>
+      }
+      <li><a href="@routes.Auth.signOut">@Messages("navbar.signout")</a></li>
+    }
+  </ul>
+}
+
+@main(title, navbarContent)(content)
