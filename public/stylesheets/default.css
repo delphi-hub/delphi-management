@@ -60,3 +60,7 @@ main  {
 nav {
     background-color: #e9ecef;
 }
+.navbar-nav > li{
+  margin-left:20px;
+  margin-right:20px;
+}
