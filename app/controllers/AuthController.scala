@@ -1,33 +1,30 @@
 package controllers
 
-import java.util.UUID
-
 import javax.inject.Inject
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import net.ceedubs.ficus.Ficus._
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
-import com.mohiva.play.silhouette.api.{Environment, LoginInfo, Silhouette}
+import com.mohiva.play.silhouette.api.{Environment, Silhouette}
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
-import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasher}
-import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
-import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
+import com.mohiva.play.silhouette.api.util.Credentials
 import com.mohiva.play.silhouette.impl.providers._
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesImpl}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits._
-import models.User
-import services.{UserService, UserTokenService}
+import services.UserService
 import org.joda.time.DateTime
 import utils.auth.DefaultEnv
 
+/**
+  * Form used to store the three input variables when logging in: E-Mail, Password, RememberMe
+  */
 object AuthForms {
 
-  // Sign in
   case class SignInData(email:String, password:String, rememberMe:Boolean)
   val signInForm = Form(mapping(
     "email" -> email,
@@ -38,42 +35,34 @@ object AuthForms {
 
 }
 
-class Auth @Inject() (
+/**
+  * Controller handling authentification related GET requests
+  *
+  * @param messagesApi Injected handle of current play MessagesApi
+  * @param env Injected handle of current silhouette Environment
+  * @param credentialsProvider Injected handle of the CredetialsProvider
+  * @param userService Injected handle of the current UserService (defined in services/UserService.scala, bound in Module.scala)
+  * @param configuration Injected handle of current application configuration
+  * @param cc Injected handle of current ControllerComponents, needed to extend superclass AbstractController
+  * @param silhouette Injected handle of current silhouette instance
+  */
+class AuthController @Inject() (
                        override val messagesApi:MessagesApi,
                        val env:Environment[DefaultEnv],
                        credentialsProvider: CredentialsProvider,
                        userService: UserService,
-                       userTokenService: UserTokenService,
                        configuration: Configuration,
                        cc: ControllerComponents,
                        silhouette: Silhouette[DefaultEnv]) extends AbstractController(cc) with I18nSupport{
 
   import AuthForms._
 
-
-  def signUp(tokenId:String) = Action.async { implicit request =>
-    val id = UUID.fromString(tokenId)
-    userTokenService.find(id).flatMap {
-      case None =>
-        Future.successful(NotFound(views.html.errors.notFound(request)))
-      case Some(token) if token.isSignUp && !token.isExpired =>
-        userService.find(token.userId).flatMap {
-          case None => Future.failed(new IdentityNotFoundException(Messages("error.noUser")))
-          case Some(user) =>
-            val loginInfo = LoginInfo(CredentialsProvider.ID, token.email)
-            for {
-              authenticator <- env.authenticatorService.create(loginInfo)
-              value <- env.authenticatorService.init(authenticator)
-              _ <- userService.confirm(loginInfo)
-              _ <- userTokenService.remove(id)
-              result <- env.authenticatorService.embed(value, Redirect(routes.HomeController.index()))
-            } yield result
-        }
-      case Some(token) =>
-        userTokenService.remove(id).map {_ => NotFound(views.html.errors.notFound(request))}
-    }
-  }
-
+  /**
+    * Called on GET /auth/signIn, will show the signIn page. If the user already is logged on, he will be redirected to
+    * the index page
+    *
+    * @return Action redirecting the user
+    */
   def signIn = silhouette.UserAwareAction.async { implicit request =>
     Future.successful(request.identity match {
       case Some(user) => Redirect(routes.HomeController.index())
@@ -81,6 +70,12 @@ class Auth @Inject() (
     })
   }
 
+  /**
+    * Called when the user hits Enter / Login-Button on the login-page. Validates login data from the Form defined above
+    * and redirects the user to the index page if supplied credentials are valid. Handles any error during login.
+    *
+    * @return Corrsponding action
+    */
   def authenticate = Action.async { implicit request =>
     signInForm.bindFromRequest.fold(
       bogusForm => Future.successful(BadRequest(views.html.auth.signIn(bogusForm))),
@@ -89,9 +84,9 @@ class Auth @Inject() (
         credentialsProvider.authenticate(credentials).flatMap { loginInfo =>
           userService.retrieve(loginInfo).flatMap {
             case None =>
-              Future.successful(Redirect(routes.Auth.signIn()).flashing("error" -> Messages("error.noUser")))
+              Future.successful(Redirect(routes.AuthController.signIn()).flashing("error" -> Messages("error.noUser")))
             case Some(user) if !user.profileFor(loginInfo).map(_.confirmed).getOrElse(false) =>
-              Future.successful(Redirect(routes.Auth.signIn()).flashing("error" -> Messages("error.unregistered", signInData.email)))
+              Future.successful(Redirect(routes.AuthController.signIn()).flashing("error" -> Messages("error.unregistered", signInData.email)))
             case Some(_) => for {
               authenticator <- env.authenticatorService.create(loginInfo).map {
                 case authenticator if signInData.rememberMe =>
@@ -108,12 +103,18 @@ class Auth @Inject() (
             } yield result
           }
         }.recover {
-          case e:ProviderException => Redirect(routes.Auth.signIn()).flashing("error" -> Messages("error.invalidCredentials"))
+          case e:ProviderException => Redirect(routes.AuthController.signIn()).flashing("error" -> Messages("error.invalidCredentials"))
         }
       }
     )
   }
 
+  /**
+    * Called when signing out. Deletes the cookie that marked the user as logged in, and redirects him to the index page, which
+    * will again redirect him to the signin page
+    *
+    * @return Action redirecting the user
+    */
   def signOut = silhouette.SecuredAction.async { implicit request =>
     env.authenticatorService.discard(request.authenticator, Redirect(routes.HomeController.index()))
   }

@@ -21,7 +21,7 @@
 
     <li class="navbar-text">@Messages("navbar.username", user.fullName(loginInfo).getOrElse(Messages("navbar.none")))</li>
     }
-    <li><a href="@routes.Auth.signOut">@Messages("navbar.signout")</a></li>
+    <li><a href="@routes.AuthController.signOut">@Messages("navbar.signout")</a></li>
     }
     <!--<a href="/" class="nav-link active py-0">Home</a>
     <a href="team.html" class="nav-link py-0">Team</a>

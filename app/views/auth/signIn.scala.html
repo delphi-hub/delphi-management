@@ -7,7 +7,7 @@
 @request.flash.get("error").map { msg =>
 @errors.alert(msg, "error")
 }
-@b4.form(routes.Auth.authenticate) {
+@b4.form(routes.AuthController.authenticate) {
 <fieldset>
     <legend>@Messages("signin.legend")</legend>
     @helper.CSRF.formField

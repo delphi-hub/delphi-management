@@ -1,7 +1,5 @@
 package module
 
-
-import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
@@ -21,20 +19,25 @@ import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
-import daos._
 import models.User
-import play.api.i18n._
 import play.api.mvc.CookieHeaderEncoding
 import services.UserService
 import utils.auth.DefaultEnv
+import daos._
 
+/**
+  * ScalaModule implementation providing all type bindings and instances for injection
+  */
 class Module extends AbstractModule with ScalaModule {
 
+  /**
+    * Bind types for injection
+    * @return
+    */
   def configure() {
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]]
     bind[IdentityService[User]].to[UserService]
     bind[UserDao].to[MockUserDao]
-    bind[UserTokenDao].to[MockUserTokenDao]
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[MockPasswordInfoDao]
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
     bind[PasswordHasher].toInstance(new BCryptPasswordHasher)
@@ -43,9 +46,15 @@ class Module extends AbstractModule with ScalaModule {
     bind[Clock].toInstance(Clock())
   }
 
+  /**
+    * Provide a HttpLayer
+    */
   @Provides
   def provideHTTPLayer(client: WSClient): HTTPLayer = new PlayHTTPLayer(client)
 
+  /**
+    *Provide an environment
+    */
   @Provides
   def provideEnvironment(
                           userService: UserService,
@@ -60,9 +69,9 @@ class Module extends AbstractModule with ScalaModule {
     )
   }
 
-
-
-
+  /**
+    * Provide an AuthenticatorService
+    */
   @Provides
   def provideAuthenticatorService(
                                    signer: Signer,
@@ -79,19 +88,26 @@ class Module extends AbstractModule with ScalaModule {
     new CookieAuthenticatorService(config, None, signer, cookieHeaderEncoding, authenticatorEncoder, fingerprintGenerator, idGenerator, clock)
   }
 
+  /**
+    * Provide a PasswordHasherRegistry
+    */
   @Provides
   def providePasswordHasherRegistry(passwordHasher: PasswordHasher): PasswordHasherRegistry = {
-    new PasswordHasherRegistry(passwordHasher)
+    PasswordHasherRegistry(passwordHasher)
   }
 
+  /**
+    * Provide an instance of JcaSigner as Signer
+    */
   @Provides
   def provideAuthenticatorCookieSigner(configuration: Configuration): Signer = {
     val config = configuration.underlying.as[JcaSignerSettings]("silhouette.authenticator.cookie.signer")
     new JcaSigner(config)
   }
 
-
-
+  /**
+    * Provide a CredetialsProvider
+    */
   @Provides
   def provideCredentialsProvider(
                                   authInfoRepository: AuthInfoRepository,
@@ -100,17 +116,20 @@ class Module extends AbstractModule with ScalaModule {
     new CredentialsProvider(authInfoRepository, passwordHasherRegistry)
   }
 
+  /**
+    * Provide a AuthInfoRepository
+    */
   @Provides
   def provideAuthInfoRepository(passwordInfoDAO: DelegableAuthInfoDAO[PasswordInfo]): AuthInfoRepository = {
     new DelegableAuthInfoRepository(passwordInfoDAO)
   }
 
+  /**
+    * Provide an instance of JcaCrypter as Crypter
+    */
   @Provides
   def provideAuthenticatorCrypter(configuration: Configuration): Crypter = {
     val config = configuration.underlying.as[JcaCrypterSettings]("silhouette.authenticator.crypter")
     new JcaCrypter(config)
   }
-
-
-
 }

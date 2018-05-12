@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import models.User
 
 /**
-  * The default env.
+  * Default silhouette environment used in this application
   */
 trait DefaultEnv extends Env {
   type I = User
