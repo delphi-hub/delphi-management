@@ -1,8 +1,10 @@
-@(message: String, style: String = "scala")
+@import com.mohiva.play.silhouette.api.LoginInfo
+@(message: String, style: String = "scala", loggedUser : Option[User], loginInfo : Option[LoginInfo])
 
 <section id="top">
     <div class="jumbotron">
-        <h1>Welcome to the Delphi-Management-Interface!</h1>
+        <h1>Welcome to the Delphi Management Interface!</h1>
+        <h3>You are logged in as @loggedUser.get.fullName(loginInfo.get).</h3>
     </div>
 </section>
 
