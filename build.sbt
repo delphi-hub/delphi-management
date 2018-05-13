@@ -17,6 +17,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 pipelineStages := Seq(digest,gzip)
 
 resolvers += Resolver.sonatypeRepo("snapshots")
+resolvers += Resolver.jcenterRepo
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
