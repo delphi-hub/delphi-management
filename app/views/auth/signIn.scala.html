@@ -21,12 +21,10 @@
         @helper.CSRF.formField
 
         @b4.email(signInForm("email"),
-        '_label -> Messages("signin.email"),
         'placeholder -> Messages("signin.email"),
         'autofocus -> true)
 
         @b4.password(signInForm("password"),
-        '_label -> Messages("signin.password"),
         'placeholder -> Messages("signin.password"))
 
         @b4.checkbox(signInForm("rememberMe"),
