@@ -6,46 +6,66 @@
     </div>
 </section>
 
-    <div class="floatStyle">
+<div class="floatStyle">
 
     <h2>System Information</h2>
 
     <div class="infoTable">
         <table class="tableAlign">
-          <!--
-          <tr class="">
-            <th>Component</th>
-            <th>Value</th>
-          </tr>
-          -->
           <tr>
-            <td>System Name :</td>
-            <td class="valueBox">-</td>            
+            <td>Host Name :</td>
+            <td class="valueBox">
+                <script type="text/javascript">
+                   document.write( getComputerName() );
+                </script>
+            </td>            
+          </tr>
+          <tr>
+            <td>Browser name :</td>
+            <td class="valueBox">
+                <script type="text/javascript">
+                   document.write( getBrowserName() );
+                </script>
+            </td>            
+          </tr>
+          <tr>
+            <td>Platform :</td>
+            <td class="valueBox">
+                <script type="text/javascript">
+                   document.write( getPlatform() );
+                </script>
+            </td>            
           </tr>
           <tr>
             <td>JVM Version :</td>
-            <td class="valueBox">1.8.0_131</td>            
+            <td class="valueBox">
+                <script type="text/javascript">
+                   document.write( getVersion() );
+                </script>
+            </td>            
           </tr>
-          <tr>
+          <!-- <tr>
             <td>Scala Version :</td>
-            <td class="valueBox">2.11.8</td>
+            <td class="valueBox">2.0</td>
           </tr>
           <tr>
             <td>Build Version :</td>
-            <td class="valueBox">-</td>
+            <td class="valueBox">1.1.0</td>
           </tr>
           <tr>
             <td>Release Version :</td>
-            <td class="valueBox">-</td>
+            <td class="valueBox">2.0</td>
           </tr>
           <tr>
             <td>CPU Load :</td>
-            <td class="valueBox">-</td>
-          </tr>
+            <td class="valueBox">11.2</td>
+          </tr> -->
         </table>
     </div>
 
-    </div>
+</div>
+
+    
 
 <div id="content" class="container">        
 
@@ -81,4 +101,3 @@
 
 
 </div>
-
