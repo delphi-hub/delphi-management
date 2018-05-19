@@ -21,8 +21,7 @@ case class Profile(
                     firstName: Option[String],
                     lastName: Option[String],
                     fullName: Option[String],
-                    passwordInfo:Option[PasswordInfo]) {
-}
+                    passwordInfo:Option[PasswordInfo])
 
 /**
   * Implementation of a silhouette Identity used in this application

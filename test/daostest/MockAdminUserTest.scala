@@ -8,12 +8,12 @@ import play.api.Configuration
 class MockAdminUserTest  extends FlatSpec{
 
 
-  val configuration = Configuration.from(Map(
+  val configuration : Configuration = Configuration.from(Map(
     "mock.admin.email" -> "admin@delphi.upb.de",
     "mock.admin.password" -> "admin@delphi"))
 
-  var hasher = new BCryptPasswordHasher()
-  var mockAdminUser = new MockAdminUser(configuration)
+  val hasher = new BCryptPasswordHasher()
+  val mockAdminUser = new MockAdminUser(configuration)
 
   "A MockAdminUser" should "have exactly one profile " in
   {

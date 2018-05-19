@@ -3,27 +3,28 @@ package module
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.services._
-import com.mohiva.play.silhouette.api.util._
+import com.mohiva.play.silhouette.api.services.{AuthenticatorService, IdentityService}
+import com.mohiva.play.silhouette.api.util.{Clock, FingerprintGenerator, HTTPLayer, IDGenerator,
+  PasswordHasher, PasswordHasherRegistry, PasswordInfo, PlayHTTPLayer}
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
-import com.mohiva.play.silhouette.impl.authenticators._
+import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticator, CookieAuthenticatorService, CookieAuthenticatorSettings}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
-import com.mohiva.play.silhouette.impl.providers._
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
-import com.mohiva.play.silhouette.impl.util._
+import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
-import net.ceedubs.ficus.Ficus._
-import net.ceedubs.ficus.readers.ArbitraryTypeReader._
+import net.ceedubs.ficus.Ficus.{booleanValueReader, finiteDurationReader, optionValueReader, stringValueReader, toFicusConfig}
+import net.ceedubs.ficus.readers.ArbitraryTypeReader.arbitraryTypeValueReader
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
 import models.User
 import play.api.mvc.CookieHeaderEncoding
 import services.UserService
 import utils.auth.DefaultEnv
-import daos._
+import daos.{MockPasswordInfoDao, MockUserDao, UserDao}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * ScalaModule implementation providing all type bindings and instances for injection
