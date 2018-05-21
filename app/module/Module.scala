@@ -15,8 +15,8 @@ import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import daos.{MockPasswordInfoDao, MockUserDao, UserDao}
 import models.User
-import net.ceedubs.ficus.Ficus.toFicusConfig
 import net.ceedubs.ficus.readers.ArbitraryTypeReader.arbitraryTypeValueReader
+import net.ceedubs.ficus.Ficus.{booleanValueReader, finiteDurationReader, optionValueReader, stringValueReader, toFicusConfig}
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.ws.WSClient
