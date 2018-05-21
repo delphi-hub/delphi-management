@@ -27,7 +27,7 @@ trait UserDao {
 class MockUserDao @Inject() (configuration: Configuration,hasher: PasswordHasher) extends UserDao {
 
   //Create fake db as mutable set, add fake user
-  var users : scala.collection.mutable.Set[User] = scala.collection.mutable.Set[User]()
+  val users : scala.collection.mutable.Set[User] = scala.collection.mutable.Set[User]()
   users += new MockAdminUser(configuration).getAdminUserMock(hasher)
 
   /**

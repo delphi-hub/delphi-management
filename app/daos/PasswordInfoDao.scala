@@ -16,7 +16,7 @@ import play.api.Configuration
 class MockPasswordInfoDao @Inject() (configuration: Configuration, hasher: PasswordHasher) extends DelegableAuthInfoDAO[PasswordInfo] {
 
   //Create fake db as mutable set, add fake user
-  var users : scala.collection.mutable.Set[User] = scala.collection.mutable.Set[User]()
+  val users : scala.collection.mutable.Set[User] = scala.collection.mutable.Set[User]()
   users += new MockAdminUser(configuration).getAdminUserMock(hasher)
 
 
