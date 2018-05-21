@@ -15,30 +15,26 @@ import play.api.Configuration
 class MockAdminUser @Inject() (configuration: Configuration){
 
   //Define constant values for fake user
-  val admin_mail = configuration.underlying.getString("mock.admin.email")
-  val admin_full_name = "Delphi Administrator"
-  val admin_first_name = "Delphi"
-  val admin_last_name = "Administrator"
-  val admin_password = configuration.underlying.getString("mock.admin.password")
+  val adminMail : String = configuration.underlying.getString("mock.admin.email")
+  val adminFullName = "Delphi Administrator"
+  val adminFirstName = "Delphi"
+  val adminLastName = "Administrator"
+  val adminPassword :String = configuration.underlying.getString("mock.admin.password")
 
   /**
     * Provide access to the User object
-    * @param passwordHasher
+    * @param passwordHasher PasswordHasher to user for PasswordInfo
     * @return
     */
-  def getAdminUserMock(passwordHasher:PasswordHasher) : User =
-  {
-
-    return User(
+  def getAdminUserMock(passwordHasher:PasswordHasher) : User = User(
       id = UUID.randomUUID(),
-      profiles=List(Profile(loginInfo = LoginInfo(CredentialsProvider.ID,admin_mail),
-        confirmed = true, email = Option(admin_mail),
-        firstName = Option(admin_first_name),
-        lastName = Option(admin_last_name),
-        fullName = Option(admin_full_name),
-        passwordInfo = Option(passwordHasher.hash(admin_password) )
+      profiles=List(Profile(loginInfo = LoginInfo(CredentialsProvider.ID,adminMail),
+        confirmed = true, email = Option(adminMail),
+        firstName = Option(adminFirstName),
+        lastName = Option(adminLastName),
+        fullName = Option(adminFullName),
+        passwordInfo = Option(passwordHasher.hash(adminPassword) )
       ))
     )
-  }
 
 }

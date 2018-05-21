@@ -3,8 +3,8 @@ package utils
 import com.mohiva.play.silhouette.api.actions.SecuredErrorHandler
 import javax.inject.Inject
 import play.api.http.DefaultHttpErrorHandler
-import play.api.i18n._
-import play.api.mvc.Results._
+import play.api.i18n.{MessagesApi,I18nSupport,Messages,MessagesImpl,Lang}
+import play.api.mvc.Results.{Redirect,Ok}
 import play.api.mvc.{RequestHeader, Result}
 
 import scala.concurrent.Future
@@ -15,12 +15,12 @@ import controllers.routes
   *
   * @param messagesApi Injected handle of current MessagesApi
   */
-class MyErrorHandler @Inject() (val messagesApi: MessagesApi)
+class ErrorHandler @Inject() (val messagesApi: MessagesApi)
   extends DefaultHttpErrorHandler with SecuredErrorHandler
     with I18nSupport  {
 
   //Implicitly define Messages Instance, needed for calling html templates
-  implicit val messages = MessagesImpl(Lang("en"), messagesApi)
+  implicit val messages : Messages = MessagesImpl(Lang("en"), messagesApi)
 
 
   override def onNotAuthenticated(implicit request: RequestHeader): Future[Result] =

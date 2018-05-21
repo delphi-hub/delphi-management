@@ -1,7 +1,7 @@
 package services
 
 import java.util.UUID
-import javax.inject._
+import javax.inject.Inject
 
 import scala.concurrent.Future
 
@@ -17,7 +17,7 @@ import daos.UserDao
   */
 class UserService @Inject() (userDao:UserDao) extends IdentityService[User] {
   def retrieve(loginInfo:LoginInfo):Future[Option[User]] = userDao.find(loginInfo)
-  def save(user:User) = userDao.save(user)
-  def find(id:UUID) = userDao.find(id)
-  def confirm(loginInfo:LoginInfo) = userDao.confirm(loginInfo)
+  def save(user:User) : Future[User] = userDao.save(user)
+  def find(id:UUID):Future[Option[User]] = userDao.find(id)
+  def confirm(loginInfo:LoginInfo):Future[User] = userDao.confirm(loginInfo)
 }

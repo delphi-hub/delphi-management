@@ -27,7 +27,7 @@ trait UserDao {
 class MockUserDao @Inject() (configuration: Configuration,hasher: PasswordHasher) extends UserDao {
 
   //Create fake db as mutable set, add fake user
-  var users = scala.collection.mutable.Set[User]()
+  val users : scala.collection.mutable.Set[User] = scala.collection.mutable.Set[User]()
   users += new MockAdminUser(configuration).getAdminUserMock(hasher)
 
   /**
@@ -54,7 +54,7 @@ class MockUserDao @Inject() (configuration: Configuration,hasher: PasswordHasher
     */
   def save(user:User):Future[User] = {
     users += user
-    return Future.successful(user)
+    Future.successful(user)
   }
 
   /**
@@ -67,7 +67,7 @@ class MockUserDao @Inject() (configuration: Configuration,hasher: PasswordHasher
   {
     val user = users.find(_.profileFor(loginInfo).isDefined).get
     //TODO: Set confirm attribute, not needed for mock
-    return Future.successful(user)
+    Future.successful(user)
   }
 
 

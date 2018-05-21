@@ -16,7 +16,7 @@ import play.api.Configuration
 class MockPasswordInfoDao @Inject() (configuration: Configuration, hasher: PasswordHasher) extends DelegableAuthInfoDAO[PasswordInfo] {
 
   //Create fake db as mutable set, add fake user
-  var users = scala.collection.mutable.Set[User]()
+  val users : scala.collection.mutable.Set[User] = scala.collection.mutable.Set[User]()
   users += new MockAdminUser(configuration).getAdminUserMock(hasher)
 
 
@@ -27,7 +27,7 @@ class MockPasswordInfoDao @Inject() (configuration: Configuration, hasher: Passw
     */
   def find(loginInfo:LoginInfo):Future[Option[PasswordInfo]] = {
     val user = users.find(_.profileFor(loginInfo).isDefined)
-    return Future.successful(user.flatMap(_.profiles.find(_.loginInfo == loginInfo)).flatMap(_.passwordInfo))
+    Future.successful(user.flatMap(_.profiles.find(_.loginInfo == loginInfo)).flatMap(_.passwordInfo))
   }
 
   /**
@@ -41,7 +41,7 @@ class MockPasswordInfoDao @Inject() (configuration: Configuration, hasher: Passw
   {
     var user = users.find(_.profileFor(loginInfo).isDefined)
     //TODO: Add new password info to profile, not needed for Mock
-    return Future.successful(authInfo)
+    Future.successful(authInfo)
   }
 
   /**
