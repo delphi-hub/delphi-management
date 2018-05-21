@@ -34,6 +34,12 @@
    <parameter name="tabSize"><![CDATA[4]]></parameter>
   </parameters>
  </check>
+ <check enabled="true" class="org.scalastyle.scalariform.FieldNamesChecker" level="warning">
+  <parameters>
+   <parameter name="regex">^[a-z][A-Za-z0-9]*$</parameter>
+   <parameter name="objectFieldRegex">^[A-Z][A-Za-z0-9]*$</parameter>
+  </parameters>
+ </check>
  <check level="warning" class="org.scalastyle.scalariform.ClassNamesChecker" enabled="true">
   <parameters>
    <parameter name="regex"><![CDATA[[A-Z][A-Za-z]*]]></parameter>
@@ -99,7 +105,7 @@
  <check level="warning" class="org.scalastyle.scalariform.MethodLengthChecker" enabled="true">
   <parameters>
    <parameter name="maxLength"><![CDATA[80]]></parameter>
-   <parameter name="ignoreComments"><![CDATA[true]]</parameter>
+   <parameter name="ignoreComments"><![CDATA[true]]></parameter>
   </parameters>
  </check>
  <check level="warning" class="org.scalastyle.scalariform.MethodNamesChecker" enabled="true">

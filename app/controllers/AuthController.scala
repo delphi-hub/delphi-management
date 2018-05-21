@@ -18,7 +18,7 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import scala.concurrent.ExecutionContext.Implicits.global
 import services.UserService
 import org.joda.time.DateTime
-import AuthForms.signInForm
+import AuthForms.SignInForm
 import utils.auth.DefaultEnv
 
 /**
@@ -27,7 +27,7 @@ import utils.auth.DefaultEnv
 object AuthForms {
 
   case class SignInData(email:String, password:String, rememberMe:Boolean)
-  val signInForm = Form(mapping(
+  val SignInForm = Form(mapping(
     "email" -> email,
     "password" -> nonEmptyText,
     "rememberMe" -> boolean
@@ -67,7 +67,7 @@ class AuthController @Inject() (
   def signIn: Action[AnyContent] = silhouette.UserAwareAction.async { implicit request =>
     Future.successful(request.identity match {
       case Some(_) => Redirect(routes.HomeController.index())
-      case None => Ok(views.html.auth.signIn(signInForm))
+      case None => Ok(views.html.auth.signIn(SignInForm))
     })
   }
 
@@ -78,7 +78,7 @@ class AuthController @Inject() (
     * @return Corrsponding action
     */
   def authenticate : Action[AnyContent] = Action.async { implicit request =>
-    signInForm.bindFromRequest.fold(
+    SignInForm.bindFromRequest.fold(
       bogusForm => Future.successful(BadRequest(views.html.auth.signIn(bogusForm))),
       signInData => {
         val credentials = Credentials(signInData.email, signInData.password)
