@@ -356,6 +356,3 @@ play.modules.enabled += "module.Module"
 play.http.errorHandler = "utils.ErrorHandler"
 
 include "silhouette.conf"
-
-# API prefix to be used for all API routes
-apiPrefix = "api"
