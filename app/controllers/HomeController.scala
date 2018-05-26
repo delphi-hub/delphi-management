@@ -24,7 +24,8 @@ class HomeController @Inject()(messageApi: MessagesApi,
     * the passed instance of MyErrorHandler will redirect him to the login page.
     */
   def index : Action[AnyContent] = silhouette.SecuredAction(new ErrorHandler(messageApi)) { implicit request => {
-    Ok(views.html.index(Option(request.identity), Option(request.authenticator.loginInfo)))
+
+    Ok(views.html.index(Option(request.identity), Option(request.authenticator.loginInfo), Option(JavaVersionCheck(None))))
   }
   }
 }
