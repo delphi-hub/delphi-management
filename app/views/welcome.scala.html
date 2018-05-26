@@ -1,4 +1,4 @@
-@(message: String, style: String = "scala")
+@(message: String, style: String = "scala", javaVersion: Option[String] => String)
 
 <section id="top">
     <div class="jumbotron">
@@ -9,6 +9,7 @@
 <div class="floatStyle">
 
     <h2>System Information</h2>
+    
 
     <div class="infoTable">
         <table class="tableAlign">
@@ -40,11 +41,12 @@
             <td>JVM Version :</td>
             <td class="valueBox">
                 <script type="text/javascript">
-                   document.write( getVersion() );
+                   //document.write( getVersion() );
+                   document.write( "@javaVersion" );
                 </script>
             </td>            
           </tr>
-          <!-- <tr>
+<!--           <tr>
             <td>Scala Version :</td>
             <td class="valueBox">2.0</td>
           </tr>

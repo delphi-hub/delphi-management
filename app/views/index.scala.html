@@ -2,7 +2,8 @@
 * This template takes a single argument, a String containing a
 * message to display.
 *@
-@(message: String)
+@(message: String, javaVersion: Option[String] => String)
+
 
 @*
 * Call the `main` template with two arguments. The first
@@ -15,6 +16,9 @@
 * Get an `Html` object by calling the built-in Play welcome
 * template and passing a `String` message.
 *@
-@welcome(message, style = "scala")
+@welcome(message, style = "scala", javaVersion)
+
+
+
 
 }
