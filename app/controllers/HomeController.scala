@@ -1,45 +1,31 @@
 package controllers
 
-import controllers.JavaVersionCheck.apply
-import javax.inject._
-import play.api.mvc._
-//import com.typesafe.sbt._
+import com.mohiva.play.silhouette.api.Silhouette
+import javax.inject.{Inject,Singleton}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import utils.auth.DefaultEnv
+import utils.ErrorHandler
+
 /**
-  * Created by benhermann on 02.01.18.
+  * Controller handling GET requests for the index page
+  *
+  * @param messageApi Injected handle of current play MessagesApi
+  * @param cc Injected handle of ControllerComponents, needed to extend superclass AbstractController
+  * @param silhouette Injected handle of current Silhouette instance
   */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class HomeController @Inject()(messageApi: MessagesApi,
+                               cc: ControllerComponents,
+                               silhouette: Silhouette[DefaultEnv]) extends AbstractController(cc) with I18nSupport{
 
   /**
-    * Create an Action to render an HTML page with a welcome message.
-    * The configuration in the `routes` file means that this method
-    * will be called when the application receives a `GET` request with
-    * a path of `/`.
+    * Create a SecuredAction to render the index page when receiving GET with path '/'. If the user is not logged in,
+    * the passed instance of MyErrorHandler will redirect him to the login page.
     */
-  def index = Action {
-    //var myValue = "1.7";
-    //var javaVersion = new JavaVersionCheckPlugin.JavaVersionCheck(Option(myValue));
-    lazy val javaVersion = apply(_)
-    //val opt = Some("1.7")
-    //var javaVersion = apply(opt)
-    Ok(views.html.index("Delphi - Management Interface", javaVersion))
+  def index : Action[AnyContent] = silhouette.SecuredAction(new ErrorHandler(messageApi)) { implicit request => {
+    lazy val javaVersion = JavaVersionCheck(None)
+    Ok(views.html.index(Option(request.identity), Option(request.authenticator.loginInfo)))
   }
-
-  
+  }
 }
-/*
-object JavaVersionCheck {
-    def apply(javaVersionPrefix: Option[String]): String = {
-    //def apply(: String = {
-        val version = sys.props.get("java.version") getOrElse {sys.error("failed to get system property java.version")}
-
-      javaVersionPrefix match {
-        case Some(prefix) =>
-          if (!version.startsWith(prefix)) {
-            sys.error(s"javac version ${version} may not be used to publish, it has to start with ${prefix} due to javaVersionPrefix setting")
-          }
-        case None =>
-      }
-      version
-  }
-} */
