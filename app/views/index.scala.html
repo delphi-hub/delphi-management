@@ -14,6 +14,6 @@
 * Get an `Html` object by calling the built-in Play welcome
 * template and passing a `String` message.
 *@
-@welcome("message", style="scala", None, loggedUser, loginInfo)
+@welcome("message", style="scala", Some(JavaVersionCheck(None)), loggedUser, loginInfo)
 
 }
