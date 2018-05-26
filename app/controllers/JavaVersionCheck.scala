@@ -3,7 +3,7 @@ package controllers
 object JavaVersionCheck {
   def apply(javaVersionPrefix: Option[String]): String = {
   //def apply(: String = {
-    val version = sys.props.get("javaVersion") getOrElse {sys.error("failed to get system property java.version")}
+    val version = sys.props.get("java.version") getOrElse {sys.error("failed to get system property java.version")}
 
     javaVersionPrefix match {
       case Some(prefix) =>
