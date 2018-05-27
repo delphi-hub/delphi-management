@@ -1,5 +1,5 @@
 @import com.mohiva.play.silhouette.api.LoginInfo
-@(message: String, style: String = "scala", javaVersion: Option[String], loggedUser : Option[User], loginInfo : Option[LoginInfo])
+@(message: String, style: String = "scala", javaVersion: Option[String], host : Option[String], scalaVersion: Option[String], platformName: Option[String], loggedUser : Option[User], loginInfo : Option[LoginInfo])
 
 <section id="top">
     <div class="jumbotron">
@@ -19,15 +19,15 @@
             <td>Host Name :</td>
             <td class="valueBox">
                 <script type="text/javascript">
-                   document.write( getComputerName() );
+                   document.write( '@host' );
                 </script>
             </td>            
           </tr>
           <tr>
-            <td>Browser name :</td>
+            <td>Scala Version :</td>
             <td class="valueBox">
                 <script type="text/javascript">
-                   document.write( getBrowserName() );
+                   document.write( '@ScalaVersion' );
                 </script>
             </td>            
           </tr>
@@ -35,7 +35,7 @@
             <td>Platform :</td>
             <td class="valueBox">
                 <script type="text/javascript">
-                   document.write( getPlatform() );
+                   document.write( '@platformName' );
                 </script>
             </td>            
           </tr>
@@ -43,27 +43,10 @@
             <td>JVM Version :</td>
             <td class="valueBox">
                 <script type="text/javascript">
-                   //document.write( getVersion() );
                    document.write( "@javaVersion" );
                 </script>
             </td>            
           </tr>
-<!--           <tr>
-            <td>Scala Version :</td>
-            <td class="valueBox">2.0</td>
-          </tr>
-          <tr>
-            <td>Build Version :</td>
-            <td class="valueBox">1.1.0</td>
-          </tr>
-          <tr>
-            <td>Release Version :</td>
-            <td class="valueBox">2.0</td>
-          </tr>
-          <tr>
-            <td>CPU Load :</td>
-            <td class="valueBox">11.2</td>
-          </tr> -->
         </table>
     </div>
 
