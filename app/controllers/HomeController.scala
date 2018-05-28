@@ -23,8 +23,10 @@ class HomeController @Inject()(messageApi: MessagesApi,
     * Create a SecuredAction to render the index page when receiving GET with path '/'. If the user is not logged in,
     * the passed instance of MyErrorHandler will redirect him to the login page.
     */
-  def index : Action[AnyContent] = silhouette.SecuredAction(new ErrorHandler(messageApi))  { implicit request =>
-    Ok(views.html.index(Option(request.identity), Option(request.authenticator.loginInfo)))
-  }
 
+  def index : Action[AnyContent] = silhouette.SecuredAction(new ErrorHandler(messageApi)) { implicit request => {
+
+    Ok(views.html.index(Option(request.identity), Option(request.authenticator.loginInfo), Option(JavaVersion(None)), Option(HostName(None)),Option(ScalaVersion(None)), Option(PlatformName(None))))
+  }
+  }
 }

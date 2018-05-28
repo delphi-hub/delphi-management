@@ -1,5 +1,5 @@
 @import com.mohiva.play.silhouette.api.LoginInfo
-@(message: String, style: String = "scala", loggedUser : Option[User], loginInfo : Option[LoginInfo])
+@(message: String, style: String = "scala", javaVersion: Option[String], host : Option[String], scalaVersion: Option[String], platformName: Option[String], loggedUser : Option[User], loginInfo : Option[LoginInfo])
 
 <section id="top">
     <div class="jumbotron">
@@ -8,7 +8,46 @@
     </div>
 </section>
 
-<div id="content" class="container">
+<div class="floatStyle">
+
+    <h2>System Information</h2>
+    
+
+    <div class="infoTable">
+        <table class="tableAlign">
+          <tr>
+            <td>Host Name :</td>
+            <td class="valueBox">
+               @host
+            </td>            
+          </tr>
+          <tr>
+            <td>Scala Version :</td>
+            <td class="valueBox">
+                @scalaVersion
+            </td>            
+          </tr>
+          <tr>
+            <td>Platform :</td>
+            <td class="valueBox">
+                @platformName
+            </td>            
+          </tr>
+          <tr>
+            <td>JVM Version :</td>
+            <td class="valueBox">
+                @javaVersion
+            </td>            
+          </tr>
+        </table>
+    </div>
+
+</div>
+
+    
+
+<div id="content" class="container">        
+
     <article>
 
         <h1>What is Delphi?</h1>
@@ -41,4 +80,3 @@
 
 
 </div>
-

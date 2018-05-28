@@ -33,5 +33,6 @@ libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "5.0.
 libraryDependencies += "org.webjars" % "bootstrap" % "4.1.0"
 libraryDependencies += "org.webjars" %% "webjars-play" % "2.6.3"
 libraryDependencies += "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4-SNAPSHOT"
+libraryDependencies += "eu.bitwalker" % "UserAgentUtils" % "1.20"
 
 routesGenerator := InjectedRoutesGenerator

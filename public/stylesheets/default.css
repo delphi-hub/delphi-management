@@ -60,6 +60,30 @@ main  {
 nav {
     background-color: #e9ecef;
 }
+
+.floatStyle {
+    float: right;
+    margin-right: 10px;
+    background-color: #f1f1f1;
+    padding: 0.01em 16px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.infoTable{
+  background-color: #FFFFFF;
+  margin-bottom: 10px;
+}
+.tableAlign {
+  width: 100%;
+  text-align: center;
+}
+.headerBorder {
+  border: 1px solid black;
+}
+.valueBox {
+  color: green;
+  font-weight: bold; 
+
 .navbar-nav > li{
   margin-left:20px;
   margin-right:20px;

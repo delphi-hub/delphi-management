@@ -1,7 +1,6 @@
 @import com.mohiva.play.silhouette.api.LoginInfo
 
-@(loggedUser: Option[User], loginInfo:Option[LoginInfo])(implicit messages:Messages)
-
+@(loggedUser: Option[User], loginInfo:Option[LoginInfo], javaVersion : Option[String], host : Option[String], scalaVersion: Option[String], platformName: Option[String])(implicit messages:Messages)
 
 
 @*
@@ -15,6 +14,6 @@
 * Get an `Html` object by calling the built-in Play welcome
 * template and passing a `String` message.
 *@
-@welcome("message", style="scala", loggedUser,loginInfo)
+@welcome("message", style="scala", javaVersion, host, scalaVersion, platformName, loggedUser, loginInfo)
 
 }
