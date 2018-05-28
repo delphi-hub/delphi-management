@@ -1,0 +1,27 @@
+body {
+  padding-top: 60px;
+}
+
+.post-form-opts {
+  margin-top: 20px;
+}
+
+.avatar {
+  height: 30px;
+  margin-top: 10px;
+  border-radius: 3px;
+}
+
+.small-avatar {
+  height: 20px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.small-margin-top {
+  margin-top: 5px;
+}
