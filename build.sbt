@@ -1,5 +1,5 @@
 
-name := """delphi-management"""
+name := "delphi-management"
 
 organization := "de.upb"
 
@@ -7,12 +7,14 @@ version := "1.0.0-SNAPSHOT"
 
 scalaVersion := "2.12.4"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins(PlayScala)
                                       .enablePlugins(BuildInfoPlugin).
                                         settings(
                                           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
                                           buildInfoPackage := "de.upb.cs.swt.delphi.management"
                                         )
+                                        
+PlayKeys.devSettings := Seq("play.server.http.port" -> "8082")
 
 pipelineStages := Seq(digest,gzip)
 
@@ -34,4 +36,3 @@ libraryDependencies += "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4-SNAPSH
 libraryDependencies += "eu.bitwalker" % "UserAgentUtils" % "1.20"
 
 routesGenerator := InjectedRoutesGenerator
-
