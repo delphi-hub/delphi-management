@@ -13,6 +13,8 @@ lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins
                                           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
                                           buildInfoPackage := "de.upb.cs.swt.delphi.management"
                                         )
+                                        
+PlayKeys.devSettings := Seq("play.server.http.port" -> "8082")
 
 pipelineStages := Seq(digest,gzip)
 
