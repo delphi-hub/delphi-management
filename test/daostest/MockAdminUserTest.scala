@@ -29,7 +29,7 @@ class MockAdminUserTest  extends FlatSpec{
   it should "contain the password specified in the configuration" in
   {
 
-    val expected = configuration.underlying.getString("mock.admin.password")
+    val expected = configuration.underlying.getString("mock.admin.email")
 
     val valid = hasher.matches(mockAdminUser.getAdminUserMock(hasher).profiles.head.passwordInfo.get, expected)
     assert(valid)
