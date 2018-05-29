@@ -14,7 +14,7 @@ import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import daos.{MockPasswordInfoDao, MockUserDao, UserDao}
-import models.User
+import models._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader.arbitraryTypeValueReader
 import net.ceedubs.ficus.Ficus.{booleanValueReader, finiteDurationReader, optionValueReader, stringValueReader, toFicusConfig}
 import net.codingwell.scalaguice.ScalaModule
