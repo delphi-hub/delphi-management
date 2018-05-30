@@ -8,5 +8,12 @@ GET     /auth/signin                controllers.AuthController.signIn
 POST    /auth/authenticate          controllers.AuthController.authenticate
 GET     /auth/signout               controllers.AuthController.signOut
 
+# Serve index page from public directory
+GET     /                           controllers.FrontendController.index()
+
+# Serve static assets under public directory
+GET     /*file                      controllers.FrontendController.assetOrDefault(file)
+
 # Public assets
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
