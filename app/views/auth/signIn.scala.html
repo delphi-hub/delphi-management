@@ -11,29 +11,31 @@
         </div>
     </section>
 
+    <div class="container">
 
+        @request.flash.get("error").map { msg =>
+        @errors.alert(msg, "error")
+        }
+        @b4.form(routes.AuthController.authenticate) {
+        <fieldset>
+            @helper.CSRF.formField
 
-    @request.flash.get("error").map { msg =>
-    @errors.alert(msg, "error")
-    }
-    @b4.form(routes.AuthController.authenticate) {
-    <fieldset>
-        @helper.CSRF.formField
+            @b4.email(signInForm("email"),
+            'placeholder -> Messages("signin.email"),
+            'autofocus -> true)
 
-        @b4.email(signInForm("email"),
-        'placeholder -> Messages("signin.email"),
-        'autofocus -> true)
+            @b4.password(signInForm("password"),
+            'placeholder -> Messages("signin.password"))
 
-        @b4.password(signInForm("password"),
-        'placeholder -> Messages("signin.password"))
+            @b4.checkbox(signInForm("rememberMe"),
+            '_text -> Messages("signin.rememberMe"),
+            'value -> false)
 
-        @b4.checkbox(signInForm("rememberMe"),
-        '_text -> Messages("signin.rememberMe"),
-        'value -> false)
+            @b4.submit('class -> "btn btn-primary"){ @Messages("signin.submit") }
+        </fieldset>
+        }
 
-        @b4.submit('class -> "btn btn-primary"){ @Messages("signin.submit") }
-    </fieldset>
-    }
+    </div>
 }
 
 
