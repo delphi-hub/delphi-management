@@ -1,3 +1,4 @@
+import com.typesafe.config._
 
 name := "delphi-management"
 
