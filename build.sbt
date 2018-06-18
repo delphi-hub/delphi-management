@@ -1,3 +1,4 @@
+import com.typesafe.config._
 
 name := "delphi-management"
 
@@ -14,8 +15,12 @@ lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins
                                           buildInfoPackage := "de.upb.cs.swt.delphi.management"
                                         )
                                         
-PlayKeys.devSettings := Seq("play.server.http.port" -> "8082")
+val conf = ConfigFactory.parseFile(new File("conf/application.conf")).resolve()
+val appPortManagement    = conf.getString("app.portManagement")
 
+PlayKeys.devSettings := Seq(
+    "play.server.http.port" -> appPortManagement
+)     
 pipelineStages := Seq(digest,gzip)
 
 resolvers += Resolver.sonatypeRepo("snapshots")
