@@ -8,7 +8,7 @@ version := "1.0.0-SNAPSHOT"
 
 scalaVersion := "2.12.4"
 
-lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins(PlayScala)
+lazy val management = (project in file("./serserver")).enablePlugins(SbtWeb).enablePlugins(PlayScala)
                                       .enablePlugins(BuildInfoPlugin).
                                         settings(
                                           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
