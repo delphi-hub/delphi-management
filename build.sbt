@@ -28,7 +28,7 @@ resolvers += Resolver.jcenterRepo
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
-libraryDependencies += "com.h2database" % "h2" % "1.4.196"
+libraryDependencies += "com.h2database" % "h2" % "1.4.197"
 libraryDependencies += "com.mohiva" %% "play-silhouette" % "5.0.0"
 libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "5.0.0"
 libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "5.0.0"
