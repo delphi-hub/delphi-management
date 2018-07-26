@@ -12,6 +12,8 @@ addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "1.3.12")
 // preparation for dependency checking
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.1")
 
+// scalastyle
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
 // web plugins
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
