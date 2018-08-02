@@ -20,7 +20,8 @@ val appPortManagement    = conf.getString("app.portManagement")
 
 PlayKeys.devSettings := Seq(
     "play.server.http.port" -> appPortManagement
-)     
+)
+
 pipelineStages := Seq(digest,gzip)
 
 resolvers += Resolver.sonatypeRepo("snapshots")
