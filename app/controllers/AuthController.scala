@@ -75,7 +75,7 @@
 //     * Called when the user hits Enter / Login-Button on the login-page. Validates login data from the Form defined above
 //     * and redirects the user to the index page if supplied credentials are valid. Handles any error during login.
 //     *
-//     * @return Corrsponding action
+//     * @return Corresponding action
 //     */
 //   def authenticate : Action[AnyContent] = Action.async { implicit request =>
 //     SignInForm.bindFromRequest.fold(
