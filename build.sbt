@@ -15,7 +15,7 @@ lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins
                                           buildInfoPackage := "de.upb.cs.swt.delphi.management"
                                         )
 
-scalastyleConfig := baseDirectory.value / "project" / "scalastyle_config.xml"
+scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val conf = ConfigFactory.parseFile(new File("conf/application.conf")).resolve()
 val appPortManagement    = conf.getString("app.portManagement")
