@@ -7,13 +7,17 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 
 export class DashboardCardComponent implements OnInit {
-  @Input() img: String;
-  @Input() route: String;
+  @Input() img: string;
+  @Input() route: string;
   numberOfInstances: string;
-  @Input() title: String;
-  @Input() componentType: String;
+  numberOfFailedInstances: string;
+  @Input() title: string;
+  @Input() componentType: string;
 
-  constructor() { }
+  constructor() {
+    this.numberOfInstances = 'No server connection';
+    this.numberOfFailedInstances = 'No server connection';
+   }
 
   ngOnInit() {
   }
