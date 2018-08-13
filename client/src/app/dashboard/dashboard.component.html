@@ -1,9 +1,70 @@
-<p>
+<!--<p>
   dashboard works!
 </p>
 <div>
   <p>
-    example card with link to crawler
+    example card with link to crawler test!
     <button routerLink="/crawler" routerLinkActive="active">Crawler</button>
   </p>
+</div>-->
+<div class="container-fluid">
+<div class="row">
+	<div class="col-md-3 col-sm-4">
+		<div class="card border-dark mb-3">
+			<div class="card-header"></div>
+			<div class="card-body text-center">
+				<h5 class="card-title custom_title">Crawler</h5>
+				<img src="../assets/images/crawler.png" class="custom_img" width="100px" height="100px">
+			</div>
+  			<div class="text-center">
+				<button type="button" class="btn btn-primary" routerLink="/crawler" routerLinkActive="active">View Details</button>
+				<button type="button" class="btn btn-secondary">Logs/Statistics</button>
+			</div>
+			<hr>
+			<div class="text-center">
+				<p class="card-text">Number of Instances:10</p>
+				<p class="card-text">Number of Queue:8</p>
+				<p class="card-text">Number of Failed Instances:2</p>
+			</div>
+  		</div>
+  	</div>
+ <div class="col-md-3 col-sm-4">
+		<div class="card border-dark mb-3">
+			<div class="card-header"></div>
+			<div class="card-body text-center">
+				<h5 class="card-title custom_title">Web Application</h5>
+				<img src="../assets/images/webapp.png" class="custom_img" width="100px" height="100px">
+			</div>
+  			<div class="text-center">
+				<button type="button" class="btn btn-primary" routerLink="/webapp" routerLinkActive="active">View Details</button>
+				<button type="button" class="btn btn-secondary">Logs/Statistics</button>
+			</div>
+			<hr>
+			<div class="text-center">
+				<p class="card-text">Number of Instances:10</p>
+				<p class="card-text">Number of Success Instances:2</p>
+				<p class="card-text">Number of Failed Instances:2</p>
+			</div>
+  		</div>
+  	</div>
+  	<div class="col-md-3 col-sm-4">
+		<div class="card border-dark mb-3">
+			<div class="card-header"></div>
+			<div class="card-body text-center">
+				<h5 class="card-title custom_title">Web API</h5>
+				<img src="../assets/images/webapi.png" class="custom_img" width="100px" height="100px">
+			</div>
+  			<div class="text-center">
+				<button type="button" class="btn btn-primary" routerLink="/webapi" routerLinkActive="active">View Details</button>
+				<button type="button" class="btn btn-secondary">Logs/Statistics</button>
+			</div>
+			<hr>
+			<div class="text-center">
+				<p class="card-text">Number of Instances:10</p>
+				<p class="card-text">Number of Success Instances:2</p>
+				<p class="card-text">Number of Failed Instances:2</p>
+			</div>
+  		</div>
+  	</div>
+</div>
 </div>
