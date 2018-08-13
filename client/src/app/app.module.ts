@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CrawlerComponent } from './crawler/crawler.component';
 import { WebappComponent } from './webapp/webapp.component';
 import { WebapiComponent } from './webapi/webapi.component';
+import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { WebapiComponent } from './webapi/webapi.component';
     DashboardComponent,
     CrawlerComponent,
     WebappComponent,
-    WebapiComponent
+    WebapiComponent,
+    DashboardCardComponent
   ],
   imports: [
     AppRoutingModule,
