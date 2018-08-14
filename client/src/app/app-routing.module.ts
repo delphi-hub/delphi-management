@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CrawlerComponent } from './crawler/crawler.component';
+import { WebappComponent } from './webapp/webapp.component';
+import { WebapiComponent } from './webapi/webapi.component';
 
 const appRoutes: Routes = [
   {
@@ -13,6 +15,16 @@ const appRoutes: Routes = [
     path: 'crawler',
     component: CrawlerComponent,
     data: { title: 'Crawler' }
+  },
+  {
+    path: 'webapp',
+    component: WebappComponent,
+    data: { title: 'Webapp' }
+  },
+  {
+    path: 'webapi',
+    component: WebapiComponent,
+    data: { title: 'Webapi' }
   },
   {
     path: '',

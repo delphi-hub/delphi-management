@@ -1,9 +1,13 @@
-<p>
-  dashboard works!
-</p>
-<div>
-  <p>
-    example card with link to crawler
-    <button routerLink="/crawler" routerLinkActive="active">Crawler</button>
-  </p>
+<div class="container-fluid">
+<div class="row">
+	<div class="col-md-3 col-sm-4">
+	<app-dashboard-card route="/crawler" componentType="crawler" title="Crawler" img="../assets/images/crawler.png"></app-dashboard-card>
+	</div>
+	<div class="col-md-3 col-sm-4">
+	<app-dashboard-card route="/webapi" componentType="webapi" title="Web API" img="../assets/images/webapi.png"></app-dashboard-card>
+	</div>
+	<div class="col-md-3 col-sm-4">
+	<app-dashboard-card route="/webapp" componentType="webapp" title="Web APP" img="../assets/images/webapp.png"></app-dashboard-card>
+	</div>
+</div>
 </div>

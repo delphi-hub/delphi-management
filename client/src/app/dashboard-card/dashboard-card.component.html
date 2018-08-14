@@ -1,0 +1,17 @@
+
+  <div class="card border-dark mb-3">
+    <div class="card-header"></div>
+    <div class="card-body text-center">
+      <h5 class="card-title custom_title">{{title}}</h5>
+      <img src={{img}} class="custom_img" width="100px" height="100px">
+    </div>
+      <div class="text-center">
+      <button type="button" class="btn btn-primary" routerLink={{route}} routerLinkActive="active">View Details</button>
+      <button type="button" class="btn btn-secondary">Logs/Statistics</button>
+    </div>
+    <hr>
+    <div class="text-center">
+      <p class="card-text">Number of Instances: {{numberOfInstances}}</p>
+      <p class="card-text">Number of failed Instances: {{numberOfFailedInstances}}</p>
+    </div>
+    </div>
