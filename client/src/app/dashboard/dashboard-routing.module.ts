@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WebappComponent } from './webapp/webapp.component';
 import { DashboardComponent } from './dashboard.component';
-import { DashboardOverviewComponent } from '../dashboard-overview/dashboard-overview.component';
+import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { CrawlerComponent } from './crawler/crawler.component';
 import { WebapiComponent } from './webapi/webapi.component';
+
 const dashboardRoutes: Routes = [
   {
   path: 'dashboard',
