@@ -28,8 +28,8 @@ const dashboardRoutes: Routes = [
      component: WebapiComponent
    }
   ]
-}
-];
+}];
+
 @NgModule({
   imports: [
     RouterModule.forChild(dashboardRoutes)
@@ -38,4 +38,11 @@ const dashboardRoutes: Routes = [
     RouterModule
   ]
 })
+
+/**
+ * This module handles the routing of the dashboard.
+ * It enables the header and sidebar to be only
+ * rendered once and load the routed components in
+ * between.
+ */
 export class DashboardRoutingModule { }

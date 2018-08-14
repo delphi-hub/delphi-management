@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+src/app/instance-registry-service
 
 # dependencies
 /node_modules

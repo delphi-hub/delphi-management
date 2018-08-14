@@ -1,0 +1,191 @@
+swagger: "2.0"
+info:
+  description: "This is a sample client side  for Delphi Instance Registry."
+  version: "1.0.0"
+  title: "Delphi Instance Registry"
+host: "localhost:8085"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+basePath: "/"
+tags:
+- name: "instance"
+  description: "Anything about Instances"
+schemes:
+- "https"
+- "http"
+paths:
+  /register:
+    post:
+      tags:
+      - "instance"
+      summary: "Register New Instance"
+      description: "Register New Instances"
+      operationId: "addInstance"
+      parameters:
+      - in: "body"
+        name: "Registering"
+        description: "Data to Register Instance"
+        required: true
+        schema:
+          $ref: "#/definitions/Instance"
+      responses:
+        200:
+          description: "Registeration Successful"
+        405:
+          description: "Invalid input"
+  /deregister:
+    post:
+      tags:
+      - "instance"
+      summary: "Deregister"
+      description: "Delete an Instance"
+      operationId: "deleteInstance"
+      parameters:
+      - in: "body"
+        name: "Instance"
+        description: "Details of Instance to be deleted"
+        required: true
+        schema:
+          $ref: "#/definitions/InstanceID"
+      responses:
+        200:
+          description: "Sucessfully Deregistered"
+        400:
+          description: "Invalid Status Value"
+        404:
+          description: "Instance not found"
+        405:
+          description: "Validation exception"
+      
+  /matchingInstance:
+    get:
+      tags:
+      - "instance"
+      summary: " Get Matching Instances"
+      operationId: "matchInstance"
+      parameters:
+      - name: "ComponentType"
+        in: "query"
+        description: "Component to be fetched"
+        required: true
+        type: "string"
+        enum:
+        - "Crawler"
+        - "WebApi"
+        - "WebApp"
+        - "DelphiManagement"
+      responses:
+        200:
+          $ref: "#/definitions/Instance"
+        400:
+          description: "Invalid status value"
+  /instances:
+    get:
+      tags:
+      - "instance"
+      summary: "Fetch Instances"
+      description: "Fetch Specific Instance"
+      operationId: "fetchInstance"
+      parameters:
+      - name: "ComponentType"
+        in: "query"
+        type: "string"
+        required: true
+        enum:
+        - "Crawler"
+        - "WebApi"
+        - "WebApp"
+        - "DelphiManagement"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Instance"
+        400:
+          description: "Invalid value"
+  /numberOfInstances:
+    get:
+      tags:
+      - "instance"
+      summary: "Find number of running instances"
+      description: "How many instances per type are running"
+      operationId: "getInstanceNumber"
+      
+      parameters:
+      - name: "ComponentType"
+        in: "query"
+        type: "string"
+        required: true
+        enum:
+        - "Crawler"
+        - "WebApi"
+        - "WebApp"
+        - "DelphiManagement"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "integer"
+            format: "int32"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Instances not found"
+  /matchingResult:
+    post:
+      tags:
+      - "instance"
+      summary: "Find the matching instance"
+      description: "Match the instance"
+      operationId: "getMatchingInstance"
+      parameters:
+      - name: "MatchingSuccessful"
+        in: "query"
+        description: "Boolean to indicate if matching is successful"
+        required: true
+        type: "boolean"
+      - name: "Component"
+        in: "body"
+        description: "Registering Instance"
+        required: true
+        schema:
+          $ref: "#/definitions/Instance"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No match found"
+definitions:
+  Instance:
+    type: "object"
+    properties:
+      ID:
+        type: "integer"
+        format: "int64"
+      IP:
+        type: "string"
+      portnumber:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      ComponentType:
+        type: "string"
+        description: "Component Type"
+        enum:
+        - "Crawler"
+        - "WebApi"
+        - "WebApp"
+        - "DelphiManagement"
+  InstanceID:
+    type: "object"
+    properties:
+      ID:
+        type: "integer"
+        format: "int64"
