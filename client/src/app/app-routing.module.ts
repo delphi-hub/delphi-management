@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 
 const appRoutes: Routes = [
@@ -10,8 +11,13 @@ const appRoutes: Routes = [
     data: { title: 'Dashboard' }
   },
   {
+    path: 'landingpage',
+    component: LandingPageComponent,
+    data: {title: 'Landingpage'}
+  },
+  {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'landingpage',
     pathMatch: 'full'
   },
 ];
