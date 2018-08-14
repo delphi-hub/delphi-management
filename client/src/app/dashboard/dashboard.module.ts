@@ -7,6 +7,7 @@ import { CrawlerComponent } from './crawler/crawler.component';
 import { WebappComponent } from './webapp/webapp.component';
 import { WebapiComponent } from './webapi/webapi.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
+import { InstanceService } from '../instance-registry-service';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
     WebappComponent,
     WebapiComponent,
     DashboardOverviewComponent
-  ]
+  ],
+  providers: [InstanceService],
 })
 export class DashboardModule { }
