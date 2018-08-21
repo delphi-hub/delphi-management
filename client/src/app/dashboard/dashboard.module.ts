@@ -9,7 +9,8 @@ import { WebapiComponent } from './webapi/webapi.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { InstanceService } from '../instance-registry-service';
 import { HeaderComponent } from './header/header.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { StatusCardComponent } from './status-card/status-card.component';
+
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     WebapiComponent,
     DashboardOverviewComponent,
     HeaderComponent,
-    SidebarComponent
+    StatusCardComponent
   ],
   providers: [InstanceService],
 })
