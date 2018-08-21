@@ -8,6 +8,8 @@ import { WebappComponent } from './webapp/webapp.component';
 import { WebapiComponent } from './webapi/webapi.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { InstanceService } from '../instance-registry-service';
+import { HeaderComponent } from './header/header.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   imports: [
@@ -20,7 +22,9 @@ import { InstanceService } from '../instance-registry-service';
     CrawlerComponent,
     WebappComponent,
     WebapiComponent,
-    DashboardOverviewComponent
+    DashboardOverviewComponent,
+    HeaderComponent,
+    SidebarComponent
   ],
   providers: [InstanceService],
 })
