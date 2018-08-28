@@ -1,0 +1,12 @@
+.rightSideDiv {
+  float: right;
+  padding-top: 10px;
+}
+
+.rightSideDiv input{
+  border-radius: 6px;
+}
+
+.rightSideDiv button{
+  border-radius: 6px;
+}
