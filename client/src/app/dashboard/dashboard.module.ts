@@ -12,6 +12,8 @@ import { WebapiComponent } from './webapi/webapi.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { InstanceService } from '../instance-registry-service';
 import { TableAllComponent } from './table-all/table-all.component';
+import { HeaderComponent } from './header/header.component';
+import { StatusCardComponent } from './status-card/status-card.component';
 
 @NgModule({
   imports: [
@@ -31,7 +33,9 @@ import { TableAllComponent } from './table-all/table-all.component';
     WebappComponent,
     WebapiComponent,
     DashboardOverviewComponent,
-    TableAllComponent
+    TableAllComponent,
+    HeaderComponent,
+    StatusCardComponent
   ],
   providers: [InstanceService],
 })
