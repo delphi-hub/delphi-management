@@ -1,6 +1,7 @@
-->          /webjars                webjars.Routes
+# ->          /webjars                webjars.Routes
 # Application
 GET     /                           controllers.HomeController.index
+->      /api                        controllers.ApiRouter
 #controllers.HomeController.index
 #controllers.FrontendController.index()
 
