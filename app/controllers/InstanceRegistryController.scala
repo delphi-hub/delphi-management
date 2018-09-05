@@ -10,9 +10,20 @@ import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 
 trait MyExecutionContext extends ExecutionContext
 
+/**
+  * Custom execution context. Used to prevent overflowing of the thread pool,
+  * which should be used to handle client connections.
+  * @param system
+  */
 class MyExecutionContextImpl @Inject()(system: ActorSystem)
   extends CustomExecutionContext(system, "my.executor") with MyExecutionContext
 
+/**
+  * Controller used to manage the requests regarding the instance registry.
+  * @param myExecutionContext
+  * @param controllerComponents
+  * @param ws
+  */
 class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
                                            ws: WSClient)
@@ -20,6 +31,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
 
   def numberOfCrawlers: Action[AnyContent] = Action.async {
     ws.url("http://localhost:8084/api/crawlers/numbers").get().map { response =>
+      // TODO: possible handling of parsing the data can be done here
       Ok(response.body)
     }(myExecutionContext)
   }

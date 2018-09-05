@@ -7,7 +7,7 @@ import play.api.routing.SimpleRouter
 import play.api.routing.sird._
 
 /**
-  * Router used to manage acess to all available API
+  * Router used to manage access to all available API
   * Endpoints.
   * @param controller Controller components reference
   */
