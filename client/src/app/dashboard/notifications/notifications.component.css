@@ -10,3 +10,19 @@
 .rightSideDiv button{
   border-radius: 6px;
 }
+
+.glyphicon{
+  font-size: 15px;
+}
+
+.warning{
+  color: #c69500;
+}
+
+.danger{
+  color: red;
+}
+
+.success{
+  color: #1c7430;
+}
