@@ -1,6 +1,7 @@
 package controllers
 
 import akka.actor.ActorSystem
+import io.swagger.annotations.{ApiResponse, ApiResponses, ApiParam}
 import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,10 +30,14 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
                                            ws: WSClient)
   extends BaseController {
 
-  def numberOfCrawlers: Action[AnyContent] = Action.async {
+  @ApiResponses(Array(
+    new ApiResponse(code = 400, message = "Invalid ComponentType supplied"),
+    new ApiResponse(code = 404, message = "Component not found")))
+  def numberOfInstances( @ApiParam(value = "ComponentType to fetch the number of instances for") componentType: String) : Action[AnyContent] = Action.async {
     ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> "Crawler").get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Ok(response.body)
     }(myExecutionContext)
   }
+
 }
