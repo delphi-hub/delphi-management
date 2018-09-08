@@ -31,7 +31,7 @@ export class DashboardCardComponent implements OnInit {
 
   ngOnInit() {
     // this has to be called onInit and not in the constructor, due
-    // to the component livecycle. Input's are not initialized in
+    // to the component lifecycle. Input's are not initialized in
     // the constructor.
     this.setInstanceNumber();
   }

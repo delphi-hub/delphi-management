@@ -14,6 +14,7 @@ import play.api.routing.sird._
 class ApiRouter @Inject()(controller: InstanceRegistryController)
   extends SimpleRouter
 {
+
   override def routes: Routes = {
     case GET(p"/") => controller.numberOfCrawlers
   }

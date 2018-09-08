@@ -30,7 +30,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   extends BaseController {
 
   def numberOfCrawlers: Action[AnyContent] = Action.async {
-    ws.url("http://localhost:8084/api/crawlers/numbers").get().map { response =>
+    ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> "Crawler").get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Ok(response.body)
     }(myExecutionContext)
