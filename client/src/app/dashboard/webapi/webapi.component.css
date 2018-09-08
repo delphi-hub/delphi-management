@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+  //float:right;
+  margin-top:15px;
+}

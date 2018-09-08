@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InstanceService, Instance } from '../../instance-registry-service';
-import { MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
+import { SelectionModel} from '@angular/cdk/collections';
 
 
 @Component({
@@ -9,28 +9,32 @@ import { MatTableDataSource} from '@angular/material';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-	@Input() data_array : Element[];
-	displayedColumns = ['status', 'name', 'version', 'startDate'];
-	dataSource = new MatTableDataSource<Element>(this.data_array);
-   
-   ngOnInit() {
-   
+  @Input() data_array;
+  displayedColumns: string[] = ['status', 'name', 'version', 'startDate', 'action', 'select'];
+  dataSource = new MatTableDataSource(this.data_array);
+  selection = new SelectionModel<Element>(true, []);
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.data_array.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.data_array.forEach(row => this.selection.select(row));
+  }
+
+  ngOnInit() {
+  this.dataSource = new MatTableDataSource(this.data_array);
+    console.log(this.data_array);
+    console.log(this.dataSource);
   }
 }
-
-export interface Element {
-  status: string;
-  name: string;
-  version: number;
-  startDate:string;
-}
-
-
-
-
-
-
-
-
 
 

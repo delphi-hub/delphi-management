@@ -23,7 +23,11 @@
               "src/assets"
             ],
             "styles": [
+              {
+                "input": "src/app-theme.scss"
+              },
               "src/styles.css"
+              
             ],
             "scripts": []
           },
