@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatIconModule, MatTableModule} from '@angular/material';
+import { MatButtonModule, MatMenuModule, MatTableModule} from '@angular/material';
+import { MatIconModule} from '@angular/material/icon';
+import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatDialogModule} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule} from '@angular/material/input';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { DashboardComponent } from './dashboard.component';
@@ -14,6 +19,7 @@ import { InstanceService } from '../instance-registry-service';
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
+import { DeletedialogComponent } from './deletedialog/deletedialog.component';
 
 @NgModule({
   imports: [
@@ -23,7 +29,11 @@ import { StatusCardComponent } from './status-card/status-card.component';
     MatMenuModule,
     MatIconModule,
     MatTableModule,
+    MatCheckboxModule,
+    MatDialogModule,
     CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
     DashboardRoutingModule
   ],
   declarations: [
@@ -35,7 +45,11 @@ import { StatusCardComponent } from './status-card/status-card.component';
     DashboardOverviewComponent,
     TableAllComponent,
     HeaderComponent,
-    StatusCardComponent
+    StatusCardComponent,
+    DeletedialogComponent
+  ],
+  entryComponents:[
+    DeletedialogComponent
   ],
   providers: [InstanceService],
 })
