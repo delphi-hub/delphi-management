@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource} from '@angular/material';
-import {Element} from '../table-all/table-all.component';
+import {Component, OnInit} from '@angular/core';
+import {ApiService, Instance} from "../../api";
 
 @Component({
   selector: 'app-crawler',
@@ -8,18 +7,21 @@ import {Element} from '../table-all/table-all.component';
   styleUrls: ['./crawler.component.css']
 })
 export class CrawlerComponent implements OnInit {
-  table_data: Element[];
 
-  constructor() {
+  // this array is inserted into the table all component in the html code
+  table_data: Instance[];
+
+  constructor(private apiService: ApiService) {
   }
 
   ngOnInit() {
-    this.table_data = [
-      {status: 'Finished', name: 'test1', version: 1, startDate: Date().toLocaleString()},
-      {status: 'Listining', name: 'test2', version: 2, startDate: Date().toLocaleString()},
-      {status: 'Finished', name: 'test3', version: 1, startDate: Date().toLocaleString()},
-      {status: 'Finished', name: 'test1', version: 3, startDate: Date().toLocaleString()}
-    ];
+
+    this.table_data = [];
+
+    this.apiService.getInstances("Crawler").subscribe((result: Array<Instance>) => {
+      this.table_data = result;
+    }, err => {
+    })
   }
 
 }

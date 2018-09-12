@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InstanceService, Instance } from '../../instance-registry-service';
+import {ApiService} from "../../api";
 
 @Component({
   selector: 'app-dashboard-card',
@@ -22,10 +22,8 @@ export class DashboardCardComponent implements OnInit {
 
   numberOfInstances: string;
   numberOfFailedInstances: string;
-  private irService: InstanceService;
 
-  constructor(irService: InstanceService) {
-    this.irService = irService;
+  constructor(private irService: ApiService) {
     this.numberOfFailedInstances = 'No server connection';
    }
 
@@ -41,7 +39,7 @@ export class DashboardCardComponent implements OnInit {
    * If there is no server connection the value is set to a default error message.
    */
   private setInstanceNumber() {
-    this.irService.getInstanceNumber(this.componentType).subscribe((amount: number) => {
+    this.irService.getNumberOfInstances(this.componentType).subscribe((amount: number) => {
       this.numberOfInstances = '' + amount;
     }, (error) => {
       this.numberOfInstances = 'No server connection';

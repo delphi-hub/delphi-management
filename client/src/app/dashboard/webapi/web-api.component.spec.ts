@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WebapiComponent } from './webapi.component';
+import { WebApiComponent } from './web-api.component';
 
-describe('WebapiComponent', () => {
-  let component: WebapiComponent;
-  let fixture: ComponentFixture<WebapiComponent>;
+describe('WebApiComponent', () => {
+  let component: WebApiComponent;
+  let fixture: ComponentFixture<WebApiComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WebapiComponent ]
+      declarations: [ WebApiComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WebapiComponent);
+    fixture = TestBed.createComponent(WebApiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

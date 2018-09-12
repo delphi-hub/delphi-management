@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "gen": "swagger-codegen generate -i swagger.yaml -l typescript-angular -o src/app/instance-registry-service/",
     "start": "npm run gen && ng serve",
     "build": "npm run gen && ng build",
     "test": "ng test",

@@ -4,7 +4,7 @@ import { WebappComponent } from './webapp/webapp.component';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { CrawlerComponent } from './crawler/crawler.component';
-import { WebapiComponent } from './webapi/webapi.component';
+import { WebApiComponent } from './webapi/web-api.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -24,8 +24,8 @@ const dashboardRoutes: Routes = [
      component: CrawlerComponent
    },
    {
-     path: 'webapi',
-     component: WebapiComponent
+     path: 'webApi',
+     component: WebApiComponent
    }
   ]
 }];

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InstanceService, Instance } from '../../instance-registry-service';
+
 import { MatTableDataSource} from '@angular/material';
+import {Instance} from "../../api";
 
 
 @Component({
@@ -9,21 +10,15 @@ import { MatTableDataSource} from '@angular/material';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-	@Input() data_array : Element[];
-	displayedColumns = ['status', 'name', 'version', 'startDate'];
-	dataSource = new MatTableDataSource<Element>(this.data_array);
+	@Input() data_array : Instance[];
+	displayedColumns = ['ID', 'name', 'host', 'portNumber'];
+	dataSource = new MatTableDataSource<Instance>(this.data_array);
    
    ngOnInit() {
    
   }
 }
 
-export interface Element {
-  status: string;
-  name: string;
-  version: number;
-  startDate:string;
-}
 
 
 
