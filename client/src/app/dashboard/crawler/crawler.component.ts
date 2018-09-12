@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService, Instance} from "../../api";
+import {ApiService, Instance} from '../../api';
 
 @Component({
   selector: 'app-crawler',
@@ -21,7 +21,8 @@ export class CrawlerComponent implements OnInit {
     this.apiService.getInstances(Instance.ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
       this.table_data = result;
     }, err => {
-    })
+    });
   }
 
 }
+

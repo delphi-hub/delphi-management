@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ApiService, Instance} from "../../api";
+import {ApiService, Instance} from '../../api';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
+
 
 @Component({
   selector: 'app-webapp',
@@ -16,12 +19,12 @@ export class WebappComponent implements OnInit {
     this.table_data = [];
 
     this.apiService.getInstances(Instance.ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
-      console.log("received result", result);
+      console.log('received result', result);
       this.table_data = result;
 
     }, err => {
-      console.log("error during get instances for web app");
-    })
+      console.log('error during get instances for web app');
+    });
   }
 
 }
