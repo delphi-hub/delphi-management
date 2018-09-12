@@ -32,3 +32,10 @@ table {
 	border-bottom-style:none !important;
 }
 
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+  //float:right;
+  margin-top:15px;
+}
+

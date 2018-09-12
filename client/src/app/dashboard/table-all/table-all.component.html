@@ -59,6 +59,10 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
     </table>
+    <div class="button-row">
+        <button mat-raised-button color="primary" (click)="openDialog()">Delete Selected</button>
+        <button mat-raised-button color="primary">Add Instance</button>
+    </div>
 </div>
 
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel} from '@angular/cdk/collections';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
 
 
 @Component({
@@ -13,6 +15,23 @@ export class TableAllComponent implements OnInit {
   displayedColumns: string[] = ['status', 'name', 'version', 'startDate', 'action', 'select'];
   dataSource = new MatTableDataSource(this.data_array);
   selection = new SelectionModel<Element>(true, []);
+
+  constructor(public dialog: MatDialog) {
+
+  }
+
+  openDialog(){
+    let dialogRef = this.dialog.open(DeletedialogComponent, {
+      width: '250px',
+      data: 'Component Data'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.dialogResult = result;
+    });
+  }
+
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

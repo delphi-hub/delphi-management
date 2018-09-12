@@ -30,7 +30,7 @@ export class WebapiComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  openApideleteDialog(){
+  /*openApideleteDialog(){
     let dialogRef = this.dialog.open(DeletedialogComponent, {
       width: '250px',
       data: 'Component Data API'
@@ -40,7 +40,7 @@ export class WebapiComponent implements OnInit {
       console.log('The dialog was closed');
       this.dialogResult = result;
     });
-  }
+  }*/
 
   ngOnInit() {
   this.data_array = ELEMENT_DATA;

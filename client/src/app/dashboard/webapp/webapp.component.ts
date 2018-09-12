@@ -29,7 +29,7 @@ export class WebappComponent implements OnInit {
   constructor(public dialog: MatDialog) {
   }
 
-  openAppdeleteDialog(){
+  /*openAppdeleteDialog(){
     let dialogRef = this.dialog.open(DeletedialogComponent, {
       width: '250px',
       data: 'Component Data'
@@ -39,7 +39,7 @@ export class WebappComponent implements OnInit {
       console.log('The dialog was closed');
       this.dialogResult = result;
     });
-  }
+  }*/
 
   ngOnInit() {
   this.data_array = ELEMENT_DATA;
