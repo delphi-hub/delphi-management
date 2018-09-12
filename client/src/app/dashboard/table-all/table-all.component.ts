@@ -11,10 +11,19 @@ import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-  @Input() data_array: Instance[];
+
+  @Input() set data_array(data_array: Instance[]) {
+    console.log('here with data_array', data_array);
+    if (this.dataSource != null) {
+      this.dataSource = new MatTableDataSource<Instance>(data_array);
+      console.log('created data source', this.dataSource);
+    } else {
+      this.dataSource.data = data_array;
+    }
+  }
   displayedColumns = ['ID', 'name', 'host', 'portNumber', 'action', 'select'];
-  dataSource: MatTableDataSource<Instance>;
-  selection = new SelectionModel<Element>(true, []);
+  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
+  selection = new SelectionModel<Instance>(true, []);
   dialogResult: any;
 
   constructor(public dialog: MatDialog) {
@@ -23,7 +32,6 @@ export class TableAllComponent implements OnInit {
 
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource<Instance>(this.data_array);
  }
 
   openDialog() {

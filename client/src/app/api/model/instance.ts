@@ -12,7 +12,7 @@
 
 
 export interface Instance {
-    ID?: number;
+    id?: number;
     host?: string;
     portNumber?: number;
     name?: string;
@@ -28,5 +28,5 @@ export namespace Instance {
         WebApi: 'WebApi' as ComponentTypeEnum,
         WebApp: 'WebApp' as ComponentTypeEnum,
         DelphiManagement: 'DelphiManagement' as ComponentTypeEnum
-    }
+    };
 }

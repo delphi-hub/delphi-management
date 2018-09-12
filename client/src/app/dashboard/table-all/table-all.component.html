@@ -5,32 +5,23 @@
   <table class="mat-elevation-z8 mat-table" mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="ID">
         <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.ID}} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
       </ng-container>
 
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
       <ng-container matColumnDef="host">
         <mat-header-cell *matHeaderCellDef> Host </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.host}} </mat-cell>
+        <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.host}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="portNumber">
         <mat-header-cell *matHeaderCellDef> Port </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.portNumber}} </mat-cell>
+        <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.portNumber}} </mat-cell>
       </ng-container>
-        <!-- <ng-container matColumnDef="version">
-            <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="startDate">
-            <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef> Start Date </mat-header-cell>
-            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.startDate}} </mat-cell>
-        </ng-container> -->
 
         <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef [ngClass]="'customWidthClass_new mat_cell'">
@@ -47,7 +38,7 @@
         </td>
         </ng-container>
 
-        <!-- <ng-container matColumnDef="action">
+        <ng-container matColumnDef="action">
             <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
             <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> 
             
@@ -59,11 +50,8 @@
             <button mat-icon-button>
                   <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
                 </button>
-                <button mat-icon-button>
-                  <mat-icon aria-label="delete">delete</mat-icon>
-                </button>
               </mat-cell>
-        </ng-container> -->
+        </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
