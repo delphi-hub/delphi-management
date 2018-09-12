@@ -13,15 +13,14 @@ export class WebappComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.table_data = [
-      {ID: 5, host: "test host", portNumber: 5, name: "test name"}
-    ];
-    this.apiService.getInstances("Crawler").subscribe((result: Array<Instance>) => {
+    this.table_data = [];
+
+    this.apiService.getInstances(Instance.ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
       console.log("received result", result);
       this.table_data = result;
 
     }, err => {
-      console.log("error during get instances for crawler");
+      console.log("error during get instances for web app");
     })
   }
 

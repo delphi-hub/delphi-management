@@ -13,11 +13,9 @@ export class WebApiComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.table_data = [
-      {ID: 5, host: "test host", portNumber: 5, name: "test name"}
-    ];
+    this.table_data = [];
 
-    this.apiService.getInstances("WebApi").subscribe((result: Array<Instance>) => {
+    this.apiService.getInstances(Instance.ComponentTypeEnum.WebApi).subscribe((result: Array<Instance>) => {
       console.log("received result", result);
       this.table_data = result;
     }, (err) => {
