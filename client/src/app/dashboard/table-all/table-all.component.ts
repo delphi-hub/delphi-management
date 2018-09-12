@@ -14,13 +14,14 @@ export class TableAllComponent implements OnInit {
   displayedColumns: string[] = ['status', 'name', 'version', 'startDate', 'action', 'select'];
   dataSource = new MatTableDataSource(this.data_array);
   selection = new SelectionModel<Element>(true, []);
+  dialogResult: any;
 
   constructor(public dialog: MatDialog) {
 
   }
 
   openDialog() {
-    let dialogRef = this.dialog.open(DeletedialogComponent, {
+    const dialogRef = this.dialog.open(DeletedialogComponent, {
       width: '250px',
       data: 'Component Data'
     });
