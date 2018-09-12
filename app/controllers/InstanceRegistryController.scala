@@ -1,7 +1,6 @@
 package controllers
 
 import akka.actor.ActorSystem
-import io.swagger.annotations.{ApiResponse, ApiResponses, ApiParam}
 import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,12 +29,20 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
                                            ws: WSClient)
   extends BaseController {
 
-  @ApiResponses(Array(
-    new ApiResponse(code = 400, message = "Invalid ComponentType supplied"),
-    new ApiResponse(code = 404, message = "Component not found")))
-  def numberOfInstances( @ApiParam(value = "ComponentType to fetch the number of instances for") componentType: String) : Action[AnyContent] = Action.async {
-    ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> "Crawler").get().map { response =>
+  def instances(componentType: String): Action[AnyContent] = Action.async {
+    ws.url("http://localhost:8087/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
       // TODO: possible handling of parsing the data can be done here
+
+      Ok(response.body)
+    }(myExecutionContext)
+  }
+
+  def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
+    // TODO: handle what should happen if the instance registry is not reachable.
+    // TODO: create constants for the urls
+    ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
+      // TODO: possible handling of parsing the data can be done here
+
       Ok(response.body)
     }(myExecutionContext)
   }

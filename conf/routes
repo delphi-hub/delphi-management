@@ -1,9 +1,8 @@
 # ->          /webjars                webjars.Routes
 # Application
 GET     /                           controllers.HomeController.index
-->      /api                        controllers.ApiRouter
 
-GET     /swagger.json           controllers.ApiHelpController.getResources
+->      /api                        controllers.ApiRouter
 #controllers.HomeController.index
 #controllers.FrontendController.index()
 

@@ -15,6 +15,7 @@ class ApiRouter @Inject()(controller: InstanceRegistryController)
 {
 
   override def routes: Routes = {
-    case GET(p"/") => controller.numberOfInstances("Crawler")
+    case GET(p"/numberOfInstances" ? q"componentType=$componentType") => controller.numberOfInstances(componentType)
+    case GET(p"/instances" ? q"componentType=$componentType") => controller.instances(componentType)
   }
 }

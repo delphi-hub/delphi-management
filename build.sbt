@@ -42,8 +42,5 @@ libraryDependencies += "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4-SNAPSH
 libraryDependencies += "eu.bitwalker" % "UserAgentUtils" % "1.20"
 libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.8"
 libraryDependencies += ws
-libraryDependencies ++= Seq(
-  "io.swagger" %% "swagger-play2" % "1.6.1-SNAPSHOT"
-)
 
 routesGenerator := InjectedRoutesGenerator
