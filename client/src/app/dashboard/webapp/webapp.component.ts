@@ -27,19 +27,8 @@ export class WebappComponent implements OnInit {
   data_array :any;
 
   constructor(public dialog: MatDialog) {
+
   }
-
-  /*openAppdeleteDialog(){
-    let dialogRef = this.dialog.open(DeletedialogComponent, {
-      width: '250px',
-      data: 'Component Data'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.dialogResult = result;
-    });
-  }*/
 
   ngOnInit() {
   this.data_array = ELEMENT_DATA;

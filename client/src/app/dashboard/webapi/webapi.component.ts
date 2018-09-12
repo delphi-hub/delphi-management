@@ -30,18 +30,6 @@ export class WebapiComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  /*openApideleteDialog(){
-    let dialogRef = this.dialog.open(DeletedialogComponent, {
-      width: '250px',
-      data: 'Component Data API'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.dialogResult = result;
-    });
-  }*/
-
   ngOnInit() {
   this.data_array = ELEMENT_DATA;
     
