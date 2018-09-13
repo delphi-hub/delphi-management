@@ -3,9 +3,9 @@ package controllers
 import akka.actor.ActorSystem
 import javax.inject.Inject
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.{WSClient}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 
 trait MyExecutionContext extends ExecutionContext
@@ -42,8 +42,11 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
     // TODO: create constants for the urls
     ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
       // TODO: possible handling of parsing the data can be done here
-
-      Ok(response.body)
+      if (response.status == 200) {
+        Ok(response.body)
+      } else {
+        new Status(response.status)
+      }
     }(myExecutionContext)
   }
 
