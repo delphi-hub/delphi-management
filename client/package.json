@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "gen": "swagger-codegen generate -i swagger.yaml -l typescript-angular -o src/app/instance-registry-service/",
+    "gen": "java -jar swagger-codegen-cli.jar generate -i swagger.yaml -l typescript-angular -o src/app/instance-registry-service/",
     "start": "npm run gen && ng serve",
     "build": "npm run gen && ng build",
     "test": "ng test",
@@ -12,8 +12,8 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^6.1.4",
-    "@angular/cdk": "^6.4.6",
+    "@angular/animations": "github:angular/animations-builds",
+    "@angular/cdk": "github:angular/cdk-builds",
     "@angular/common": "^6.1.4",
     "@angular/compiler": "^6.1.4",
     "@angular/core": "^6.1.4",
@@ -28,6 +28,7 @@
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
+    "material-design-icons": "^3.0.1",
     "popper.js": "^1.14.4",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
