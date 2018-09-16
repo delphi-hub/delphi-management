@@ -1,22 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource} from '@angular/material';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
-
-
-export interface Element {
-  status: string;
-  name: string;
-  version: number;
-  startDate:string;
-}
-
-const ELEMENT_DATA: Element[] = [
-  {status: 'Finished', name: 'test1', version: 1, startDate: Date().toLocaleString()},
-  {status: 'Listining', name: 'test2', version: 2, startDate: Date().toLocaleString()},
-  {status: 'Finished', name: 'test3', version: 1, startDate: Date().toLocaleString()},
-  {status: 'Finished', name: 'test1', version: 3, startDate: Date().toLocaleString()}
-];
+import {Component, OnInit} from '@angular/core';
+import {ApiService, Instance} from '../../api';
 
 @Component({
   selector: 'app-crawler',
@@ -24,36 +7,22 @@ const ELEMENT_DATA: Element[] = [
   styleUrls: ['./crawler.component.css']
 })
 export class CrawlerComponent implements OnInit {
-	  dialogResult = "";
-    data_array :any;
-	  
 
-  constructor(public dialog: MatDialog) {
+  // this array is inserted into the table all component in the html code
+  table_data: Instance[];
 
+  constructor(private apiService: ApiService) {
   }
-
-  openDialog(){
-  	let dialogRef = this.dialog.open(DeletedialogComponent, {
-      width: '250px',
-      data: 'Component Data'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.dialogResult = result;
-    });
-  }
-
-
-  /*applyFilter(filterValue: string) {
-    this.data_array.filter = filterValue.trim().toLowerCase();
-    //console.log('test',this.table_data.filter);
-  }*/
 
   ngOnInit() {
-  //console.log(this.data_array);
-  this.data_array = ELEMENT_DATA;
-    
+
+    this.table_data = [];
+
+    this.apiService.getInstances(Instance.ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
+      this.table_data = result;
+    }, err => {
+      console.log('error receiving data for crawler');
+    });
   }
 
 }

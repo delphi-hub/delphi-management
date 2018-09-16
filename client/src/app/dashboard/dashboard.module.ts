@@ -13,12 +13,12 @@ import { DashboardCardComponent } from './dashboard-card/dashboard-card.componen
 import { DashboardComponent } from './dashboard.component';
 import { CrawlerComponent } from './crawler/crawler.component';
 import { WebappComponent } from './webapp/webapp.component';
-import { WebapiComponent } from './webapi/webapi.component';
+import { WebApiComponent } from './webapi/web-api.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
-import { InstanceService } from '../instance-registry-service';
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
+import {ApiService} from '../api';
 import { DeletedialogComponent } from './deletedialog/deletedialog.component';
 
 @NgModule({
@@ -41,16 +41,16 @@ import { DeletedialogComponent } from './deletedialog/deletedialog.component';
     DashboardComponent,
     CrawlerComponent,
     WebappComponent,
-    WebapiComponent,
+    WebApiComponent,
     DashboardOverviewComponent,
     TableAllComponent,
     HeaderComponent,
     StatusCardComponent,
     DeletedialogComponent
   ],
-  entryComponents:[
+  entryComponents: [
     DeletedialogComponent
   ],
-  providers: [InstanceService],
+  providers: [ApiService],
 })
 export class DashboardModule { }
