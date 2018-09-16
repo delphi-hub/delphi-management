@@ -1,9 +1,9 @@
 package systeminfotest
 
 import org.scalatest.FlatSpec
-import controllers._
+import controllers.{HostName, JavaVersion, ScalaVersion}
 
-class SystemInfoTest  extends FlatSpec{
+class SystemInfoTest  extends FlatSpec {
   it should "contains non empty java version" in {
     assertResult(false)(Option(JavaVersion(None)).isEmpty)
   }
