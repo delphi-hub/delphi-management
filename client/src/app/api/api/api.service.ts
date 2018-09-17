@@ -1,10 +1,28 @@
+/*
+ * Copyright (C) 2018 The Delphi Team.
+ * See the LICENCE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {Inject, Injectable, Optional} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {Configuration} from "../configuration";
-import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES} from "../variables";
-import {CustomHttpUrlEncodingCodec} from "../encoder";
-import {Instance} from "..";
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Configuration} from '../configuration';
+import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES} from '../variables';
+import {CustomHttpUrlEncodingCodec} from '../encoder';
+import {Instance} from '..';
 
 
 @Injectable({
@@ -36,7 +54,7 @@ export class ApiService {
    * @param reportProgress flag to report request and response progress.
    */
   public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<number> {
-    return this.get(NUMBER_OF_INSTANCES, componentType)
+    return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
   /**
@@ -47,10 +65,10 @@ export class ApiService {
    * @param reportProgress flag to report request and response progress.
    */
   public getInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<Array<Instance>> {
-    return this.get(INSTANCES, componentType)
+    return this.get(INSTANCES, componentType);
   }
 
-  private get(endpoint: string, componentType, observe: any = 'body', reportProgress: boolean = false ): any{
+  private get(endpoint: string, componentType, observe: any = 'body', reportProgress: boolean = false ): any {
     if (componentType === null || componentType === undefined) {
       throw new Error('Required parameter componentType was null or undefined when calling getInstanceNumber.');
     }
@@ -63,12 +81,12 @@ export class ApiService {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
-    let httpHeaderAccepts: string[] = [
+    const httpHeaderAccepts: string[] = [
       'application/json'
     ];
-    let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    if (httpHeaderAcceptSelected != undefined) {
-      headers = headers.set("Accept", httpHeaderAcceptSelected);
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     return this.httpClient.get<Instance | number>(`${this.basePath}${endpoint}`,
