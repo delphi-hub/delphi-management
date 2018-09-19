@@ -28,12 +28,13 @@ import play.api.routing.sird._
   * Endpoints.
   * @param controller Controller components reference
   */
-class ApiRouter @Inject()(controller: InstanceRegistryController)
+class ApiRouter @Inject()(irController: InstanceRegistryController, sysController: SystemInfoController)
   extends SimpleRouter
 {
 
   override def routes: Routes = {
-    case GET(p"/numberOfInstances" ? q"componentType=$componentType") => controller.numberOfInstances(componentType)
-    case GET(p"/instances" ? q"componentType=$componentType") => controller.instances(componentType)
+    case GET(p"/numberOfInstances" ? q"componentType=$componentType") => irController.numberOfInstances(componentType)
+    case GET(p"/instances" ? q"componentType=$componentType") => irController.instances(componentType)
+    case GET(p"/systemInfo") => sysController.getInfo()
   }
 }
