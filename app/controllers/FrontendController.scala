@@ -36,9 +36,7 @@ class FrontendController @Inject()(assets: Assets, errorHandler: HttpErrorHandle
 
   def index: Action[AnyContent] = assets.at("index.html")
 
-  def assetOrDefault(resource: String): Action[AnyContent] = if (resource.startsWith(config.get[String]("apiPrefix"))){
-    Action.async(r => errorHandler.onClientError(r, NOT_FOUND, "Not found"))
-  } else {
+  def assetOrDefault(resource: String): Action[AnyContent] =
     if (resource.contains(".")) assets.at(resource) else index
-  }
+
 }
