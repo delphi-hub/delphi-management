@@ -1,4 +1,23 @@
+/*
+ * Copyright (C) 2018 The Delphi Team.
+ * See the LICENCE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Component, OnInit, Input } from '@angular/core';
+import {Instance} from '../../api';
 import { SelectionModel} from '@angular/cdk/collections';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
 import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
@@ -10,15 +29,26 @@ import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-  @Input() data_array;
-  displayedColumns: string[] = ['status', 'name', 'version', 'startDate', 'action', 'select'];
-  dataSource = new MatTableDataSource(this.data_array);
-  selection = new SelectionModel<Element>(true, []);
+
+  @Input() set data_array(data_array: Instance[]) {
+    if (this.dataSource != null) {
+      this.dataSource = new MatTableDataSource<Instance>(data_array);
+    } else {
+      this.dataSource.data = data_array;
+    }
+  }
+  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'select'];
+  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
+  selection = new SelectionModel<Instance>(true, []);
   dialogResult: any;
 
   constructor(public dialog: MatDialog) {
 
   }
+
+
+  ngOnInit() {
+ }
 
   openDialog() {
     const dialogRef = this.dialog.open(DeletedialogComponent, {
@@ -45,13 +75,7 @@ export class TableAllComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.data_array.forEach(row => this.selection.select(row));
-  }
-
-  ngOnInit() {
-  this.dataSource = new MatTableDataSource(this.data_array);
-    console.log(this.data_array);
-    console.log(this.dataSource);
+        this.data_array.forEach((row) => {this.selection.select(row);});
   }
 }
 

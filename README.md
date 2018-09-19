@@ -19,7 +19,7 @@ It is a web application to allow administrators to control the crawling process.
 It takes commands from authenticated administrators over the web interface and issues the appropriate steps in the crawler.
 
 ## How can I use it?
-To build the angular app for deployment make sure to have the swagger-codegen (https://github.com/swagger-api/swagger-codegen) npm and the angular cli installed 
+To build the angular app for deployment make sure to have npm and the angular cli installed 
 ```
 cd client && npm install && ng build --prod && cd ..
 ```

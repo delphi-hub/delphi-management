@@ -1,11 +1,13 @@
-->          /webjars                webjars.Routes
+# ->          /webjars                webjars.Routes
 # Application
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.FrontendController.index
+
+->      /api                        controllers.ApiRouter
 #controllers.HomeController.index
 #controllers.FrontendController.index()
 
 
 # Public assets
 # Serve static assets under public directory
-GET     /*file                      controllers.HomeController.assetOrDefault(file)
+GET     /*file                      controllers.FrontendController.assetOrDefault(file)
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
