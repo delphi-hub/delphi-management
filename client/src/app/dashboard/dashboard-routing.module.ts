@@ -5,16 +5,21 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { CrawlerComponent } from './crawler/crawler.component';
 import { WebapiComponent } from './webapi/webapi.component';
+import { HeaderComponent } from './header/header.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { HelpComponent } from './help/help.component';
+  
+
 
 const dashboardRoutes: Routes = [
-  {
-  path: 'dashboard',
+   {
+   path: 'dashboard',
   component: DashboardComponent,
   children: [
-    {
+      {
       path: '',
       component: DashboardOverviewComponent
-    },
+   },
    {
     path: 'webapp',
     component: WebappComponent
@@ -26,9 +31,19 @@ const dashboardRoutes: Routes = [
    {
      path: 'webapi',
      component: WebapiComponent
-   }
-  ]
-}];
+   },
+   ]
+   },
+   {
+      path: 'usermanagement',
+      component: UserManagementComponent
+    },
+    {
+      path: 'help',
+      component: HelpComponent
+    }
+    ];
+  
 
 @NgModule({
   imports: [

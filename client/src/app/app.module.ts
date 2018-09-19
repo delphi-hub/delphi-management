@@ -6,6 +6,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HttpClientModule } from '@angular/common/http';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,5 +20,6 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }

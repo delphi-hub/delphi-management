@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import {HttpClientModule} from '@angular/common/http'; 
 
 @Component({
   selector: 'app-statuscard',
@@ -7,8 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class StatusCardComponent implements OnInit {
+public deviceInfo = null;
 
-  constructor() { }
+  constructor(private deviceService: DeviceDetectorService) { 
+this.infoFunction();
+  }
+    infoFunction() {
+      this.deviceInfo = this.deviceService.getDeviceInfo();
+      }
 
   ngOnInit() {
   }

@@ -19,7 +19,11 @@ import { InstanceService } from '../instance-registry-service';
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
+import { HttpClientModule } from '@angular/common/http';
+import { DeviceDetectorModule } from 'ngx-device-detector'; 
 import { DeletedialogComponent } from './deletedialog/deletedialog.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   imports: [
@@ -34,7 +38,10 @@ import { DeletedialogComponent } from './deletedialog/deletedialog.component';
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    HttpClientModule, 
+    DashboardRoutingModule, 
+    DeviceDetectorModule.forRoot() 
   ],
   declarations: [
     DashboardCardComponent,
@@ -46,8 +53,11 @@ import { DeletedialogComponent } from './deletedialog/deletedialog.component';
     TableAllComponent,
     HeaderComponent,
     StatusCardComponent,
-    DeletedialogComponent
-  ],
+    DeletedialogComponent,
+    UserManagementComponent,
+    HelpComponent
+
+      ],
   entryComponents:[
     DeletedialogComponent
   ],
