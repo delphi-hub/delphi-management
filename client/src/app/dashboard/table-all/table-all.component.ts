@@ -31,15 +31,13 @@ import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
 export class TableAllComponent implements OnInit {
 
   @Input() set data_array(data_array: Instance[]) {
-    console.log('here with data_array', data_array);
     if (this.dataSource != null) {
       this.dataSource = new MatTableDataSource<Instance>(data_array);
-      console.log('created data source', this.dataSource);
     } else {
       this.dataSource.data = data_array;
     }
   }
-  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'action', 'select'];
+  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'select'];
   dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
   selection = new SelectionModel<Instance>(true, []);
   dialogResult: any;

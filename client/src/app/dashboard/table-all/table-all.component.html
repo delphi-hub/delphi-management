@@ -56,20 +56,20 @@
         </td>
         </ng-container>
 
-        <ng-container matColumnDef="action">
-            <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
-            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> 
-            
-             <button mat-button><i class="material-icons">play_circle_filled_white</i></button><button mat-button><i class="material-icons warn">pause_circle_outline</i></button><button mat-button><i class="material-icons">delete</i></button></mat-cell>
-             <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row;">
-                <button mat-icon-button>
-                  <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
-                </button>
-            <button mat-icon-button>
-                  <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
-                </button>
-              </mat-cell>
-        </ng-container>
+        <!--<ng-container matColumnDef="action">-->
+            <!--<mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>-->
+            <!--<mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> -->
+            <!---->
+             <!--<button mat-button><i class="material-icons">play_circle_filled_white</i></button><button mat-button><i class="material-icons warn">pause_circle_outline</i></button><button mat-button><i class="material-icons">delete</i></button></mat-cell>-->
+             <!--<mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row;">-->
+                <!--<button mat-icon-button>-->
+                  <!--<mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>-->
+                <!--</button>-->
+            <!--<button mat-icon-button>-->
+                  <!--<mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>-->
+                <!--</button>-->
+              <!--</mat-cell>-->
+        <!--</ng-container>-->
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
