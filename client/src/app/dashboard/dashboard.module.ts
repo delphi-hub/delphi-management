@@ -36,10 +36,9 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
-import { DeviceDetectorModule } from 'ngx-device-detector'; 
+import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DeletedialogComponent } from './deletedialog/deletedialog.component';
 import { UserManagementComponent } from './user-management/user-management.component';
-import { HelpComponent } from './help/help.component';
 import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 
@@ -58,9 +57,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     MatFormFieldModule,
     MatInputModule,
     DashboardRoutingModule,
-    HttpClientModule, 
-    DashboardRoutingModule, 
-    DeviceDetectorModule.forRoot() 
+    DashboardRoutingModule,
+    DeviceDetectorModule.forRoot()
   ],
   declarations: [
     DashboardCardComponent,
@@ -73,8 +71,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     HeaderComponent,
     StatusCardComponent,
     DeletedialogComponent,
-    UserManagementComponent,
-    HelpComponent
+    UserProfileComponent,
+    UserManagementComponent
   ],
   entryComponents: [
     DeletedialogComponent

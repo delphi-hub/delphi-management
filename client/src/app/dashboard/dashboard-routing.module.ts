@@ -16,54 +16,54 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { WebappComponent } from './webapp/webapp.component';
-import { DashboardComponent } from './dashboard.component';
-import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
-import { CrawlerComponent } from './crawler/crawler.component';
-import { UserManagementComponent } from './user-management/user-management.component';
-import { WebApiComponent } from './webapi/web-api.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {WebappComponent} from './webapp/webapp.component';
+import {DashboardComponent} from './dashboard.component';
+import {DashboardOverviewComponent} from './dashboard-overview/dashboard-overview.component';
+import {CrawlerComponent} from './crawler/crawler.component';
+import {UserManagementComponent} from './user-management/user-management.component';
+import {WebApiComponent} from './webapi/web-api.component';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {HelpComponent} from '../help/help.component';
 
 
 const dashboardRoutes: Routes = [
-   {
-   path: 'dashboard',
-  component: DashboardComponent,
-  children: [
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    children: [
       {
-      path: '',
-      component: DashboardOverviewComponent
-   },
-   {
-    path: 'webapp',
-    component: WebappComponent
-   },
-   {
-     path: 'crawler',
-     component: CrawlerComponent
-   },
-   {
-     path: 'webapi',
-     component: WebapiComponent
-   },
-   {
-      path: 'usermanagement',
-      component: UserManagementComponent
-   },
-    {
-      path: 'userProfile',
-      component: UserProfileComponent
-    },
-    {
-      path: 'help',
-      component: HelpComponent
-    }
-  ]}
-    ];
-  
+        path: '',
+        component: DashboardOverviewComponent
+      },
+      {
+        path: 'webapp',
+        component: WebappComponent
+      },
+      {
+        path: 'crawler',
+        component: CrawlerComponent
+      },
+      {
+        path: 'webApi',
+        component: WebApiComponent
+      },
+      {
+        path: 'userManagement',
+        component: UserManagementComponent
+      },
+      {
+        path: 'userProfile',
+        component: UserProfileComponent
+      },
+      {
+        path: 'help',
+        component: HelpComponent
+      }
+    ]
+  }];
+
 
 @NgModule({
   imports: [
@@ -80,4 +80,5 @@ const dashboardRoutes: Routes = [
  * rendered once and load the routed components in
  * between.
  */
-export class DashboardRoutingModule { }
+export class DashboardRoutingModule {
+}
