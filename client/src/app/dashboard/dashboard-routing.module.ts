@@ -24,6 +24,7 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
 import { CrawlerComponent } from './crawler/crawler.component';
 import { WebApiComponent } from './webapi/web-api.component';
 import {UserProfileComponent} from './user-profile/user-profile.component';
+import {HelpComponent} from '../help/help.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -49,6 +50,10 @@ const dashboardRoutes: Routes = [
     {
       path: 'userProfile',
       component: UserProfileComponent
+    },
+    {
+      path: 'help',
+      component: HelpComponent
     }
   ]
 }];
