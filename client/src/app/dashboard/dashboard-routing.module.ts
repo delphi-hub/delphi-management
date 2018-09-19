@@ -23,6 +23,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { CrawlerComponent } from './crawler/crawler.component';
 import { WebApiComponent } from './webapi/web-api.component';
+import {UserProfileComponent} from './user-profile/user-profile.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -44,7 +45,11 @@ const dashboardRoutes: Routes = [
    {
      path: 'webApi',
      component: WebApiComponent
-   }
+   },
+    {
+      path: 'userProfile',
+      component: UserProfileComponent
+    }
   ]
 }];
 
