@@ -38,6 +38,7 @@ import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
 import {ApiService} from '../api';
 import { DeletedialogComponent } from './deletedialog/deletedialog.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { DeletedialogComponent } from './deletedialog/deletedialog.component';
     TableAllComponent,
     HeaderComponent,
     StatusCardComponent,
-    DeletedialogComponent
+    DeletedialogComponent,
+    UserProfileComponent
   ],
   entryComponents: [
     DeletedialogComponent

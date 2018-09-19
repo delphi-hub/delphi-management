@@ -37,7 +37,6 @@ export class WebappComponent implements OnInit {
     this.table_data = [];
 
     this.apiService.getInstances(Instance.ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
-      console.log('received result', result);
       this.table_data = result;
 
     }, err => {
