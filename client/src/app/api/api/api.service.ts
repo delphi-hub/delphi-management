@@ -20,9 +20,10 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Configuration} from '../configuration';
-import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES} from '../variables';
+import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
 import {CustomHttpUrlEncodingCodec} from '../encoder';
 import {Instance} from '..';
+import {SysInfo} from "../model/sysInfo";
 
 
 @Injectable({
@@ -46,6 +47,21 @@ export class ApiService {
     }
   }
 
+  public getSysInfo(reportProgress: boolean = false): Observable<SysInfo> {
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+    return this.httpClient.get<SysInfo>(`${this.basePath}${SYS_INFO}`,
+      {headers: headers, observe: 'body', reportProgress: reportProgress});
+    }
+
   /**
    * Find number of running instances
    * How many instances per type are running
@@ -68,7 +84,7 @@ export class ApiService {
     return this.get(INSTANCES, componentType);
   }
 
-  private get(endpoint: string, componentType, observe: any = 'body', reportProgress: boolean = false ): any {
+  private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {
     if (componentType === null || componentType === undefined) {
       throw new Error('Required parameter componentType was null or undefined when calling getInstanceNumber.');
     }

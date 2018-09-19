@@ -17,7 +17,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { DeviceDetectorService } from 'ngx-device-detector';
+import { ApiService } from '../../api';
+import {SysInfo} from '../../api/model/sysInfo';
 
 @Component({
   selector: 'app-statuscard',
@@ -26,17 +27,20 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 })
 
 export class StatusCardComponent implements OnInit {
-  public deviceInfo = null;
 
-  constructor(private deviceService: DeviceDetectorService) {
-    this.infoFunction();
-  }
+  sysInfo: SysInfo;
 
-  infoFunction() {
-    this.deviceInfo = this.deviceService.getDeviceInfo();
+  constructor( private apiService: ApiService) {
+    this.sysInfo = { hostName: 'no server connection',
+                    javaVersion: 'no server connection',
+                    platformName: 'no server connection',
+                    scalaVersion: 'no server connection' };
   }
 
   ngOnInit() {
+    this.apiService.getSysInfo().subscribe((sysInfo) => {
+      this.sysInfo = sysInfo;
+    });
   }
 
 }

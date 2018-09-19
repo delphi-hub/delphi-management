@@ -21,17 +21,29 @@
      <div class="floatStyle">
          <table class="tableAlign">
           <tr>
-            <td>Browser: </td>
+            <td>Scala Version: </td>
             <td class="valueBox">
-                {{deviceInfo.browser}}
+                {{sysInfo.scalaVersion}}
             </td>            
           </tr>
           <tr>
-            <td>Client Platform: </td>
+            <td>JVM Version: </td>
             <td class="valueBox">
-               {{deviceInfo.os}}
+               {{sysInfo.javaVersion}}
             </td>            
           </tr>
+           <tr>
+             <td>Platform: </td>
+             <td class="valueBox">
+               {{sysInfo.platformName}}
+             </td>
+           </tr>
+           <tr>
+             <td>Host Name: </td>
+             <td class="valueBox">
+               {{sysInfo.hostName}}
+             </td>
+           </tr>
         </table>
      </div>
 </div>

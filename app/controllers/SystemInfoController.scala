@@ -38,23 +38,23 @@
 
  object HostName {
    def apply(host: Option[String]): String = {
-    var hostname = InetAddress.getLocalHost().getHostName()
+    val hostname = InetAddress.getLocalHost().getHostName()
     hostname
    }
  }
 
  object PlatformName {
    def apply(platform: Option[String]): String = {
-     var os = "os.name";
-     var version = "os.version";
-     var osVersion = System.getProperty(os) + " " + System.getProperty(version)
+     val os = "os.name";
+     val version = "os.version";
+     val osVersion = System.getProperty(os) + " " + System.getProperty(version)
      osVersion
    }
  }
 
  object ScalaVersion {
    def apply(browser: Option[String]): String = {
-     var scalaVersion = PlayVersion.current
+     val scalaVersion = PlayVersion.current
      scalaVersion
    }
  }
