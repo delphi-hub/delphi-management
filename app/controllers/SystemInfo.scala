@@ -1,42 +1,60 @@
-// package controllers
+/*
+ * Copyright (C) 2018 The Delphi Team.
+ * See the LICENCE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-// import java.net.InetAddress
-// import play.core.PlayVersion
+ package controllers
 
-//   object JavaVersion {
-//   def apply(javaVersionPrefix: Option[String]): String = {
-//     val version = sys.props.get("java.version") getOrElse {sys.error("failed to get system property java.version")}
+ import java.net.InetAddress
+ import play.core.PlayVersion
 
-//     javaVersionPrefix match {
-//       case Some(prefix) =>
-//         if (!version.startsWith(prefix)) {
-//           sys.error(s"javac version ${version} may not be used to publish, it has to start with ${prefix} due to javaVersionPrefix setting")
-//         }
-//       case None =>
-//     }
-//     version
-//   }
-// }
+   object JavaVersion {
+   def apply(javaVersionPrefix: Option[String]): String = {
+     val version = sys.props.get("java.version") getOrElse {sys.error("failed to get system property java.version")}
 
-// object HostName {
-//   def apply(host: Option[String]): String = {    
-//    var hostname = InetAddress.getLocalHost().getHostName()
-//    hostname
-//   }
-// }
+     javaVersionPrefix match {
+       case Some(prefix) =>
+         if (!version.startsWith(prefix)) {
+           sys.error(s"javac version ${version} may not be used to publish, it has to start with ${prefix} due to javaVersionPrefix setting")
+         }
+       case None =>
+     }
+     version
+   }
+ }
 
-// object PlatformName {
-//   def apply(platform: Option[String]): String = {
-//     var os = "os.name";
-//     var version = "os.version";
-//     var osVersion = System.getProperty(os) + " " + System.getProperty(version)
-//     osVersion
-//   }
-// }
+ object HostName {
+   def apply(host: Option[String]): String = {
+    var hostname = InetAddress.getLocalHost().getHostName()
+    hostname
+   }
+ }
 
-// object ScalaVersion {
-//   def apply(browser: Option[String]): String = {
-//     var scalaVersion = PlayVersion.current
-//     scalaVersion
-//   }
-// }
+ object PlatformName {
+   def apply(platform: Option[String]): String = {
+     var os = "os.name";
+     var version = "os.version";
+     var osVersion = System.getProperty(os) + " " + System.getProperty(version)
+     osVersion
+   }
+ }
+
+ object ScalaVersion {
+   def apply(browser: Option[String]): String = {
+     var scalaVersion = PlayVersion.current
+     scalaVersion
+   }
+ }
