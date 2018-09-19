@@ -75,7 +75,7 @@ export class TableAllComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.data_array.forEach(row => this.selection.select(row));
+        this.data_array.forEach((row) => {this.selection.select(row);});
   }
 }
 
