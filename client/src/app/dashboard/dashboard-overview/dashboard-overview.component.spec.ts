@@ -1,4 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {Instance} from "../../api";
+import { HttpClientModule } from '@angular/common/http';
+import { StatusCardComponent } from '../status-card/status-card.component';
+import { DashboardCardComponent } from '../dashboard-card/dashboard-card.component';
+import { RouterModule } from '@angular/router';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
 
 describe('DashboardOverviewComponent', () => {
@@ -7,7 +12,8 @@ describe('DashboardOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardOverviewComponent ]
+      declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent ],
+      imports: [RouterModule, HttpClientModule]
     })
     .compileComponents();
   }));

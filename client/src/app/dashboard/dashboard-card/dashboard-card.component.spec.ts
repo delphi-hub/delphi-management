@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Router, RouterOutlet } from "@angular/router";
+import { RouterModule } from '@angular/router';
 import { DashboardCardComponent } from './dashboard-card.component';
 
 describe('DashboardCardComponent', () => {
@@ -8,7 +9,10 @@ describe('DashboardCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardCardComponent ]
+      declarations: [ DashboardCardComponent ],
+       providers: [{provide: Router},
+            RouterOutlet],
+      imports: [RouterModule]
     })
     .compileComponents();
   }));
