@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Instance} from "../../api";
 
 @Component({
   selector: 'app-dashboard-overview',
@@ -8,6 +9,10 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardOverviewComponent implements OnInit {
 
   constructor() { }
+
+  crawler = Instance.ComponentTypeEnum.Crawler;
+  webApi = Instance.ComponentTypeEnum.WebApi;
+  webApp = Instance.ComponentTypeEnum.WebApp;
 
   ngOnInit() {
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {Instance} from '../../api';
 import { SelectionModel} from '@angular/cdk/collections';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
 import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
@@ -10,15 +11,28 @@ import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-  @Input() data_array;
-  displayedColumns: string[] = ['status', 'name', 'version', 'startDate', 'action', 'select'];
-  dataSource = new MatTableDataSource(this.data_array);
-  selection = new SelectionModel<Element>(true, []);
+
+  @Input() set data_array(data_array: Instance[]) {
+    console.log('here with data_array', data_array);
+    if (this.dataSource != null) {
+      this.dataSource = new MatTableDataSource<Instance>(data_array);
+      console.log('created data source', this.dataSource);
+    } else {
+      this.dataSource.data = data_array;
+    }
+  }
+  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'action', 'select'];
+  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
+  selection = new SelectionModel<Instance>(true, []);
   dialogResult: any;
 
   constructor(public dialog: MatDialog) {
 
   }
+
+
+  ngOnInit() {
+ }
 
   openDialog() {
     const dialogRef = this.dialog.open(DeletedialogComponent, {
@@ -46,12 +60,6 @@ export class TableAllComponent implements OnInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this.data_array.forEach(row => this.selection.select(row));
-  }
-
-  ngOnInit() {
-  this.dataSource = new MatTableDataSource(this.data_array);
-    console.log(this.data_array);
-    console.log(this.dataSource);
   }
 }
 

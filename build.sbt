@@ -40,5 +40,7 @@ libraryDependencies += "org.webjars" % "bootstrap" % "4.1.0"
 libraryDependencies += "org.webjars" %% "webjars-play" % "2.6.3"
 libraryDependencies += "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4-SNAPSHOT"
 libraryDependencies += "eu.bitwalker" % "UserAgentUtils" % "1.20"
+libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.8"
+libraryDependencies += ws
 
 routesGenerator := InjectedRoutesGenerator

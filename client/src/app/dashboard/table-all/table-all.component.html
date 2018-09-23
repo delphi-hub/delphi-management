@@ -3,25 +3,25 @@
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
   <table class="mat-elevation-z8 mat-table" mat-table [dataSource]="dataSource">
-    <ng-container  matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="ID">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
 
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="version">
-            <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
-        </ng-container>
+      <ng-container matColumnDef="host">
+        <mat-header-cell *matHeaderCellDef> Host </mat-header-cell>
+        <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.host}} </mat-cell>
+      </ng-container>
 
-        <ng-container matColumnDef="startDate">
-            <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef> Start Date </mat-header-cell>
-            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.startDate}} </mat-cell>
-        </ng-container>
+      <ng-container matColumnDef="portNumber">
+        <mat-header-cell *matHeaderCellDef> Port </mat-header-cell>
+        <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.portNumber}} </mat-cell>
+      </ng-container>
 
         <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef [ngClass]="'customWidthClass_new mat_cell'">
@@ -40,18 +40,15 @@
 
         <ng-container matColumnDef="action">
             <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
-            <!--<mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> 
+            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> 
             
-             <button mat-button><i class="material-icons">play_circle_filled_white</i></button><button mat-button><i class="material-icons warn">pause_circle_outline</i></button><button mat-button><i class="material-icons">delete</i></button></mat-cell>-->
+             <button mat-button><i class="material-icons">play_circle_filled_white</i></button><button mat-button><i class="material-icons warn">pause_circle_outline</i></button><button mat-button><i class="material-icons">delete</i></button></mat-cell>
              <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row;">
                 <button mat-icon-button>
                   <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
                 </button>
             <button mat-icon-button>
                   <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
-                </button>
-                <button mat-icon-button>
-                  <mat-icon aria-label="delete">delete</mat-icon>
                 </button>
               </mat-cell>
         </ng-container>
@@ -64,7 +61,3 @@
         <button mat-raised-button color="primary">Add Instance</button>
     </div>
 </div>
-
-
-
-  

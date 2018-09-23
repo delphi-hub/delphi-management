@@ -1,21 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource} from '@angular/material';
+import {ApiService, Instance} from '../../api';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
 
-export interface Element {
-  status: string;
-  name: string;
-  version: number;
-  startDate:string;
-}
-
-const ELEMENT_DATA: Element[] = [
-  {status: 'Finished', name: 'test1', version: 1, startDate: Date().toLocaleString()},
-  {status: 'Listining', name: 'test2', version: 2, startDate: Date().toLocaleString()},
-  {status: 'Finished', name: 'test3', version: 1, startDate: Date().toLocaleString()},
-  {status: 'Finished', name: 'test1', version: 3, startDate: Date().toLocaleString()}
-];
 
 @Component({
   selector: 'app-webapp',
@@ -23,16 +10,21 @@ const ELEMENT_DATA: Element[] = [
   styleUrls: ['./webapp.component.css']
 })
 export class WebappComponent implements OnInit {
-  dialogResult = "";
-  data_array :any;
-
-  constructor(public dialog: MatDialog) {
-
+  // this array is inserted into the table all component in the html code
+  table_data: Instance[];
+  constructor(private apiService: ApiService) {
   }
 
   ngOnInit() {
-  this.data_array = ELEMENT_DATA;
-    
+    this.table_data = [];
+
+    this.apiService.getInstances(Instance.ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
+      console.log('received result', result);
+      this.table_data = result;
+
+    }, err => {
+      console.log('error during get instances for web app');
+    });
   }
 
 }

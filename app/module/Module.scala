@@ -13,6 +13,7 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
+import controllers.{MyExecutionContext, MyExecutionContextImpl}
 import daos.{MockPasswordInfoDao, MockUserDao, UserDao}
 import models.User
 import net.ceedubs.ficus.readers.ArbitraryTypeReader.arbitraryTypeValueReader
@@ -45,6 +46,7 @@ class Module extends AbstractModule with ScalaModule {
     bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
     bind[EventBus].toInstance(EventBus())
     bind[Clock].toInstance(Clock())
+    bind(classOf[MyExecutionContext]).to(classOf[MyExecutionContextImpl])
   }
 
   /**
