@@ -23,7 +23,7 @@ import {Configuration} from '../configuration';
 import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
 import {CustomHttpUrlEncodingCodec} from '../encoder';
 import {Instance} from '..';
-import {SysInfo} from "../model/sysInfo";
+import {SysInfo} from '../model/sysInfo';
 
 
 @Injectable({

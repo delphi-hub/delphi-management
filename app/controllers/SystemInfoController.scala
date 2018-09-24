@@ -21,14 +21,21 @@
  import java.net.InetAddress
 
  import javax.inject.Inject
+ import models.SystemInfo
+ import play.api.libs.json.Json
  import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
  import play.core.PlayVersion
- import play.api.libs.json.Json
+
 
  class SystemInfoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+   implicit val systemInfoWrites = Json.writes[SystemInfo]
+   implicit val systemInfoReads = Json.reads[SystemInfo]
 
   def getInfo: Action[AnyContent] = Action {
-    Ok(Json.obj("hostName" -> getHostName(), "javaVersion" -> getJvmVersion(), "platformName" -> getPlatformName(), "scalaVersion" -> getScalaVersion()))
+
+    val info = SystemInfo(hostName = getHostName(), javaVersion = getJvmVersion(), platformName = getPlatformName(), scalaVersion = getScalaVersion())
+    val infoJson = Json.toJson(info)
+    Ok(infoJson)
   }
 
    private def getJvmVersion(): String = {
@@ -39,21 +46,21 @@
 
 
 
-     private def getHostName(): String = {
+   private def getHostName(): String = {
        InetAddress.getLocalHost().getHostName()
-     }
+   }
 
 
-    private def getPlatformName(): String = {
+   private def getPlatformName(): String = {
        val os = "os.name";
        val version = "os.version";
        val osVersion: String = System.getProperty(os) + " " + System.getProperty(version)
        osVersion
-     }
+   }
 
 
    private def getScalaVersion(): String = {
        PlayVersion.current
-     }
+   }
 
  }

@@ -36,7 +36,6 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
-import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DeletedialogComponent } from './deletedialog/deletedialog.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import {ApiService} from '../api';
@@ -57,8 +56,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     MatFormFieldModule,
     MatInputModule,
     DashboardRoutingModule,
-    DashboardRoutingModule,
-    DeviceDetectorModule.forRoot()
+    DashboardRoutingModule
   ],
   declarations: [
     DashboardCardComponent,

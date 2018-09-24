@@ -18,9 +18,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import {ApiService, Instance} from '../../api';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
-
 
 @Component({
   selector: 'app-webapp',

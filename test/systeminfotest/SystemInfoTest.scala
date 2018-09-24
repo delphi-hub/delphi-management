@@ -18,21 +18,34 @@
 
 package systeminfotest
 
-import org.scalatest.FlatSpec
-import controllers._
+import controllers.SystemInfoController
+import models.SystemInfo
 
-class SystemInfoTest  extends FlatSpec{
-  it should "contains non empty java version" in {
-    assertResult(false)(Option(JavaVersion(None)).isEmpty)
-  }
-  it should "contains non empty scala version" in {
-    assertResult(false)(Option(ScalaVersion(None)).isEmpty)
-  }
-  it should "contains non empty hostname" in {
-    assertResult(false)(Option(HostName(None)).isEmpty)
-  }
-  it should "contains non empty platform value" in {
-    assertResult(false)(Option(JavaVersion(None)).isEmpty)
+import scala.concurrent.Future
+import org.scalatestplus.play._
+import play.api.libs.json._
+import play.api.mvc._
+import play.api.test._
+import play.api.test.Helpers._
+
+
+class SystemInfoTest extends PlaySpec with Results {
+
+  "SystemInfo" should {
+    "should return a valid SystemInfo Json" in {
+      val controller = new SystemInfoController(stubControllerComponents())
+
+      val result: Future[Result] = controller.getInfo().apply(FakeRequest())
+      val bodyText: String = contentAsString(result)
+      val json = Json.parse(bodyText)
+      implicit val systemInfoWrites = Json.writes[SystemInfo]
+      implicit val systemInfoReads = Json.reads[SystemInfo]
+
+      val validateResult: JsResult[SystemInfo] = json.validate[SystemInfo]
+
+      validateResult.isSuccess mustBe true
+
+    }
   }
 
 }
