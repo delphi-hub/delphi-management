@@ -36,9 +36,11 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
-import {ApiService} from '../api';
 import { DeletedialogComponent } from './deletedialog/deletedialog.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+
 
 @NgModule({
   imports: [
@@ -53,6 +55,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
+    DashboardRoutingModule,
     DashboardRoutingModule
   ],
   declarations: [
@@ -66,7 +69,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     HeaderComponent,
     StatusCardComponent,
     DeletedialogComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UserManagementComponent
   ],
   entryComponents: [
     DeletedialogComponent

@@ -25,6 +25,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,5 +40,6 @@ import { HelpComponent } from './help/help.component';
   ],
   providers: [],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }

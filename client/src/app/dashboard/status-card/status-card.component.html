@@ -16,34 +16,34 @@
   ~ limitations under the License.
   -->
 
-<h6>System Information</h6>
+<h5>System Information</h5>
 <div class="container border ">
      <div class="floatStyle">
-
          <table class="tableAlign">
           <tr>
-            <td>Host Name :</td>
+            <td>Scala Version: </td>
             <td class="valueBox">
-               Test
+                {{sysInfo.scalaVersion}}
             </td>            
           </tr>
           <tr>
-            <td>Scala Version :</td>
+            <td>JVM Version: </td>
             <td class="valueBox">
-                2.0
+               {{sysInfo.javaVersion}}
             </td>            
           </tr>
-          <tr>
-            <td>Browser :</td>
-            <td class="valueBox">
-                Chrome
-            </td>            
-          </tr>
-          <tr>
-            <td>Platform :</td>
-            <td class="valueBox">
-               Linux
-            </td>            
-          </tr>
+           <tr>
+             <td>Platform: </td>
+             <td class="valueBox">
+               {{sysInfo.platformName}}
+             </td>
+           </tr>
+           <tr>
+             <td>Host Name: </td>
+             <td class="valueBox">
+               {{sysInfo.hostName}}
+             </td>
+           </tr>
         </table>
-    </div>
+     </div>
+</div>
