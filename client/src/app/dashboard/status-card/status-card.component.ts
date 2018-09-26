@@ -17,6 +17,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../api';
+import {SysInfo} from '../../api/model/sysInfo';
 
 @Component({
   selector: 'app-statuscard',
@@ -26,9 +28,19 @@ import { Component, OnInit } from '@angular/core';
 
 export class StatusCardComponent implements OnInit {
 
-  constructor() { }
+  sysInfo: SysInfo;
+
+  constructor( private apiService: ApiService) {
+    this.sysInfo = { hostName: 'no server connection',
+                    javaVersion: 'no server connection',
+                    platformName: 'no server connection',
+                    scalaVersion: 'no server connection' };
+  }
 
   ngOnInit() {
+    this.apiService.getSysInfo().subscribe((sysInfo) => {
+      this.sysInfo = sysInfo;
+    });
   }
 
 }
