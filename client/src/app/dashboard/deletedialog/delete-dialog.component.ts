@@ -21,24 +21,24 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 
 @Component({
-  selector: 'app-deletedialog',
-  templateUrl: './deletedialog.component.html',
-  styleUrls: ['./deletedialog.component.css']
+  selector: 'app-delete-dialog',
+  templateUrl: './delete-dialog.component.html',
+  styleUrls: ['./delete-dialog.component.css']
 })
-export class DeletedialogComponent implements OnInit {
+export class DeleteDialogComponent implements OnInit {
 
-  constructor(public thisDialogRef:MatDialogRef<DeletedialogComponent>, @Inject(MAT_DIALOG_DATA) public data: string) { }
+  constructor(public thisDialogRef: MatDialogRef<DeleteDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
   }
 
-  onCloseConfirm(){
-  	this.thisDialogRef.close('Confirm');
+  onCloseConfirm() {
+    this.thisDialogRef.close('Confirm');
 
   }
 
-  onCloseCancle(){
-  	this.thisDialogRef.close('Cancle');
+  onCloseCancel() {
+    this.thisDialogRef.close('Cancle');
 
   }
 

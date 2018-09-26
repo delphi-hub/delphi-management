@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import {Instance} from "../../api";
+import {Instance} from '../../api';
 
 @Component({
   selector: 'app-dashboard-overview',
