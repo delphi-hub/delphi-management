@@ -19,17 +19,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule} from '@angular/material/dialog';
 
-import { DeleteDialog } from './delete-dialog.component';
+import { DeleteDialogComponent } from './delete-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 
 describe('DeleteDialogComponent', () => {
-  let component: DeleteDialog;
-  let fixture: ComponentFixture<DeleteDialog>;
+  let component: DeleteDialogComponent;
+  let fixture: ComponentFixture<DeleteDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteDialog ],
+      declarations: [ DeleteDialogComponent ],
       imports: [MatDialogModule],
       providers: [{
       provide: MatDialogRef,
