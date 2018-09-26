@@ -19,18 +19,172 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-3 col-sm-4">
-    <app-dashboard-card route="crawler" componentType={{crawler}} title="Crawler" img="../assets/images/crawler.png"></app-dashboard-card>
+      <app-dashboard-card route="crawler" componentType={{crawler}} title="Crawler" img="../assets/images/crawler.png" collapse_target="#demo1" numberOfNotification="3"></app-dashboard-card>
     </div>
     <div class="col-md-3 col-sm-4">
-    <app-dashboard-card route="webApi" componentType={{webApi}} title="Web API" img="../assets/images/webapi.png"></app-dashboard-card>
+      <app-dashboard-card route="webApi" componentType={{webApi}} title="Web API" img="../assets/images/webapi.png" collapse_target="#demo2" numberOfNotification="1"></app-dashboard-card>
     </div>
     <div class="col-md-3 col-sm-4">
-    <app-dashboard-card route="webapp" componentType={{webApp}} title="Web APP" img="../assets/images/webapp.png"></app-dashboard-card>
+      <app-dashboard-card route="webapp" componentType={{webApp}} title="Web APP" img="../assets/images/webapp.png" collapse_target="#demo3" numberOfNotification="2"></app-dashboard-card>
     </div>
     <div class="col-md-1 col-sm-4">
     </div>
     <div class="col-md-2 col-sm-4">
-    <app-statuscard></app-statuscard>
+      <app-statuscard></app-statuscard>
+    </div>
   </div>
+
+  <!--Begin notification pannels-->
+  <div id="demo1" class="collapse">
+    <h4>Crawler</h4>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Type </th>
+        <th>Notifications</th>
+        <th>Date/Time</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>
+          <i class="fa fa-exclamation"></i>
+        </td>
+        <td>
+          <span>Demo overloaded</span>
+        </td>
+        <td> <span>14/08/18 10:01</span></td>
+        <td>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class=""><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-close"></i>
+        </td>
+        <td> <span>Demo-4 failed</span></td>
+        <td><span>14/08/18 19:01</span></td>
+        <td>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class=""><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-check"></i>
+        </td>
+        <td>
+          <span> Demo-2 added</span>
+        </td>
+        <td><span>14/08/18 10:01</span></td>
+        <td>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class=""><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div id="demo2" class="collapse">
+    <h4>WebApi</h4>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Type </th>
+        <th>Notifications</th>
+        <th>Date/Time</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>
+          <i class="fa fa-check"></i>
+        </td>
+        <td>
+          <span> Demo-2 added</span>
+        </td>
+        <td><span>14/08/18 10:01</span></td>
+        <td>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class=""><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="demo3" class="collapse">
+    <h4>WebApp</h4>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Type </th>
+        <th>Notifications</th>
+        <th>Date/Time</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>
+          <i class="fa fa-close"></i>
+        </td>
+        <td> <span>Demo-4 failed</span></td>
+        <td><span>14/08/18 19:01</span></td>
+        <td>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class=""><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-check"></i>
+        </td>
+        <td>
+          <span> Demo-2 added</span>
+        </td>
+        <td><span>14/08/18 10:01</span></td>
+        <td>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class=""><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--End notification pannels-->
 </div>
-</div>
+
