@@ -20,11 +20,13 @@ package controllers
 
 import akka.actor.ActorSystem
 import javax.inject.Inject
+import play.api.Configuration
 
-import scala.concurrent.{ExecutionContext}
+import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.{WSClient}
+import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+
 
 trait MyExecutionContext extends ExecutionContext
 
@@ -44,11 +46,12 @@ class MyExecutionContextImpl @Inject()(system: ActorSystem)
   */
 class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
-                                           ws: WSClient)
+                                           ws: WSClient, config: Configuration)
   extends BaseController {
-
+  val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   def instances(componentType: String): Action[AnyContent] = Action.async {
-    ws.url("http://localhost:8087/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
+
+    ws.url(instanceRegistryUri + "/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
       // TODO: possible handling of parsing the data can be done here
 
       Ok(response.body)
@@ -58,7 +61,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
-    ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
+    ws.url(instanceRegistryUri + "/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       if (response.status == 200) {
         Ok(response.body)
