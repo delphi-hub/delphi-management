@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit, Input } from '@angular/core';
-import {ApiService} from "../../api";
+import {ApiService} from '../../api';
 
 @Component({
   selector: 'app-dashboard-card',
