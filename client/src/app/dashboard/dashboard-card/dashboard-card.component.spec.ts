@@ -17,9 +17,11 @@
  */
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterOutlet } from "@angular/router";
+import { Router, RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { DashboardCardComponent } from './dashboard-card.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DashboardCardComponent', () => {
   let component: DashboardCardComponent;
@@ -30,7 +32,7 @@ describe('DashboardCardComponent', () => {
       declarations: [ DashboardCardComponent ],
        providers: [{provide: Router},
             RouterOutlet],
-      imports: [RouterModule]
+      imports: [RouterModule, RouterTestingModule, HttpClientModule]
     })
     .compileComponents();
   }));
