@@ -28,7 +28,7 @@ import {ApiService, SocketService} from '../../api';
 /**
  * The dashboard-card component is used to provide
  * an overview of the status of the given component.
- * The needed information are querried based on the
+ * The needed information are queried based on the
  * given componentType.
  */
 export class DashboardCardComponent implements OnInit {
