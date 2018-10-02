@@ -16,6 +16,12 @@
  * limitations under the License.
  */
 
-export * from './instance';
-export * from './instanceID';
-export * from './sysInfo';
+export interface SocketMessage {
+  event: EventType;
+  payload?: string;
+}
+
+export enum EventType {
+  InstanceNumbers = 'InstanceNumbers',
+  InstanceDetails = 'InstanceDetails',
+}

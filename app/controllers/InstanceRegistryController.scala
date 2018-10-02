@@ -21,10 +21,15 @@ package controllers
 import akka.actor.ActorSystem
 import javax.inject.Inject
 
-import scala.concurrent.{ExecutionContext}
+import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.{WSClient}
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import play.api.libs.ws.WSClient
+import play.api.mvc._
+import akka.stream.Materializer
+import akka.stream.scaladsl._
+import models.{EventType, SocketMessage}
+import play.api.libs.json.{Json}
+import play.api.mvc.WebSocket.MessageFlowTransformer
 
 trait MyExecutionContext extends ExecutionContext
 
@@ -33,7 +38,7 @@ trait MyExecutionContext extends ExecutionContext
   * which should be used to handle client connections.
   * @param system
   */
-class MyExecutionContextImpl @Inject()(system: ActorSystem)
+class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
   extends CustomExecutionContext(system, "my.executor") with MyExecutionContext
 
 /**
@@ -42,10 +47,18 @@ class MyExecutionContextImpl @Inject()(system: ActorSystem)
   * @param controllerComponents
   * @param ws
   */
-class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContext,
+
+
+class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Materializer, myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
                                            ws: WSClient)
   extends BaseController {
+
+
+    implicit val messageReads = Json.reads[SocketMessage]
+    implicit val messageWrites = Json.writes[SocketMessage]
+    implicit val messageFlowTransformer = MessageFlowTransformer.jsonMessageFlowTransformer[SocketMessage, SocketMessage]
+
 
   def instances(componentType: String): Action[AnyContent] = Action.async {
     ws.url("http://localhost:8087/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -55,6 +68,17 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
     }(myExecutionContext)
   }
 
+  def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
+    request => { // Log events to the console
+      val in = Sink.foreach[SocketMessage](println)
+
+      // Send a single 'Hello!' message and then leave the socket open
+      val msg = new SocketMessage(event=EventType.InstanceDetails, payload = Option("wow so much information"))
+      val out = Source.single(msg).concat(Source.maybe)
+
+      Flow.fromSinkAndSource(in, out)
+    }
+  }
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls

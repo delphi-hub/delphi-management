@@ -16,6 +16,21 @@
  * limitations under the License.
  */
 
-export * from './instance';
-export * from './instanceID';
-export * from './sysInfo';
+package models
+
+import models.EventType.MessageType
+import play.api.libs.json.{ Reads, Writes}
+
+
+final case class SocketMessage(event: MessageType, payload: Option[String])
+
+
+  object EventType extends Enumeration {
+    type MessageType = EventType.Value
+    val InstanceNumbers = Value("InstanceNumbers")
+    val InstanceDetails = Value("InstanceDetails")
+
+    implicit val MessageTypeReads: Reads[MessageType] = Reads.enumNameReads(EventType)
+    implicit val MessageTypeWrites: Writes[MessageType] = Writes.enumNameWrites
+  }
+

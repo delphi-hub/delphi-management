@@ -18,6 +18,7 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {ApiService, SocketService} from '../../api';
+import {EventType} from '../../api/model/socketMessage';
 
 @Component({
   selector: 'app-dashboard-card',
@@ -52,7 +53,9 @@ export class DashboardCardComponent implements OnInit {
     this.setInstanceNumber();
 
     this.socketService.initSocket().then(() => {
-      this.socketService.send(this.componentType);
+      this.socketService.subscribeForUpdate(EventType.InstanceNumbers).subscribe((data) => {
+        console.log('data callback in card component', data);
+      });
     });
 
   }

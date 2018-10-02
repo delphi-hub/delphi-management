@@ -19,6 +19,8 @@
 import {Inject, Injectable, Optional} from '@angular/core';
 import {BASE_PATH} from '../variables';
 import {Configuration} from '../configuration';
+import {Observable} from 'rxjs';
+import {EventType, SocketMessage} from '../model/socketMessage';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,7 @@ export class SocketService {
   protected basePath = '';
   public configuration = new Configuration();
   private socket: WebSocket = null;
+  private registeredEvents: Set<EventType>;
 
   constructor(@Optional() @Inject(BASE_PATH) basePath: string,
               @Optional() configuration: Configuration) {
@@ -39,20 +42,46 @@ export class SocketService {
       this.configuration = configuration;
       this.basePath = basePath || configuration.basePath || this.basePath;
     }
+    this.registeredEvents = new Set<EventType>();
   }
 
-  public send(message: string) {
+  public send(message: SocketMessage|EventType) {
     if (this.socket) {
       if (this.socket.readyState === this.socket.OPEN) {
-        this.socket.send(message);
+        this.socket.send(JSON.stringify(message));
       } else {
         this.socket.addEventListener('open', () => {
-          this.socket.send(message);
+          this.socket.send(JSON.stringify(message));
         });
       }
     } else {
       throw new Error('trying to send data to a closed socket');
     }
+  }
+
+  public subscribeForUpdate(eventName: EventType): Observable<any> {
+    return new Observable((observer) => {
+
+      if (!this.registeredEvents.has(eventName)) {
+        this.registeredEvents.add(eventName);
+        this.socket.send(eventName);
+      }
+
+      this.socket.onmessage = (e: MessageEvent) => {
+        console.log('received on socket connection', e);
+        // TODO: check e.data content before
+        const msg: SocketMessage = e.data;
+        if (msg.event === eventName) {
+          observer.next(e);
+        }
+      };
+
+      return () => {
+        console.log('finished observable stream');
+      };
+
+
+    });
   }
 
   public initSocket(): Promise<void> {
