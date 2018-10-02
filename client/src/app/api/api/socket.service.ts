@@ -32,6 +32,8 @@ export class SocketService {
   public configuration = new Configuration();
   private socket: WebSocket = null;
   private registeredEvents: Set<EventType>;
+  private observers = [];
+
 
   constructor(@Optional() @Inject(BASE_PATH) basePath: string,
               @Optional() configuration: Configuration) {
@@ -61,8 +63,10 @@ export class SocketService {
 
   public subscribeForUpdate(eventName: EventType): Observable<any> {
     console.log('creating observer for event type', eventName);
-    return new Observable((observer) => {
 
+    return new Observable((observer) => {
+      this.observers.push(observer);
+      console.log('observerts: ', this.observers);
       if (!this.registeredEvents.has(eventName)) {
         this.registeredEvents.add(eventName);
         this.socket.send(eventName);
@@ -74,7 +78,8 @@ export class SocketService {
         const msg: SocketMessage = JSON.parse(e.data);
         console.log('comparing msg event to event name', msg.event, eventName)
         if (msg.event.toString() === eventName.toString()) {
-          observer.next(e);
+          this.observers.forEach(o => {o.next(e); });
+
         } else {
           console.log('drop event because it is not relevant');
         }
