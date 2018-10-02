@@ -16,9 +16,15 @@
  * limitations under the License.
  */
 
-export * from './api.service';
-export * from './socket.service';
-import {ApiService} from './api.service';
+import {TestBed} from '@angular/core/testing';
+
 import {SocketService} from './socket.service';
 
-export const APIS = [ApiService, SocketService];
+describe('SocketService', () => {
+  beforeEach(() => TestBed.configureTestingModule({}));
+
+  it('should be created', () => {
+    const service: SocketService = TestBed.get(SocketService);
+    expect(service).toBeTruthy();
+  });
+});

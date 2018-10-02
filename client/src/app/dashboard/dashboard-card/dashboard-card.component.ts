@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
-import {ApiService} from "../../api";
+import {Component, Input, OnInit} from '@angular/core';
+import {ApiService, SocketService} from '../../api';
 
 @Component({
   selector: 'app-dashboard-card',
@@ -41,7 +41,7 @@ export class DashboardCardComponent implements OnInit {
   numberOfInstances: string;
   numberOfFailedInstances: string;
 
-  constructor(private irService: ApiService) {
+  constructor(private irService: ApiService, private socketService: SocketService) {
     this.numberOfFailedInstances = 'No server connection';
    }
 
@@ -50,6 +50,11 @@ export class DashboardCardComponent implements OnInit {
     // to the component lifecycle. Input's are not initialized in
     // the constructor.
     this.setInstanceNumber();
+
+    this.socketService.initSocket().then(() => {
+      this.socketService.send(this.componentType);
+    });
+
   }
 
   /**
@@ -59,7 +64,7 @@ export class DashboardCardComponent implements OnInit {
   private setInstanceNumber() {
     this.irService.getNumberOfInstances(this.componentType).subscribe((amount: number) => {
       this.numberOfInstances = '' + amount;
-    }, (error) => {
+    }, () => {
       this.numberOfInstances = 'No server connection';
     });
   }

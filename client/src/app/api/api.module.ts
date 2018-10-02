@@ -16,19 +16,20 @@
  * limitations under the License.
  */
 
-import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Configuration } from './configuration';
+import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import {Configuration} from './configuration';
 
-import { ApiService } from './api/api.service';
+import {ApiService} from './api/api.service';
+import {SocketService} from './api/socket.service';
 
 @NgModule({
   imports:      [ CommonModule, HttpClientModule ],
   declarations: [],
   exports:      [],
   providers: [
-    ApiService ]
+    ApiService, SocketService]
 })
 export class ApiModule {
   public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
