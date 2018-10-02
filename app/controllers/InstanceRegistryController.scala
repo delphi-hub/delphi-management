@@ -73,7 +73,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       val in = Sink.foreach[SocketMessage](println)
 
       // Send a single 'Hello!' message and then leave the socket open
-      val msg = new SocketMessage(event=EventType.InstanceDetails, payload = Option("wow so much information"))
+      val msg = new SocketMessage(event=EventType.InstanceNumbers, payload = Option("wow so much information"))
       val out = Source.single(msg).concat(Source.maybe)
 
       Flow.fromSinkAndSource(in, out)

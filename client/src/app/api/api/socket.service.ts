@@ -60,6 +60,7 @@ export class SocketService {
   }
 
   public subscribeForUpdate(eventName: EventType): Observable<any> {
+    console.log('creating observer for event type', eventName);
     return new Observable((observer) => {
 
       if (!this.registeredEvents.has(eventName)) {
@@ -70,9 +71,12 @@ export class SocketService {
       this.socket.onmessage = (e: MessageEvent) => {
         console.log('received on socket connection', e);
         // TODO: check e.data content before
-        const msg: SocketMessage = e.data;
-        if (msg.event === eventName) {
+        const msg: SocketMessage = JSON.parse(e.data);
+        console.log('comparing msg event to event name', msg.event, eventName)
+        if (msg.event.toString() === eventName.toString()) {
           observer.next(e);
+        } else {
+          console.log('drop event because it is not relevant');
         }
       };
 
