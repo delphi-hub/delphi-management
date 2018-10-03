@@ -19,21 +19,26 @@
 import {Inject, Injectable, Optional} from '@angular/core';
 import {BASE_PATH} from '../variables';
 import {Configuration} from '../configuration';
-import {Observable} from 'rxjs';
+import {Observable, Observer} from 'rxjs';
 import {EventType, SocketMessage} from '../model/socketMessage';
+
+
+
+interface ObserverMap {
+  [key: string]: Set<Observer<any>>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class SocketService {
 
   private wsUri = 'ws://' + location.host + '/ws';
   protected basePath = '';
   public configuration = new Configuration();
   private socket: WebSocket = null;
-  private registeredEvents: Set<EventType>;
-  private observers = [];
-
+  private observers: ObserverMap = {};
 
   constructor(@Optional() @Inject(BASE_PATH) basePath: string,
               @Optional() configuration: Configuration) {
@@ -44,7 +49,6 @@ export class SocketService {
       this.configuration = configuration;
       this.basePath = basePath || configuration.basePath || this.basePath;
     }
-    this.registeredEvents = new Set<EventType>();
   }
 
   public send(message: SocketMessage|EventType) {
@@ -61,32 +65,39 @@ export class SocketService {
     }
   }
 
-  public subscribeForUpdate(eventName: EventType): Observable<any> {
+  public subscribeForEvent(eventName: EventType): Observable<any> {
     console.log('creating observer for event type', eventName);
 
-    return new Observable((observer) => {
-      this.observers.push(observer);
-      console.log('observerts: ', this.observers);
-      if (!this.registeredEvents.has(eventName)) {
-        this.registeredEvents.add(eventName);
+    return new Observable((observer: Observer<any>) => {
+      const registeredEvents = Object.keys(this.observers);
+
+      console.log('observers: ', this.observers);
+      if (!registeredEvents.includes(eventName)) {
+        this.observers[eventName] = new Set<Observer<any>>();
         this.socket.send(eventName);
       }
-
+      this.observers[eventName].add(observer);
       this.socket.onmessage = (e: MessageEvent) => {
         console.log('received on socket connection', e);
         // TODO: check e.data content before
         const msg: SocketMessage = JSON.parse(e.data);
-        console.log('comparing msg event to event name', msg.event, eventName)
-        if (msg.event.toString() === eventName.toString()) {
-          this.observers.forEach(o => {o.next(e); });
-
-        } else {
-          console.log('drop event because it is not relevant');
+        const relevantObservers: Set<Observer<any>> = this.observers[msg.event];
+        if (relevantObservers) {
+          if (relevantObservers.size !== 0) {
+            relevantObservers.forEach((obs) => {
+              // TODO: cast payload depending on msg event type
+              obs.next(msg.payload);
+            });
+          }
         }
       };
 
       return () => {
         console.log('finished observable stream');
+        const events = Object.keys(this.observers);
+        events.forEach((event) => {
+          this.observers[event].delete(observer);
+        });
       };
 
 

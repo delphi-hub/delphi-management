@@ -53,7 +53,7 @@ export class DashboardCardComponent implements OnInit {
     this.setInstanceNumber();
 
     this.socketService.initSocket().then(() => {
-      this.socketService.subscribeForUpdate(EventType.InstanceNumbers).subscribe((data) => {
+      this.socketService.subscribeForEvent(EventType.InstanceNumbers).subscribe((data) => {
         console.log('data callback in card component', data);
       });
     });
