@@ -16,32 +16,51 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Location } from '@angular/common';
 import { Router, RouterOutlet } from "@angular/router";
-import { RouterModule } from '@angular/router';
+//import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { MatTableModule, MatInputModule} from '@angular/material';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatIconModule} from '@angular/material/icon';
+import { CrawlerComponent } from '../crawler/crawler.component';
+import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { TableAllComponent } from '../table-all/table-all.component';
+import { HeaderComponent } from '../header/header.component';
+import { ApiService} from '../../api';
 import { DashboardCardComponent } from './dashboard-card.component';
 
-describe('DashboardCardComponent', () => {
+
+describe('component: DashboardCardComponent', () => {
   let component: DashboardCardComponent;
   let fixture: ComponentFixture<DashboardCardComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DashboardCardComponent ],
-       providers: [{provide: Router},
-            RouterOutlet],
-      imports: [RouterModule]
-    })
-    .compileComponents();
-  }));
+  let location, router;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DashboardCardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      
+      providers: [ApiService],
+      imports: [RouterTestingModule.withRoutes([
+        { path: 'dashboard/crawler', component: CrawlerComponent}
+      ]), HttpClientTestingModule, HttpClientModule, MatTableModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatIconModule],
+      declarations: [ DashboardCardComponent, CrawlerComponent, DashboardComponent, TableAllComponent, HeaderComponent]
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  beforeEach(inject([Router, Location], (_router: Router, _location: Location) => {
+    location = _location;
+    router = _router;
+  }));
+
+
+  it(`should create`, async(inject([HttpTestingController, ApiService],
+    (httpClient: HttpTestingController, apiService: ApiService) => {
+      expect(apiService).toBeTruthy();
+  })));
 });
+
