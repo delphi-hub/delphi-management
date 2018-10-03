@@ -16,14 +16,12 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Location } from '@angular/common';
 import { Router, RouterOutlet } from "@angular/router";
 //import { RouterModule } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MatTableModule, MatInputModule} from '@angular/material';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatCheckboxModule} from '@angular/material/checkbox';
@@ -34,6 +32,8 @@ import { TableAllComponent } from '../table-all/table-all.component';
 import { HeaderComponent } from '../header/header.component';
 import { ApiService} from '../../api';
 import { DashboardCardComponent } from './dashboard-card.component';
+import { HttpClientModule, HttpClient} from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
 
 
 describe('component: DashboardCardComponent', () => {
