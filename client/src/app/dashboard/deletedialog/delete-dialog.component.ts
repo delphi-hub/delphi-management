@@ -37,7 +37,7 @@ export class DeleteDialogComponent implements OnInit {
 
   }
 
-  onCloseCancel() {
+  onCloseCancle() {
     this.thisDialogRef.close('Cancle');
 
   }

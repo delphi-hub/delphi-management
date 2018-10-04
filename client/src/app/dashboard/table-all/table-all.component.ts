@@ -46,7 +46,6 @@ export class TableAllComponent implements OnInit {
 
   }
 
-
   ngOnInit() {
  }
 

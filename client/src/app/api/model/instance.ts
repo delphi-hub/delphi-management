@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-
 export interface Instance {
     id?: number;
     host?: string;

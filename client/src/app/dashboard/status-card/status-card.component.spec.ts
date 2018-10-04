@@ -17,9 +17,10 @@
  */
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { StatusCardComponent } from './status-card.component';
-import {HttpClientModule} from '@angular/common/http';
+
 
 describe('StatusCardComponent', () => {
   let component: StatusCardComponent;
@@ -28,7 +29,7 @@ describe('StatusCardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ StatusCardComponent ],
-      imports: [ HttpClientModule ]
+      imports: [HttpClientTestingModule, HttpClientModule]
     })
     .compileComponents();
   }));
