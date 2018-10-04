@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -27,18 +27,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class DeletedialogComponent implements OnInit {
 
-  constructor(public thisDialogRef:MatDialogRef<DeletedialogComponent>, @Inject(MAT_DIALOG_DATA) public data: string) { }
+  constructor(public thisDialogRef: MatDialogRef<DeletedialogComponent>, @Inject(MAT_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
   }
 
-  onCloseConfirm(){
-  	this.thisDialogRef.close('Confirm');
+  onCloseConfirm() {
+    this.thisDialogRef.close('Confirm');
 
   }
 
-  onCloseCancle(){
-  	this.thisDialogRef.close('Cancle');
+  onCloseCancle() {
+    this.thisDialogRef.close('Cancle');
 
   }
 

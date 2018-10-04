@@ -16,11 +16,10 @@
  * limitations under the License.
  */
 
-import { By } from '@angular/platform-browser';
+
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Location } from '@angular/common';
-import { Router, RouterOutlet } from "@angular/router";
-//import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { MatTableModule, MatInputModule} from '@angular/material';
 import { MatFormFieldModule} from '@angular/material/form-field';
@@ -37,13 +36,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 
 describe('component: DashboardCardComponent', () => {
-  let component: DashboardCardComponent;
-  let fixture: ComponentFixture<DashboardCardComponent>;
-  let location, router;
+  let location;
+  let router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      
+
       providers: [ApiService],
       imports: [RouterTestingModule.withRoutes([
         { path: 'dashboard/crawler', component: CrawlerComponent}

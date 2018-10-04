@@ -17,7 +17,6 @@
  */
 
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -26,10 +25,9 @@ import { DashboardComponent } from './dashboard.component';
 
 
 describe('component: DashboardComponent', () => {
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+
   let location, router;
-  let routerStub;
+
 
   beforeEach(() => {
 
@@ -40,7 +38,7 @@ describe('component: DashboardComponent', () => {
       ])
     ],
       declarations: [ DashboardComponent, HeaderComponent],
-      
+
     });
   });
 
@@ -50,11 +48,10 @@ describe('component: DashboardComponent', () => {
   }));
 
   it('should go to dashboard', async(() => {
-    let fixture = TestBed.createComponent(DashboardComponent);
+    const fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();
     router.navigate(['/dashboard']).then(() => {
       expect(location.path()).toBe('/dashboard');
-      console.log('after expect');
     });
   }));
 });

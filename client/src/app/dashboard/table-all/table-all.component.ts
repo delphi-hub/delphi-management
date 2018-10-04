@@ -19,7 +19,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {Instance} from '../../api';
 import { SelectionModel} from '@angular/cdk/collections';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
+import { MatDialog, MatTableDataSource} from '@angular/material';
 import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
 
 
@@ -45,7 +45,7 @@ export class TableAllComponent implements OnInit {
   constructor(public dialog: MatDialog) {
 
   }
-  
+
   ngOnInit() {
  }
 
