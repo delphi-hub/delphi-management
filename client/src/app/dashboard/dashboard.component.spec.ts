@@ -16,35 +16,45 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Location } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard.component';
 
-class MockRouter { public navigate() {} }
 
-describe('DashboardComponent', () => {
+describe('component: DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DashboardComponent, HeaderComponent],
-      providers: [{provide: Router, useClass: MockRouter },
-            RouterOutlet],
-      imports: [ RouterTestingModule ]
-    })
-    .compileComponents();
-  }));
+  let location, router;
+  let routerStub;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+
+    TestBed.configureTestingModule({
+    imports: [
+    RouterTestingModule.withRoutes([
+        { path: 'dashboard', component: DashboardComponent }
+      ])
+    ],
+      declarations: [ DashboardComponent, HeaderComponent],
+      
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  beforeEach(inject([Router, Location], (_router: Router, _location: Location) => {
+    location = _location;
+    router = _router;
+  }));
+
+  it('should go to dashboard', async(() => {
+    let fixture = TestBed.createComponent(DashboardComponent);
+    fixture.detectChanges();
+    router.navigate(['/dashboard']).then(() => {
+      expect(location.path()).toBe('/dashboard');
+      console.log('after expect');
+    });
+  }));
 });
