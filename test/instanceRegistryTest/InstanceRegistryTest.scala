@@ -8,12 +8,14 @@ import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{GET, route}
 
 import scala.concurrent.Future
+  // the whole communication with the instance registry endpoints is about to change to use socket communication
+  
+//class InstanceRegistryTest extends FlatSpec with MockitoSugar with Results with OneAppPerSuiteWithComponents {
 
-class InstanceRegistryTest extends FlatSpec with MockitoSugar with Results with OneAppPerSuiteWithComponents {
-  "respond to the index Action" should "" in {
+  // "respond to the index Action" should "" in {
 
-    val Some(result): Option[Future[Result]] = route(app, FakeRequest(GET, "/api/numberOfInstances?componentType=Crawler"))
-    print(result)
+  //   val Some(result): Option[Future[Result]] = route(app, FakeRequest(GET, "/api/numberOfInstances?componentType=Crawler"))
+  //   print(result)
 
-  }
-}
+  // }
+//}
