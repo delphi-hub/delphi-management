@@ -65,6 +65,7 @@ export class SocketService {
     }
   }
 
+  // TODO: define an abstract data type to give the observable instead of any
   public subscribeForEvent(eventName: EventType): Observable<any> {
     console.log('creating observer for event type', eventName);
 
