@@ -20,7 +20,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {Instance} from '../../api';
 import { SelectionModel} from '@angular/cdk/collections';
 import { MatDialog, MatTableDataSource} from '@angular/material';
-import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
+import { DeleteDialogComponent } from '../deletedialog/delete-dialog.component';
 
 
 @Component({
@@ -50,7 +50,7 @@ export class TableAllComponent implements OnInit {
  }
 
   openDialog() {
-    const dialogRef = this.dialog.open(DeletedialogComponent, {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '250px',
       data: 'Component Data'
     });

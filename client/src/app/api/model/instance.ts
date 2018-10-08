@@ -21,9 +21,6 @@ export interface Instance {
     host?: string;
     portNumber?: number;
     name?: string;
-    /**
-     * Component Type
-     */
     componentType?: Instance.ComponentTypeEnum;
 }
 export namespace Instance {

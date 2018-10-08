@@ -22,6 +22,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard.component';
+import {HttpClientModule} from '@angular/common/http';
 
 
 describe('component: DashboardComponent', () => {
