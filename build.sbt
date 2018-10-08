@@ -14,14 +14,15 @@ lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins
                                           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
                                           buildInfoPackage := "de.upb.cs.swt.delphi.management"
                                         )
-                                        
+
+scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
+
 val conf = ConfigFactory.parseFile(new File("conf/application.conf")).resolve()
 val appPortManagement    = conf.getString("app.portManagement")
 
 PlayKeys.devSettings := Seq(
     "play.server.http.port" -> appPortManagement
 )
-
 pipelineStages := Seq(digest,gzip)
 
 resolvers += Resolver.sonatypeRepo("snapshots")
@@ -44,3 +45,12 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.8"
 libraryDependencies += ws
 
 routesGenerator := InjectedRoutesGenerator
+
+// Pinning secure versions of insecure transitive libraryDependencies
+// Please update when updating dependencies above (including Play plugin)
+libraryDependencies ++= Seq(
+  "com.nimbusds" % "nimbus-jose-jwt" % "5.14",
+  "org.bouncycastle" % "bcprov-jdk15on" % "1.60",
+  "com.google.guava" % "guava" % "25.1-jre",
+  "org.apache.commons" % "commons-compress" % "1.16"
+)
