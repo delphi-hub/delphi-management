@@ -36,7 +36,6 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
 import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
-import { DeleteDialogComponent } from './deletedialog/delete-dialog.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
@@ -68,12 +67,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     TableAllComponent,
     HeaderComponent,
     StatusCardComponent,
-    DeleteDialogComponent,
     UserProfileComponent,
     UserManagementComponent
   ],
   entryComponents: [
-    DeleteDialogComponent
   ],
   providers: [ApiService],
 })

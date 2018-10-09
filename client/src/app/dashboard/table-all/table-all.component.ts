@@ -20,7 +20,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import {Instance} from '../../api';
 import { SelectionModel} from '@angular/cdk/collections';
 import { MatDialog, MatTableDataSource} from '@angular/material';
-import { DeleteDialogComponent } from '../deletedialog/delete-dialog.component';
 
 
 @Component({
@@ -48,18 +47,6 @@ export class TableAllComponent implements OnInit {
 
   ngOnInit() {
  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      width: '250px',
-      data: 'Component Data'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.dialogResult = result;
-    });
-  }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
