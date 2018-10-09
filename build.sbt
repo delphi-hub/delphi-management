@@ -39,13 +39,6 @@ libraryDependencies += "eu.bitwalker" % "UserAgentUtils" % "1.20"
 libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.8"
 libraryDependencies += ws
 
-val silhouetteVersion = "5.0.5"
-libraryDependencies ++= Seq(
-"com.mohiva" %% "play-silhouette" % silhouetteVersion,
-"com.mohiva" %% "play-silhouette-persistence" % silhouetteVersion,
-"com.mohiva" %% "play-silhouette-crypto-jca" % silhouetteVersion,
-"com.mohiva" %% "play-silhouette-password-bcrypt" % silhouetteVersion
-)
 routesGenerator := InjectedRoutesGenerator
 
 // Pinning secure versions of insecure transitive libraryDependencies
