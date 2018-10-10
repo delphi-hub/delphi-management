@@ -30,23 +30,14 @@ resolvers += Resolver.jcenterRepo
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
-
-val silhouetteVersion = "5.0.0"
-libraryDependencies ++= Seq(
-  "com.mohiva" %% "play-silhouette" % silhouetteVersion,
-  "com.mohiva" %% "play-silhouette-persistence" % silhouetteVersion,
-  "com.mohiva" %% "play-silhouette-crypto-jca" % silhouetteVersion,
-  "com.mohiva" %% "play-silhouette-password-bcrypt" % silhouetteVersion
-)
-
-
 libraryDependencies += "net.codingwell" %% "scala-guice" % "4.1.1"
 libraryDependencies += "com.iheart" %% "ficus" % "1.4.3"
-
 libraryDependencies += "org.webjars" % "bootstrap" % "4.1.0"
 libraryDependencies += "org.webjars" %% "webjars-play" % "2.6.3"
 libraryDependencies += "com.adrianhurt" %% "play-bootstrap" % "1.4-P26-B4-SNAPSHOT"
 libraryDependencies += "eu.bitwalker" % "UserAgentUtils" % "1.20"
+libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.8"
+libraryDependencies += ws
 
 routesGenerator := InjectedRoutesGenerator
 

@@ -1,7 +1,11 @@
 *.class
 *.log
-
+public
 /.idea/
 /target/
 /project/project/
 /project/target/
+
+client/.github/
+client/.travis.yml
+client/.vscode/

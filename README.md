@@ -19,7 +19,10 @@ It is a web application to allow administrators to control the crawling process.
 It takes commands from authenticated administrators over the web interface and issues the appropriate steps in the crawler.
 
 ## How can I use it?
-
+To build the angular app for deployment make sure to have npm and the angular cli installed 
+```
+cd client && npm install && ng build --prod && cd ..
+```
 For any deployed instance you need an administrator account to interact with the application.
 You can start your own instance by executing
 ```
