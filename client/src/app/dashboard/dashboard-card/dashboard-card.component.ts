@@ -37,7 +37,7 @@ export class DashboardCardComponent implements OnInit {
   @Input() route: string;
   @Input() title: string;
   @Input() componentType: string;
-  @Input() collapse_target: string;
+  @Input() collapseTarget: string;
   @Input() numberOfNotification: string;
 
   numberOfInstances: string;

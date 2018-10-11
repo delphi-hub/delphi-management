@@ -7,16 +7,22 @@ import { Observable, of as observableOf, merge } from 'rxjs';
 //Data model type
 export interface DatatableNotifItem {
   type: string;
-  notif_name: string;
-  date_time: string;
+  notifName: string;
+  dateTime: string;
   details: Array<string>;
 }
 
 // TODO: replace this with real data from the application coming from the Server
+// TODO: function to write
+/*function getDataNotifications(){
+
+}
+*
+* */
 const EXAMPLE_DATA: DatatableNotifItem[] = [
-  {type: 'warning', notif_name: 'Demo overwritten', date_time:'12:15', details:["fd","2","3","4"]},
-  {type: 'done', notif_name: 'Demo success', date_time:'12:15', details:["1","2","3","4"]},
-  {type: 'close', notif_name: 'Demo failed', date_time:'12:15', details:["1","2","3","4"]},
+  {type: 'warning', notifName: 'Demo overwritten', dateTime:'12:15', details:["1","2","3","4"]},
+  {type: 'done', notifName: 'Demo success', dateTime:'12:15', details:["1","2","3","4"]},
+  {type: 'close', notifName: 'Demo failed', dateTime:'12:15', details:["1","2","3","4"]},
   ];
 
 /**
@@ -80,8 +86,8 @@ export class DatatableNotifDataSource extends DataSource<DatatableNotifItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'notif_name': return compare(a.notif_name, b.notif_name, isAsc);
-        case 'date_time': return compare(a.date_time, b.date_time, isAsc);
+        case 'notifName': return compare(a.notifName, b.notifName, isAsc);
+        case 'dateTime': return compare(a.dateTime, b.dateTime, isAsc);
         default: return 0;
       }
     });

@@ -7,15 +7,15 @@
     </ng-container>
 
     <!-- Name notif Column -->
-    <ng-container matColumnDef="notif_name">
+    <ng-container matColumnDef="notifName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Notification</th>
-      <td mat-cell *matCellDef="let row">{{row.notif_name}}</td>
+      <td mat-cell *matCellDef="let row">{{row.notifName}}</td>
     </ng-container>
 
     <!-- Date name Column -->
-    <ng-container matColumnDef="date_time">
+    <ng-container matColumnDef="dateTime">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date and Time</th>
-      <td mat-cell *matCellDef="let row">{{row.date_time}}</td>
+      <td mat-cell *matCellDef="let row">{{row.dateTime}}</td>
     </ng-container>
 
 
@@ -23,7 +23,7 @@
     <ng-container matColumnDef="details">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Details</th>
       <td mat-cell *matCellDef="let row">
-        <button mat-raised-button (click)="openDialog()">details</button>
+        <button mat-stroked-button color="primary">View Details...</button>
       </td>
     </ng-container>
 

@@ -19,6 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Instance} from "../../api";
 
+
 @Component({
   selector: 'app-dashboard-overview',
   templateUrl: './dashboard-overview.component.html',
@@ -34,5 +35,6 @@ export class DashboardOverviewComponent implements OnInit {
 
   ngOnInit() {
   }
+
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { DatatableNotifDataSource } from './datatable-notif-datasource';
 
+
 @Component({
   selector: 'app-datatable-notif',
   templateUrl: './datatable-notif.component.html',
@@ -13,7 +14,7 @@ export class DatatableNotifComponent implements OnInit {
   dataSource: DatatableNotifDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['type', 'notif_name', 'date_time', 'details'];
+  displayedColumns = ['type', 'notifName', 'dateTime', 'details'];
 
   ngOnInit() {
     this.dataSource = new DatatableNotifDataSource(this.paginator, this.sort);
