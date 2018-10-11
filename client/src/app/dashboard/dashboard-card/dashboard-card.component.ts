@@ -18,7 +18,7 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {ApiService, SocketService} from '../../api';
-import {EventType} from '../../api/model/socketMessage';
+import {EventType, InstanceNumbers} from '../../api/model/socketMessage';
 
 @Component({
   selector: 'app-dashboard-card',
@@ -51,9 +51,8 @@ export class DashboardCardComponent implements OnInit {
     // to the component lifecycle. Input's are not initialized in
     // the constructor.
     this.setInstanceNumber();
-
     this.socketService.initSocket().then(() => {
-      this.socketService.subscribeForEvent(EventType.InstanceNumbers).subscribe((data) => {
+      this.socketService.subscribeForEvent(EventType.InstanceNumbers).subscribe((data: InstanceNumbers) => {
         console.log('data callback in card component', data);
       });
     });

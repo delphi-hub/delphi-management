@@ -27,6 +27,15 @@ export interface Instance {
      */
     componentType?: Instance.ComponentTypeEnum;
 }
+
+export function objIsInstance(obj: any): obj is Instance {
+  return (obj.id !== undefined && typeof obj.id === 'number' &&
+          obj.host !== undefined && typeof obj.host === 'string' &&
+          obj.portNumber !== undefined && typeof obj.portNumber === 'number' &&
+          obj.name !== undefined && typeof obj.name === 'string' &&
+          obj.componentType !== undefined && obj.componentType in Instance.ComponentTypeEnum);
+}
+
 export namespace Instance {
     export type ComponentTypeEnum = 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement';
     export const ComponentTypeEnum = {

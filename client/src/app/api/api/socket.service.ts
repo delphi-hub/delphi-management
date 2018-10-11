@@ -20,8 +20,14 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {BASE_PATH} from '../variables';
 import {Configuration} from '../configuration';
 import {Observable, Observer} from 'rxjs';
-import {EventType, SocketMessage} from '../model/socketMessage';
-
+import {
+  checkMessageType,
+  EventType, InstanceNumbers,
+  messageHasPayload,
+  objectIsMessage,
+  SocketMessage
+} from '../model/socketMessage';
+import {Instance} from '..';
 
 
 interface ObserverMap {
@@ -82,13 +88,14 @@ export class SocketService {
     }
   }
 
-  // TODO: define an abstract data type to give the observable instead of any
+
   /**
    * Subscribes to the event of the given type. Returns an observable to subscribe
    * to in order to receive the corresponding updates.
+
    * @param eventName
    */
-  public subscribeForEvent(eventName: EventType): Observable<any> {
+  public subscribeForEvent(eventName: EventType): Observable<InstanceNumbers | Instance> {
     console.log('creating observer for event type', eventName);
 
     return new Observable((observer: Observer<any>) => {
@@ -108,16 +115,19 @@ export class SocketService {
 
       this.socket.onmessage = (e: MessageEvent) => this.socketOnMessage(e);
 
+      /**
+       * If an observable stream ends the observer is removed from the
+       * observer list and the list is deleted if it is empty.
+       */
       return () => {
-        console.log('finished observable stream');
         const events = Object.keys(this.observers);
         events.forEach((event) => {
-          // TODO: if observer list empty delete list
           this.observers[event].delete(observer);
+          if (this.observers[event].size === 0) {
+            this.observers[event] = null;
+          }
         });
       };
-
-
     });
   }
 
@@ -128,15 +138,18 @@ export class SocketService {
    */
   private socketOnMessage(e: MessageEvent) {
     console.log('received on socket connection', e);
-    // TODO: check e.data content before
     const msg: SocketMessage = JSON.parse(e.data);
-    const relevantObservers: Set<Observer<any>> = this.observers[msg.event];
-    if (relevantObservers) {
-      if (relevantObservers.size !== 0) {
-        relevantObservers.forEach((obs) => {
-          // TODO: cast payload depending on msg event type
-          obs.next(msg.payload);
-        });
+    if (objectIsMessage(msg)) {
+      const relevantObservers: Set<Observer<any>> = this.observers[msg.event];
+      if (relevantObservers) {
+        if (relevantObservers.size !== 0) {
+          relevantObservers.forEach((obs) => {
+            if (messageHasPayload(msg)) {
+              checkMessageType(msg);
+              obs.next(msg.payload);
+            }
+          });
+        }
       }
     }
   }

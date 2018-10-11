@@ -28,7 +28,7 @@ import play.api.mvc._
 import akka.stream.Materializer
 import akka.stream.scaladsl._
 import models.{EventType, SocketMessage}
-import play.api.libs.json.{Json}
+import play.api.libs.json.{Json, Reads, Writes}
 import play.api.mvc.WebSocket.MessageFlowTransformer
 
 trait MyExecutionContext extends ExecutionContext
@@ -55,9 +55,10 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   extends BaseController {
 
 
-    implicit val messageReads = Json.reads[SocketMessage]
-    implicit val messageWrites = Json.writes[SocketMessage]
-    implicit val messageFlowTransformer = MessageFlowTransformer.jsonMessageFlowTransformer[SocketMessage, SocketMessage]
+    implicit val messageReads: Reads[SocketMessage] = Json.reads[SocketMessage]
+    implicit val messageWrites: Writes[SocketMessage] = Json.writes[SocketMessage]
+    implicit val messageFlowTransformer: MessageFlowTransformer[SocketMessage, SocketMessage] =
+      MessageFlowTransformer.jsonMessageFlowTransformer[SocketMessage, SocketMessage]
 
 
   def instances(componentType: String): Action[AnyContent] = Action.async {
