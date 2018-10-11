@@ -33,7 +33,11 @@ interface ObserverMap {
 })
 
 /**
- * The SocketService is used to create a socket connection to the webserver.
+ * The SocketService is used to create a socket connection to the web server.
+ * It is possible for components to subscribe to events through the subscribeForEvent
+ * method and send methods to the web server through the send method.
+ * initSocket() has to be called in order to initiate the socket connection (if called
+ * multiple times the same connection is returned).
  */
 export class SocketService {
 
@@ -41,6 +45,10 @@ export class SocketService {
   protected basePath = '';
   public configuration = new Configuration();
   private socket: WebSocket = null;
+  /**
+   * This map is used to manage the observers interested in the defined events.
+   * It maps event types to a set of observers interested in these events.
+   */
   private observers: ObserverMap = {};
 
   constructor(@Optional() @Inject(BASE_PATH) basePath: string,
@@ -54,6 +62,12 @@ export class SocketService {
     }
   }
 
+  /**
+   * Sends the given message to the web server. If the socket connection is not
+   * open yet, but the socket connection has been created, an event listener
+   * is registered and the message is send once the socket connection is open.
+   * @param message
+   */
   public send(message: SocketMessage|EventType) {
     if (this.socket) {
       if (this.socket.readyState === this.socket.OPEN) {
@@ -69,11 +83,20 @@ export class SocketService {
   }
 
   // TODO: define an abstract data type to give the observable instead of any
+  /**
+   * Subscribes to the event of the given type. Returns an observable to subscribe
+   * to in order to receive the corresponding updates.
+   * @param eventName
+   */
   public subscribeForEvent(eventName: EventType): Observable<any> {
     console.log('creating observer for event type', eventName);
 
     return new Observable((observer: Observer<any>) => {
-      // TODO: explain this precomputattion thingy
+
+      /**
+       * First step to subscribe for an event is to append the new observer to the set
+       * or create a new set if there is no observer for the given event.
+       */
       const registeredEvents = Object.keys(this.observers);
 
       console.log('observers: ', this.observers);
@@ -83,20 +106,7 @@ export class SocketService {
       }
       this.observers[eventName].add(observer);
 
-      this.socket.onmessage = (e: MessageEvent) => {
-        console.log('received on socket connection', e);
-        // TODO: check e.data content before
-        const msg: SocketMessage = JSON.parse(e.data);
-        const relevantObservers: Set<Observer<any>> = this.observers[msg.event];
-        if (relevantObservers) {
-          if (relevantObservers.size !== 0) {
-            relevantObservers.forEach((obs) => {
-              // TODO: cast payload depending on msg event type
-              obs.next(msg.payload);
-            });
-          }
-        }
-      };
+      this.socket.onmessage = (e: MessageEvent) => this.socketOnMessage(e);
 
       return () => {
         console.log('finished observable stream');
@@ -111,6 +121,32 @@ export class SocketService {
     });
   }
 
+  /**
+   * Called when the socket receives a new message. Handles the forwarding
+   * of the messages to the observers which are interested in it.
+   * @param e
+   */
+  private socketOnMessage(e: MessageEvent) {
+    console.log('received on socket connection', e);
+    // TODO: check e.data content before
+    const msg: SocketMessage = JSON.parse(e.data);
+    const relevantObservers: Set<Observer<any>> = this.observers[msg.event];
+    if (relevantObservers) {
+      if (relevantObservers.size !== 0) {
+        relevantObservers.forEach((obs) => {
+          // TODO: cast payload depending on msg event type
+          obs.next(msg.payload);
+        });
+      }
+    }
+  }
+
+  /**
+   * Creates a new socket connection to the web server and returning
+   * a promise. The promise resolves successfully once the connection
+   * is open. If there already is a connection the promise resolves
+   * instantly.
+   */
   public initSocket(): Promise<void> {
     if (this.socket === null) {
       this.socket = new WebSocket(this.wsUri);
