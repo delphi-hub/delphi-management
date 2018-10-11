@@ -19,7 +19,9 @@
 import {Instance, objIsInstance} from './instance';
 
 export enum EventType {
-  InstanceNumbers = 'InstanceNumbers',
+  InstanceNumbersCrawler = 'InstanceNumbersCrawler',
+  InstanceNumbersWebApi = 'InstanceNumbersWebApi',
+  InstanceNumbersWebApp = 'InstanceNumbersWebApp',
   InstanceDetails = 'InstanceDetails',
 }
 
@@ -44,7 +46,7 @@ export function objectIsMessage(obj: any): obj is SocketMessage {
 export function checkMessageType(msg: SocketMessage) {
   let successfulTypeCheck = true;
   switch (msg.event) {
-    case EventType.InstanceNumbers:
+    case EventType.InstanceNumbersCrawler || EventType.InstanceNumbersWebApi || EventType.InstanceNumbersWebApp:
       successfulTypeCheck = payloadIsInstanceNumber(msg.payload);
       break;
     case EventType.InstanceDetails:
