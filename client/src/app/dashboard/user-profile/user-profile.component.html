@@ -1,4 +1,30 @@
-<p>
-  In the near future the Delphi-Management application will support a user specific login. Then this page will provide information about
-  the logged in user as well as some configuation possibilities.
-</p>
+<h2> Admin Profile</h2>
+<div class="container">
+  <form class="example-container">
+      <mat-form-field>
+          <input matInput placeholder="Name" name="name" required>
+          <mat-error *ngIf="name.invalid">{{getErrorMessageName()}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+          <input matInput  placeholder="Email" name="email" [formControl]="email" required>
+          <mat-error *ngIf="email.invalid">{{getErrorMessageEmail()}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+          <input matInput placeholder="Organization" name="organization">
+      </mat-form-field>
+
+      <label>Notifications level: <span>*</span> </label>
+        <mat-hint>Based on your selection emails will be sent to notify the status of instances</mat-hint>
+      <mat-radio-group [(ngModel)]="notification_level" name="notification_level" required>
+        <mat-radio-button *ngFor="let level of levels" [value]="level">
+          {{level}}
+        </mat-radio-button>
+      </mat-radio-group>
+  </form>
+  <div class="button-row">
+      <button mat-raised-button color="primary" >Save</button>
+      <button mat-raised-button color="primary">Cancel</button>
+  </div>
+</div>

@@ -19,11 +19,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { FormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatMenuModule, MatTableModule} from '@angular/material';
 import { MatIconModule} from '@angular/material/icon';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDialogModule} from '@angular/material/dialog';
+import { MatRadioModule} from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup} from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule} from '@angular/material/input';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -46,12 +50,15 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
     MatTableModule,
     MatCheckboxModule,
     MatDialogModule,
+    MatRadioModule,
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
