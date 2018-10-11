@@ -32,6 +32,9 @@ interface ObserverMap {
   providedIn: 'root'
 })
 
+/**
+ * The SocketService is used to create a socket connection to the webserver.
+ */
 export class SocketService {
 
   private wsUri = 'ws://' + location.host + '/ws';
@@ -70,6 +73,7 @@ export class SocketService {
     console.log('creating observer for event type', eventName);
 
     return new Observable((observer: Observer<any>) => {
+      // TODO: explain this precomputattion thingy
       const registeredEvents = Object.keys(this.observers);
 
       console.log('observers: ', this.observers);
@@ -78,6 +82,7 @@ export class SocketService {
         this.socket.send(eventName);
       }
       this.observers[eventName].add(observer);
+
       this.socket.onmessage = (e: MessageEvent) => {
         console.log('received on socket connection', e);
         // TODO: check e.data content before
@@ -97,6 +102,7 @@ export class SocketService {
         console.log('finished observable stream');
         const events = Object.keys(this.observers);
         events.forEach((event) => {
+          // TODO: if observer list empty delete list
           this.observers[event].delete(observer);
         });
       };

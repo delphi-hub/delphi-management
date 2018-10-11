@@ -79,6 +79,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       Flow.fromSinkAndSource(in, out)
     }
   }
+
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
