@@ -47,14 +47,15 @@ export function checkMessageType(msg: SocketMessage) {
   let successfulTypeCheck = true;
   switch (msg.event) {
     case EventType.InstanceNumbersCrawler || EventType.InstanceNumbersWebApi || EventType.InstanceNumbersWebApp:
-      successfulTypeCheck = payloadIsInstanceNumber(msg.payload);
+      successfulTypeCheck = messageHasPayload(msg) ? payloadIsInstanceNumber(msg.payload) : false;
       break;
     case EventType.InstanceDetails:
-      successfulTypeCheck = objIsInstance(msg.payload);
+      successfulTypeCheck = messageHasPayload(msg) ? objIsInstance(msg.payload) : false;
       break;
   }
 
   if (!successfulTypeCheck) {
+    console.log('should be here');
     throw new Error('Expected message type for message ' + msg + ' was not met.');
   }
 }

@@ -19,11 +19,10 @@
 import {Inject, Injectable, Optional} from '@angular/core';
 import {BASE_PATH} from '../variables';
 import {Configuration} from '../configuration';
-import {Observable, Observer} from 'rxjs';
+import {Observable, Observer, Subject} from 'rxjs';
 import {
   checkMessageType,
   EventType, InstanceNumbers,
-  messageHasPayload,
   objectIsMessage,
   SocketMessage
 } from '../model/socketMessage';
@@ -31,7 +30,7 @@ import {Instance} from '..';
 
 
 interface ObserverMap {
-  [key: string]: Set<Observer<any>>;
+  [key: string]: Subject<any>;
 }
 
 @Injectable({
@@ -47,6 +46,14 @@ interface ObserverMap {
  */
 export class SocketService {
 
+  /**
+   * Really useful stuff regarding observers and subjects and reactive event programming
+   * https://medium.com/@benlesh/on-the-subject-of-subjects-in-rxjs-2b08b7198b93
+   * https://medium.com/@benlesh/hot-vs-cold-observables-f8094ed53339
+   * https://blog.angularindepth.com/rxjs-understanding-the-publish-and-share-operators-16ea2f446635
+   * https://blog.angularindepth.com/rxjs-understanding-subjects-5c585188c3e1
+   *
+   */
   private wsUri = 'ws://' + location.host + '/ws';
   protected basePath = '';
   public configuration = new Configuration();
@@ -108,25 +115,20 @@ export class SocketService {
 
       console.log('observers: ', this.observers);
       if (!registeredEvents.includes(eventName)) {
-        this.observers[eventName] = new Set<Observer<any>>();
+        this.observers[eventName] = new Subject<any>();
         this.socket.send(eventName);
       }
-      this.observers[eventName].add(observer);
+      this.observers[eventName].subscribe(observer);
 
-      this.socket.onmessage = (e: MessageEvent) => this.socketOnMessage(e);
+      this.socket.addEventListener('message', (e: MessageEvent) => this.socketOnMessage(e));
 
       /**
        * If an observable stream ends the observer is removed from the
        * observer list and the list is deleted if it is empty.
        */
       return () => {
-        const events = Object.keys(this.observers);
-        events.forEach((event) => {
-          this.observers[event].delete(observer);
-          if (this.observers[event].size === 0) {
-            this.observers[event] = null;
-          }
-        });
+        // TODO: see console log
+        console.log('observer completed, implement unsubscribe logic !');
       };
     });
   }
@@ -140,16 +142,10 @@ export class SocketService {
     console.log('received on socket connection', e);
     const msg: SocketMessage = JSON.parse(e.data);
     if (objectIsMessage(msg)) {
-      const relevantObservers: Set<Observer<any>> = this.observers[msg.event];
-      if (relevantObservers) {
-        if (relevantObservers.size !== 0) {
-          relevantObservers.forEach((obs) => {
-            if (messageHasPayload(msg)) {
-              checkMessageType(msg);
-              obs.next(msg.payload);
-            }
-          });
-        }
+      const relevantSubject: Subject<any> = this.observers[msg.event];
+      if (relevantSubject) {
+          checkMessageType(msg);
+          relevantSubject.next(msg.payload);
       }
     }
   }
