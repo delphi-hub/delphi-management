@@ -1,6 +1,8 @@
 language: scala
 scala:
   -  2.12.4
+before_install:
+  -  npm install -g angular-cli
 script:
   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then sbt ++$TRAVIS_SCALA_VERSION test; cd client && npm install && ng build --prod && cd .. ; fi'
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport coverageAggregate codacyCoverage; cd client && npm install && ng build --prod && cd .. ; fi'
