@@ -53,6 +53,6 @@ table {
 .button-row button,
 .button-row a {
   margin-right: 8px;
-  //float:right;
+  float:right;
   margin-top:15px;
 }

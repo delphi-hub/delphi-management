@@ -24,6 +24,7 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDialogModule} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule} from '@angular/material/input';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -39,6 +40,8 @@ import { StatusCardComponent } from './status-card/status-card.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
 
 
 @NgModule({
@@ -52,6 +55,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     MatCheckboxModule,
     MatDialogModule,
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     DashboardRoutingModule,
@@ -68,9 +73,12 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     HeaderComponent,
     StatusCardComponent,
     UserProfileComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    DeleteDialogComponent,
+    AddDialogComponent
   ],
   entryComponents: [
+    DeleteDialogComponent, AddDialogComponent
   ],
   providers: [ApiService],
 })

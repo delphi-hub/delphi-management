@@ -18,49 +18,54 @@
 <div *ngIf="dataSource.data.length == 0; else tableBlock">
   There are currently no instances running.
 </div>
-<ng-template #tableBlock>
+<ng-template #tableBlock> 
   <div class="container">
       <mat-form-field>
-      <input id="filter_data" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+          <input id="filter_data" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
       </mat-form-field>
-    <table class="mat-elevation-z8 mat-table" mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="ID">
-          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
-        </ng-container>
+      <table class="mat-elevation-z8 mat-table" mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="ID">
+              <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+          </ng-container>
 
           <ng-container matColumnDef="name">
               <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.name}} </mat-cell>
           </ng-container>
 
-        <ng-container matColumnDef="host">
-          <mat-header-cell *matHeaderCellDef> Host </mat-header-cell>
-          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.host}} </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="host">
+              <mat-header-cell *matHeaderCellDef> Host </mat-header-cell>
+              <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.host}} </mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="portNumber">
-          <mat-header-cell *matHeaderCellDef> Port </mat-header-cell>
-          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.portNumber}} </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="portNumber">
+              <mat-header-cell *matHeaderCellDef> Port </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.portNumber}} </mat-cell>
+          </ng-container>
 
-          <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef [ngClass]="'customWidthClass_new mat_cell'">
-              <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-              </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let row" [ngClass]="'customWidthClass_new mat_cell'">
-              <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)">
-              </mat-checkbox>
-          </td>
+          <ng-container matColumnDef="action">
+              <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
+               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row; let i=index;">
+                  <button mat-icon-button>
+                      <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
+                  </button>
+                  <button mat-icon-button>
+                      <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
+                  </button>
+                  <button mat-icon-button>
+                      <mat-icon aria-label="delete" (click)="openDialog(i,row)">delete</mat-icon>
+                  </button>
+                </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </table>
   </div>
 </ng-template>
+
+<div class="button-row">
+    <button mat-raised-button color="primary" (click)="openAddDialog(data)">Add Instance</button>
+</div>
+

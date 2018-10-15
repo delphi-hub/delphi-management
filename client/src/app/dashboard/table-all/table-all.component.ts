@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {Instance} from '../../api';
-import { SelectionModel} from '@angular/cdk/collections';
-import { MatDialog, MatTableDataSource} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatTableDataSource} from '@angular/material';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 
 
 @Component({
@@ -36,33 +37,61 @@ export class TableAllComponent implements OnInit {
       this.dataSource.data = data_array;
     }
   }
-  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'select'];
+  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'action'];
   dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
-  selection = new SelectionModel<Instance>(true, []);
   dialogResult: any;
+  @ViewChild(MatTable) table: MatTable<any>;
 
   constructor(public dialog: MatDialog) {
 
   }
 
-  ngOnInit() {
- }
+    ngOnInit() {
+    }
+
+  openDialog(i: number, instance: Instance) {
+    console.log('instance',instance);
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '250px',
+      data: {name:instance.name}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        if (result === 'Confirm') {
+          console.log("data",this.dataSource.data);
+          this.removeAt(i);
+          }
+        this.dialogResult = result;
+    });
+  }
+
+  removeAt(index: number) {
+    this.dataSource.data.splice(index, 1);
+    this.table.renderRows();
+  }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.data_array.length;
-    return numSelected === numRows;
+  openAddDialog(instance: Instance) {
+      const dialogRef = this.dialog.open(AddDialogComponent, {
+      width: '300px',
+      data: {instance: instance}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.status === 'Add') {
+          console.log("result",result);
+          console.log("instance data", result.instance);
+          this.dataSource.data.push(result.instance);
+          this.table.renderRows();
+        }
+      this.dialogResult = result;
+
+    });
   }
 
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.data_array.forEach((row) => {this.selection.select(row); });
-  }
 }
 
 
