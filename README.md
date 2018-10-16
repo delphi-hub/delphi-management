@@ -5,10 +5,10 @@ A management console for the Delphi platform.
 We are currently in pre-alpha state! There is no release and the code in
 this repository is purely experimental!
 
-|branch | status | codacy |
-| :---: | :---: | :---: |
-| master | [![Build Status](https://travis-ci.org/delphi-hub/delphi-management.svg?branch=master)](https://travis-ci.org/delphi-hub/delphi-management) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a50d2132e6b46adb6f6eb36b6ddc4e7)](https://www.codacy.com/app/delphi-hub/delphi-management?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=delphi-hub/delphi-management&amp;utm_campaign=Badge_Grade)|
-| develop | [![Build Status](https://travis-ci.org/delphi-hub/delphi-management.svg?branch=develop)](https://travis-ci.org/delphi-hub/delphi-management) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a50d2132e6b46adb6f6eb36b6ddc4e7?branch=develop)](https://www.codacy.com/app/delphi-hub/delphi-management?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=delphi-hub/delphi-management&amp;utm_campaign=Badge_Grade) |
+|branch | status | codacy | snyk |
+| :---: | :---: | :---: | :---: |  
+| master | [![Build Status](https://travis-ci.org/delphi-hub/delphi-management.svg?branch=master)](https://travis-ci.org/delphi-hub/delphi-management) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a50d2132e6b46adb6f6eb36b6ddc4e7)](https://www.codacy.com/app/delphi-hub/delphi-management?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=delphi-hub/delphi-management&amp;utm_campaign=Badge_Grade)| [![Known Vulnerabilities](https://snyk.io/test/github/delphi-hub/delphi-management/badge.svg?targetFile=build.sbt)](https://snyk.io/test/github/delphi-hub/delphi-management/?targetFile=build.sbt) |
+| develop | [![Build Status](https://travis-ci.org/delphi-hub/delphi-management.svg?branch=develop)](https://travis-ci.org/delphi-hub/delphi-management) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a50d2132e6b46adb6f6eb36b6ddc4e7?branch=develop)](https://www.codacy.com/app/delphi-hub/delphi-management?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=delphi-hub/delphi-management&amp;utm_campaign=Badge_Grade) | [![Known Vulnerabilities](https://snyk.io/test/github/delphi-hub/delphi-management/develop/badge.svg?targetFile=build.sbt)](https://snyk.io/test/github/delphi-hub/delphi-management/develop/?targetFile=build.sbt) |
 
 ## What is the Delphi Management Console?
 
@@ -19,7 +19,10 @@ It is a web application to allow administrators to control the crawling process.
 It takes commands from authenticated administrators over the web interface and issues the appropriate steps in the crawler.
 
 ## How can I use it?
-
+To build the angular app for deployment make sure to have npm and the angular cli installed 
+```
+cd client && npm install && ng build --prod && cd ..
+```
 For any deployed instance you need an administrator account to interact with the application.
 You can start your own instance by executing
 ```
