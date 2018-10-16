@@ -19,13 +19,13 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-3 col-sm-4">
-    <app-dashboard-card route="crawler" componentType={{crawler}} title="Crawler" img="../assets/images/crawler.png"></app-dashboard-card>
+    <app-dashboard-card route="crawler" componentType={{crawler}} title="Crawler" img="../assets/images/crawler.png"  numberOfNotification="3" (sharedOutput)="receivedNotifCrawler($event)"></app-dashboard-card>
     </div>
     <div class="col-md-3 col-sm-4">
-    <app-dashboard-card route="webApi" componentType={{webApi}} title="Web API" img="../assets/images/webapi.png"></app-dashboard-card>
+    <app-dashboard-card route="webApi" componentType={{webApi}} title="Web API" img="../assets/images/webapi.png"  numberOfNotification="3" (sharedOutput)="receivedNotifWebapi($event)"></app-dashboard-card>
     </div>
     <div class="col-md-3 col-sm-4">
-    <app-dashboard-card route="webapp" componentType={{webApp}} title="Web APP" img="../assets/images/webapp.png"></app-dashboard-card>
+    <app-dashboard-card route="webapp" componentType={{webApp}} title="Web APP" img="../assets/images/webapp.png"  numberOfNotification="3" (sharedOutput)="receivedNotifWebapp($event)"></app-dashboard-card>
     </div>
     <div class="col-md-1 col-sm-4">
     </div>
@@ -33,4 +33,20 @@
     <app-statuscard></app-statuscard>
   </div>
 </div>
+</div>
+
+<!--Notifications Panels-->
+<div id="crawler" *ngIf="showNotifCrawler">
+  <h4>Crawler</h4>
+  <app-datatable-notification></app-datatable-notification>
+</div>
+
+<div id="webapi" *ngIf="showNotifWebapi">
+  <h4>Webapi</h4>
+  <app-datatable-notification></app-datatable-notification>
+</div>
+
+<div id="webapp" *ngIf="showNotifWebapp">
+  <h4>Webapp</h4>
+  <app-datatable-notification></app-datatable-notification>
 </div>

@@ -26,6 +26,10 @@ import {Instance} from '../../api';
 })
 export class DashboardOverviewComponent implements OnInit {
 
+  showNotifCrawler = false;
+  showNotifWebapi = false;
+  showNotifWebapp = false;
+
   constructor() { }
 
   crawler = Instance.ComponentTypeEnum.Crawler;
@@ -34,5 +38,19 @@ export class DashboardOverviewComponent implements OnInit {
 
   ngOnInit() {
   }
+
+
+  public receivedNotifCrawler(event: boolean){
+    this.showNotifCrawler = event;
+  }
+
+  public receivedNotifWebapp(event: boolean){
+    this.showNotifWebapp = event;
+  }
+
+  public receivedNotifWebapi(event: boolean){
+    this.showNotifWebapi = event;
+  }
+
 
 }

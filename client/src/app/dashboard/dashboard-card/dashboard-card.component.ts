@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {ApiService} from '../../api';
+
 
 @Component({
   selector: 'app-dashboard-card',
@@ -37,7 +38,11 @@ export class DashboardCardComponent implements OnInit {
   @Input() route: string;
   @Input() title: string;
   @Input() componentType: string;
+  @Input() numberOfNotification: string;
 
+  public show = false;
+  @Output()
+  public sharedOutput = new EventEmitter<boolean>();
   numberOfInstances: string;
   numberOfFailedInstances: string;
 
@@ -64,4 +69,11 @@ export class DashboardCardComponent implements OnInit {
     });
   }
 
+  /**
+   *
+   */
+  public onshared(){
+    this.show = !this.show;
+    this.sharedOutput.emit(this.show);
+  }
 }

@@ -19,7 +19,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatTableModule} from '@angular/material';
+import { MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule} from '@angular/material';
 import { MatIconModule} from '@angular/material/icon';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDialogModule} from '@angular/material/dialog';
@@ -39,6 +39,10 @@ import { StatusCardComponent } from './status-card/status-card.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import {DatatableNotificationComponent} from './datatable-notification/datatable-notification.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
+
 
 
 @NgModule({
@@ -55,7 +59,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     MatFormFieldModule,
     MatInputModule,
     DashboardRoutingModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    MatPaginatorModule,
+    MatSortModule,
+    NgbModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -68,7 +75,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     HeaderComponent,
     StatusCardComponent,
     UserProfileComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    DatatableNotificationComponent
   ],
   entryComponents: [
   ],
