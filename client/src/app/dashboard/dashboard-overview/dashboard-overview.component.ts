@@ -40,15 +40,15 @@ export class DashboardOverviewComponent implements OnInit {
   }
 
 
-  public receivedNotifCrawler(event: boolean){
+  public receivedNotifCrawler(event: boolean) {
     this.showNotifCrawler = event;
   }
 
-  public receivedNotifWebapp(event: boolean){
+  public receivedNotifWebapp(event: boolean) {
     this.showNotifWebapp = event;
   }
 
-  public receivedNotifWebapi(event: boolean){
+  public receivedNotifWebapi(event: boolean) {
     this.showNotifWebapi = event;
   }
 

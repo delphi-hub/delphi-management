@@ -15,9 +15,9 @@ export interface DatatableNotificationItem {
 // TODO: replace this with real data from the application coming from the Server
 // TODO: function to write getDataNotifications()
 const EXAMPLE_DATA: DatatableNotificationItem[] = [
-  {type: 'warning', notifName: 'Demo overwritten', dateTime:'12:15', details:["fd","2","3","4"]},
-  {type: 'done', notifName: 'Demo success', dateTime:'12:15', details:["1","2","3","4"]},
-  {type: 'close', notifName: 'Demo failed', dateTime:'12:15', details:["1","2","3","4"]},
+  {type: "warning", notifName: "Demo overwritten", dateTime: "12:15", details: ["fd","2","3","4"]},
+  {type: "done", notifName: "Demo success", dateTime: "12:15", details: ["1","2","3","4"]},
+  {type: "close", notifName: "Demo failed", dateTime: "12:15", details: ["1","2","3","4"]},
 ];
 
 /**

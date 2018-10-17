@@ -72,7 +72,7 @@ export class DashboardCardComponent implements OnInit {
   /**
    *
    */
-  public onshared(){
+  public onshared() {
     this.show = !this.show;
     this.sharedOutput.emit(this.show);
   }
