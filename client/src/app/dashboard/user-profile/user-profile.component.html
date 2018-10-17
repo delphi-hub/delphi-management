@@ -10,18 +10,6 @@
           <input matInput  placeholder="Email" name="email" [formControl]="email" required>
           <mat-error *ngIf="email.invalid">{{getErrorMessageEmail()}}</mat-error>
       </mat-form-field>
-
-      <mat-form-field>
-          <input matInput placeholder="Organization" name="organization">
-      </mat-form-field>
-
-      <label>Notifications level: <span>*</span> </label>
-        <mat-hint>Based on your selection emails will be sent to notify the status of instances</mat-hint>
-      <mat-radio-group [(ngModel)]="notification_level" name="notification_level" required>
-        <mat-radio-button *ngFor="let level of levels" [value]="level">
-          {{level}}
-        </mat-radio-button>
-      </mat-radio-group>
   </form>
   <div class="button-row">
       <button mat-raised-button color="primary" >Save</button>
