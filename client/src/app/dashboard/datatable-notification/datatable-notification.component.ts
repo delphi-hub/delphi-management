@@ -25,6 +25,8 @@ export class DatatableNotificationComponent implements OnInit {
 
   constructor(public dialog: MatDialog) {}
 
+  // TODO dialog for display details
+  openDialog(){}
 }
 
 
