@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable, Optional} from '@angular/core';
-import {BASE_PATH} from '../variables';
-import {Configuration} from '../configuration';
+import {Injectable} from '@angular/core';
 import {Observable, Observer, Subject} from 'rxjs';
 import {
   checkMessageType,
@@ -54,25 +52,18 @@ export class SocketService {
    * https://blog.angularindepth.com/rxjs-understanding-subjects-5c585188c3e1
    *
    */
-  private wsUri = 'ws://' + location.host + '/ws';
-  protected basePath = '';
-  public configuration = new Configuration();
-  private socket: WebSocket = null;
+  readonly wsUri;
+  private socket: WebSocket;
   /**
    * This map is used to manage the observers interested in the defined events.
    * It maps event types to a set of observers interested in these events.
    */
-  private observers: ObserverMap = {};
+  readonly observers: ObserverMap;
 
-  constructor(@Optional() @Inject(BASE_PATH) basePath: string,
-              @Optional() configuration: Configuration) {
-    if (basePath) {
-      this.basePath = basePath;
-    }
-    if (configuration) {
-      this.configuration = configuration;
-      this.basePath = basePath || configuration.basePath || this.basePath;
-    }
+  constructor() {
+    this.observers = {};
+    this.wsUri = 'ws://' + location.host + '/ws';
+    this.socket = null;
   }
 
   /**

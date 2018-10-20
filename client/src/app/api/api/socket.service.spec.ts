@@ -21,10 +21,41 @@ import {TestBed} from '@angular/core/testing';
 import {SocketService} from './socket.service';
 
 describe('SocketService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let socketService: SocketService;
+  let socketMock;
+  beforeEach(() => {
+    function WebSocketStub(url: string) {
+      socketMock = {
+        url: url,
+        readyState: WebSocket.OPEN,
+        send: jasmine.createSpy('send'),
+        close: jasmine.createSpy('close').and.callFake(function () {
+          socketMock.readyState = WebSocket.CLOSING;
+        })
+      };
+
+      return socketMock;
+    }
+
+    WebSocketStub['OPEN'] = WebSocket.OPEN;
+    WebSocketStub['CLOSED'] = WebSocket.CLOSED;
+      TestBed.configureTestingModule(
+        {providers: [SocketService, {useValue: {WebSocket: WebSocketStub}}]});
+    }
+  );
 
   it('should be created', () => {
-    const service: SocketService = TestBed.get(SocketService);
-    expect(service).toBeTruthy();
+    socketService = TestBed.get(SocketService);
+    expect(socketService).toBeTruthy();
+  });
+
+
+  it('should return correct data on subscribe', () => {
+    console.log('new test');
+    socketService = TestBed.get(SocketService);
+    // need to check the result based on some mock object to simulate the connection to the webserver
+    socketService.initSocket().then(() => {
+      console.log('fake socket open');
+    });
   });
 });
