@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort} from '@angular/material';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatPaginator, MatSort} from '@angular/material';
 import { DatatableNotificationDataSource } from './datatable-notification-datasource';
 
 export interface DialogData {
