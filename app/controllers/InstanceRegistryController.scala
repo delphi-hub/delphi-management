@@ -18,10 +18,14 @@
 
 package controllers
 
+import akka.Done
 import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import javax.inject.Inject
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
 import play.api.mvc._
@@ -73,8 +77,47 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     request => { // Log events to the console
       val in = Sink.foreach[SocketMessage](println)
 
-      // Send a single 'Hello!' message and then leave the socket open
-      val msg = new SocketMessage(event=EventType.InstanceNumbers, payload = Option("wow so much information"))
+
+      // TODO: parse the response and send it to the client via socket connection
+      // Future[Done] is the materialized value of Sink.foreach,
+      // emitted when the stream completes
+      val incoming: Sink[Message, Future[Done]] =
+      Sink.foreach[Message] {
+        case message: TextMessage.Strict =>
+          println(message.text)
+      }
+
+      // TODO: check with infrastructure team what they expect to register for events
+      val outgoing = Source.single(TextMessage("hello world!"))
+      // TODO: figure out actual endpoint
+      val webSocketFlow = Http().webSocketClientFlow(WebSocketRequest("ws://localhost:8087/events"))
+
+
+      // TODO: scala akka magic as seen here https://doc.akka.io/docs/akka-http/current/client-side/websocket-support.html
+      // the materialized value is a tuple with
+      // upgradeResponse is a Future[WebSocketUpgradeResponse] that
+      // completes or fails when the connection succeeds or fails
+      // and closed is a Future[Done] with the stream completion from the incoming sink
+      val (upgradeResponse, closed) =
+      outgoing
+        .viaMat(webSocketFlow)(Keep.right) // keep the materialized Future[WebSocketUpgradeResponse]
+        .toMat(incoming)(Keep.both) // also keep the Future[Done]
+        .run()
+
+      // just like a regular http request we can access response status which is available via upgrade.response.status
+      // status code 101 (Switching Protocols) indicates that server support WebSockets
+      val connected = upgradeResponse.flatMap { upgrade =>
+        if (upgrade.response.status == StatusCodes.SwitchingProtocols) {
+          Future.successful(Done)
+        } else {
+          throw new RuntimeException(s"Connection failed: ${upgrade.response.status}")
+        }
+      }
+
+      // in a real application you would not side effect here
+      connected.onComplete(println)
+      closed.foreach(_ => println("closed"))
+      val msg = new SocketMessage(event=EventType.InstanceNumbersCrawler, payload = Option("wow so much information"))
       val out = Source.single(msg).concat(Source.maybe)
 
       Flow.fromSinkAndSource(in, out)
