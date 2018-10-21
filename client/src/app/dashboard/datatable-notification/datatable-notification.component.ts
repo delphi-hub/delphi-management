@@ -1,10 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSort} from '@angular/material';
-import { DatatableNotificationDataSource } from './datatable-notification-datasource';
+import {DatatableNotificationDataSource} from './datatable-notification-datasource';
 
-export interface DialogData {
-  animal: 'panda' | 'unicorn' | 'lion';
-}
 
 @Component({
   selector: 'app-datatable-notification',
