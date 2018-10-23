@@ -47,13 +47,13 @@
           <ng-container matColumnDef="action">
               <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
                <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row; let i=index;">
-                  <button mat-icon-button>
+                  <button mat-icon-button matTooltip="Play">
                       <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
                   </button>
-                  <button mat-icon-button>
+                  <button mat-icon-button matTooltip="Pause">
                       <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
                   </button>
-                  <button mat-icon-button>
+                  <button mat-icon-button matTooltip="Delete">
                       <mat-icon aria-label="delete" (click)="openDialog(i,row)">delete</mat-icon>
                   </button>
                 </mat-cell>
@@ -66,6 +66,6 @@
 </ng-template>
 
 <div class="button-row">
-    <button mat-raised-button color="primary" (click)="openAddDialog(data)">Add Instance</button>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">Add Instance</button>
 </div>
 

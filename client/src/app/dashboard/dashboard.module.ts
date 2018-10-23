@@ -27,6 +27,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule} from '@angular/material/input';
+import { MatTooltipModule} from '@angular/material/tooltip';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { DashboardComponent } from './dashboard.component';
@@ -59,6 +60,7 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     DashboardRoutingModule,
     DashboardRoutingModule
   ],

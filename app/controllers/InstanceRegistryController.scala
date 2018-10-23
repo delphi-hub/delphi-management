@@ -26,6 +26,8 @@ import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import play.api.libs.json._
+
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -48,6 +50,8 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
                                            val controllerComponents: ControllerComponents,
                                            ws: WSClient, config: Configuration)
   extends BaseController {
+  
+
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
@@ -57,6 +61,8 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
       Ok(response.body)
     }(myExecutionContext)
   }
+
+  
 
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
@@ -68,7 +74,21 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
       } else {
         new Status(response.status)
       }
-    }(myExecutionContext)
+  }(myExecutionContext)
   }
 
+  //This function is for POST method to the Scala web server
+  def postDockerControl(componentType: String, name: String)  : Action[AnyContent] = Action.async {
+      val dataPost = Json.obj(
+          "componentType" -> componentType,
+           "name" -> name
+      )
+        ws.url(instanceRegistryUri + "/deploy").post(dataPost).map { response =>
+     if (response.status == 200) {
+        Ok(response.body)
+      } else {
+        new Status(response.status)
+      }
+  }(myExecutionContext)
+ }
 }
