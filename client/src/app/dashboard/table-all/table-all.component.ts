@@ -74,7 +74,8 @@ export class TableAllComponent implements OnInit {
       this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openAddDialog(instance: Instance) {
+  openAddDialog() {
+      let instance: Instance;
       const dialogRef = this.dialog.open(AddDialogComponent, {
       width: '300px',
       data: {instance: instance}

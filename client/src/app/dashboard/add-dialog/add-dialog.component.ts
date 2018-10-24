@@ -15,6 +15,17 @@ export class AddDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  formControl = new FormControl('', [
+    Validators.required
+    // Validators.email,
+  ]);
+
+  getErrorMessage() {
+    return this.formControl.hasError('required') ? 'Required field' :
+      this.formControl.hasError('name') ? 'Not a valid name' :
+        '';
+  }
+
   onConfirmAddInstance(): void {
    
    		console.log("added data",this.data);

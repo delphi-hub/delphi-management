@@ -20,7 +20,7 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Configuration} from '../configuration';
-import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
+import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO,NEW_INSTANCE} from '../variables';
 import {CustomHttpUrlEncodingCodec} from '../encoder';
 import {Instance} from '..';
 import {SysInfo} from '../model/sysInfo';
@@ -73,8 +73,11 @@ export class ApiService {
     return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
+  public PostNewInstance(componentType: string, name:string, observe: any = 'body', reportProgress: boolean = false ): Observable<Instance> {
+    return this.post(NEW_INSTANCE,componentType, name);
+  }
   /**
-   * Find number of running instances
+   * Find number of running instances 
    * How many instances per type are running
    * @param componentType
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -115,4 +118,38 @@ export class ApiService {
       }
     );
   }
+  // This is to send the POST request to the server
+  private post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false ): any {
+    if (componentType === null || componentType === undefined && name === null || name === undefined) {
+      throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
+    }
+
+    let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+    if (componentType !== undefined && name !== undefined) {
+      queryParameters = queryParameters.set('componentType', <any>componentType);
+      queryParameters = queryParameters.set('name', <any>name);
+    }
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<Instance>(`${this.basePath}${endpoint}`,
+      {
+        params: queryParameters,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
+  }
+
 }
