@@ -73,9 +73,7 @@ export class ApiService {
     return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
-  public PostNewInstance(componentType: string, name:string, observe: any = 'body', reportProgress: boolean = false ): Observable<Instance> {
-    return this.post(NEW_INSTANCE,componentType, name);
-  }
+
   /**
    * Find number of running instances 
    * How many instances per type are running
@@ -85,6 +83,10 @@ export class ApiService {
    */
   public getInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<Array<Instance>> {
     return this.get(INSTANCES, componentType);
+  }
+
+  public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Array<Instance>> {
+    return this.post(NEW_INSTANCE, componentType, name);
   }
 
   private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {

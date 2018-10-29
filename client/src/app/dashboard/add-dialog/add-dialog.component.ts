@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { Instance } from '../../api';
+import {ApiService, Instance} from '../../api';
 
 @Component({
   selector: 'app-add-dialog',
@@ -10,9 +10,10 @@ import { Instance } from '../../api';
 })
 export class AddDialogComponent implements OnInit {
 
-  constructor(public thisDialogRef:MatDialogRef<AddDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Instance) { }
+  constructor(public thisDialogRef:MatDialogRef<AddDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Instance, private apiService: ApiService) { }
 
   ngOnInit() {
+   //console.log('data.type', this.data);
   }
 
   formControl = new FormControl('', [
@@ -29,8 +30,14 @@ export class AddDialogComponent implements OnInit {
   onConfirmAddInstance(): void {
    
    		console.log("added data",this.data);
-   		let result = {'status':'Add', 'instance' : this.data};
-   		this.thisDialogRef.close(result);
+       let result = {'status':'Add', 'instance' : this.data};
+       console.log("added data new",this.data);
+       this.apiService.postInstance('WebApi', 'demo').subscribe((result: any) => {
+         console.log('result', result);
+        this.thisDialogRef.close(result);
+        }, err => {
+          console.log('error receiving data for crawler');
+        });	
   	}
 
   onCloseCancle(){

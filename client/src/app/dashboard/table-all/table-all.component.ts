@@ -29,6 +29,7 @@ import { AddDialogComponent } from '../add-dialog/add-dialog.component';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
+  //@Input() type: Instance.ComponentTypeEnum;
 
   @Input() set data_array(data_array: Instance[]) {
     if (this.dataSource != null) {
@@ -47,6 +48,8 @@ export class TableAllComponent implements OnInit {
   }
 
     ngOnInit() {
+
+      //console.log('this.type in table all', this.type);
     }
 
   openDialog(i: number, instance: Instance) {
@@ -74,11 +77,19 @@ export class TableAllComponent implements OnInit {
       this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  //Function to add the data into dataSource 
   openAddDialog() {
       let instance: Instance;
+     
+      //Instance.ComponentTypeEnum =<Instance>""
+     //instance.componentType = this.type;
+      //console.log("component type",instance.componentType);
       const dialogRef = this.dialog.open(AddDialogComponent, {
       width: '300px',
-      data: {instance: instance}
+      data: {
+        instance: instance
+      }
+
     });
 
     dialogRef.afterClosed().subscribe(result => {
