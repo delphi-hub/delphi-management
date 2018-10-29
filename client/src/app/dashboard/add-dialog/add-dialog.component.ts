@@ -10,7 +10,7 @@ import {ApiService, Instance} from '../../api';
 })
 export class AddDialogComponent implements OnInit {
 
-  constructor(public thisDialogRef:MatDialogRef<AddDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Instance, private apiService: ApiService) { }
+  constructor(public thisDialogRef:MatDialogRef<AddDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private apiService: ApiService) { }
 
   ngOnInit() {
    //console.log('data.type', this.data);
@@ -31,8 +31,8 @@ export class AddDialogComponent implements OnInit {
    
    		console.log("added data",this.data);
        let result = {'status':'Add', 'instance' : this.data};
-       console.log("added data new",this.data);
-       this.apiService.postInstance('WebApi', 'demo').subscribe((result: any) => {
+       console.log("added data new",this.data, this.data.instance.componentType, this.data.name);
+       this.apiService.postInstance(this.data.instance.componentType, this.data.name).subscribe((result: any) => {
          console.log('result', result);
         this.thisDialogRef.close(result);
         }, err => {

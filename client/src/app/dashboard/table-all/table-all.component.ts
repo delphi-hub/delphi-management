@@ -29,7 +29,7 @@ import { AddDialogComponent } from '../add-dialog/add-dialog.component';
   styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-  //@Input() type: Instance.ComponentTypeEnum;
+  @Input() type: Instance.ComponentTypeEnum;
 
   @Input() set data_array(data_array: Instance[]) {
     if (this.dataSource != null) {
@@ -79,11 +79,8 @@ export class TableAllComponent implements OnInit {
 
   //Function to add the data into dataSource 
   openAddDialog() {
-      let instance: Instance;
-     
-      //Instance.ComponentTypeEnum =<Instance>""
-     //instance.componentType = this.type;
-      //console.log("component type",instance.componentType);
+      let instance: Instance = {};
+      instance.componentType = this.type;
       const dialogRef = this.dialog.open(AddDialogComponent, {
       width: '300px',
       data: {
