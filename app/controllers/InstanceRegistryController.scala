@@ -78,8 +78,8 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   }
 
   //This function is for POST method to the Scala web server
-  def postDockerControl(componentType: String)  : Action[AnyContent] = Action.async {
-      val dataPost = "componentType=" + componentType + "&" + "InstanceName =" + name
+  def postDockerControl(componentType: String, name: String)  : Action[AnyContent] = Action.async {
+      val dataPost = "ComponentType=" + componentType + "&" + "InstanceName =" + name
     //  println(s"Coming here" +dataPost) 
       ws.url(instanceRegistryUri + "/deploy").post(dataPost).map { response =>
       if (response.status == 200) {
