@@ -60,7 +60,7 @@ export class ApiService {
     }
     return this.httpClient.get<SysInfo>(`${this.basePath}${SYS_INFO}`,
       {headers: headers, observe: 'body', reportProgress: reportProgress});
-    }
+  }
 
   /**
    * Find number of running instances
@@ -75,7 +75,7 @@ export class ApiService {
 
 
   /**
-   * Find number of running instances 
+   * Find number of running instances
    * How many instances per type are running
    * @param componentType
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -85,8 +85,8 @@ export class ApiService {
     return this.get(INSTANCES, componentType);
   }
 
-  public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Array<Instance>> {
-    return this.post(NEW_INSTANCE, componentType, name);
+  public postInstance(componentType: string, instanceName: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Array<Instance>> {
+    return this.post(NEW_INSTANCE, componentType, instanceName);
   }
 
   private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {
@@ -120,34 +120,30 @@ export class ApiService {
       }
     );
   }
-  // This is to send the POST request to the server
+
+  /**
+   * Create a new Instance
+   * @param componentType
+   * @param InstanceName
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   private post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false ): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
       throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
     }
-
+    console.log("ici post");
     let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
     if (componentType !== undefined && name !== undefined) {
-      queryParameters = queryParameters.set('componentType', <any>componentType);
-      queryParameters = queryParameters.set('name', <any>name);
+      queryParameters = queryParameters.set('componentType', <string>componentType);
+      queryParameters = queryParameters.set('instanceName', <string>name);
     }
-
-    let headers = this.defaultHeaders;
-
-    // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
-    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    return this.httpClient.post<Instance>(`${this.basePath}${endpoint}`,
+    //http://localhost:8083/api/instances?componentType=WebApi
+    return this.httpClient.post(`${this.basePath}${endpoint}`, {},
       {
         params: queryParameters,
         withCredentials: this.configuration.withCredentials,
-        headers: headers,
+        //headers: headers,
         observe: observe,
         reportProgress: reportProgress
       }

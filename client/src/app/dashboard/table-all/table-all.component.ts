@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ɵstringify} from '@angular/core';
 import {Instance} from '../../api';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatTableDataSource} from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
@@ -38,6 +38,9 @@ export class TableAllComponent implements OnInit {
       this.dataSource.data = data_array;
     }
   }
+   @Input()compType : string;
+
+
   displayedColumns = ['ID', 'name', 'host', 'portNumber', 'action'];
   dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
   dialogResult: any;

@@ -27,8 +27,6 @@ import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
-import play.api.libs.json._
-
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -79,6 +77,22 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   }
 
   //This function is for POST method to the Scala web server
+  def postDockerControl(componentType: String, instanceName: String)  : Action[AnyContent] = Action.async {
+      val dataPost = "ComponentType="+componentType+"&"+"InstanceName ="+instanceName
+      println(s"date before post Coming here" + dataPost)
+      ws.url(instanceRegistryUri + "/deploy").post(dataPost).map { response =>
+        if (response.status == 200) {
+        Ok(response.body)
+      } else {
+        new Status(response.status)
+      }
+    }(myExecutionContext)
+ }
+
+  def postD(): Unit ={
+    
+  }
+
  
 
 def testpost (componentType: String, name: String) 
