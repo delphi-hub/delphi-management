@@ -33,7 +33,7 @@ export class AddDialogComponent implements OnInit {
        let result = {'status':'Add', 'instance' : this.data};
        console.log("added data new",this.data, this.data.instance.componentType, this.data.name);
        this.apiService.postInstance(this.data.instance.componentType, this.data.name).subscribe((result: any) => {
-         console.log('result', result);
+       console.log('result', result);
         this.thisDialogRef.close(result);
         }, err => {
           console.log('error receiving data for crawler');

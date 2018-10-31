@@ -22,6 +22,7 @@ import akka.actor.ActorSystem
 import javax.inject.Inject
 import play.api.Configuration
 
+import controllers.Stock._
 import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
@@ -60,7 +61,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
 
       Ok(response.body)
     }(myExecutionContext)
-  }
+      }
 
   
 
@@ -78,17 +79,24 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   }
 
   //This function is for POST method to the Scala web server
-  def postDockerControl(componentType: String, name: String)  : Action[AnyContent] = Action.async {
-      val dataPost = "ComponentType=" + componentType + "&" + "InstanceName =" + name
-    //  println(s"Coming here" +dataPost) 
-      ws.url(instanceRegistryUri + "/deploy").post(dataPost).map { response =>
-      if (response.status == 200) {
-        println("success")
-        Ok(response.body)
-      } else {
-        println("fail")
-        new Status(response.status)
-      }
-  }(myExecutionContext)
- }
+ 
+
+def testpost (componentType: String, name: String) 
+(implicit ec : ExecutionContext): Future[String] =
+{
+val query= "ComponentType"
+val request = POST(instanceRegistryUri/ "deploy", query)
+Stock.sendRequest(request).flatmap { response =>
+response.status match {
+case StatusCode.Created =>
+println("created" +response)
+case _ => 
+println("error" +response)
+}
+}
+
+
+  
+    
+  }
 }
