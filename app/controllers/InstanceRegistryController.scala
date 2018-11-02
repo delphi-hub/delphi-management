@@ -22,7 +22,8 @@ import akka.actor.ActorSystem
 import javax.inject.Inject
 import play.api.Configuration
 
-import controllers.Stock._
+import scala.concurrent.Future
+
 import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
@@ -81,22 +82,36 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   //This function is for POST method to the Scala web server
  
 
-def testpost (componentType: String, name: String) 
-(implicit ec : ExecutionContext): Future[String] =
-{
-val query= "ComponentType"
-val request = POST(instanceRegistryUri/ "deploy", query)
-Stock.sendRequest(request).flatmap { response =>
-response.status match {
-case StatusCode.Created =>
-println("created" +response)
-case _ => 
-println("error" +response)
-}
-}
-
-
+def postinstance () : Action[AnyContent] = Action.async { request =>
+  var compType = ""
+  var name = ""
   
-    
+  request.body.asJson.map { json =>
+    for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
+    ){
+      val obj = jsonValue.as[JsObject]
+      if((obj \ "param").asOpt[String].get.equals("componentType")){
+          compType = (obj \ "value").asOpt[String].get
+      } else if((obj \ "param").asOpt[String].get.equals("name")){
+          name = (obj \ "value").asOpt[String].get
+      }
+    }
+
   }
+
+  ws.url(instanceRegistryUri + "/deploy")
+  .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
+  .post("")
+  .map { response =>
+    response.status match {
+      case 202 =>
+        println("created with id" +response.body)
+        Ok(response.body)
+      case x => 
+        println("error" +response)
+        new Status(x)
+    }
+  }(myExecutionContext)
+}
+
 }

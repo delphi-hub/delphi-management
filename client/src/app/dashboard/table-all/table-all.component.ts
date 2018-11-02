@@ -48,10 +48,9 @@ export class TableAllComponent implements OnInit {
   }
 
     ngOnInit() {
-
-      //console.log('this.type in table all', this.type);
     }
-
+    
+    // Function to Delete the data from datasource
   openDialog(i: number, instance: Instance) {
     console.log('instance',instance);
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
