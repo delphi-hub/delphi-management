@@ -42,7 +42,7 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
       case y => throw new RuntimeException(s"Unexpected type $y while deserializing component type.")
     }
   }
-  implicit val instanceFormat = jsonFormat5(Instance)
+  implicit val instanceFormat = jsonFormat6(Instance)
 }
 
 final case class Instance (
@@ -50,6 +50,7 @@ final case class Instance (
                             host: Option[String],
                             portNumber: Option[Long],
                             name: Option[String],
+                            instanceState: Option[String],
                             /* Component Type */
                             componentType: Option[InstanceEnums.ComponentType]
                           )

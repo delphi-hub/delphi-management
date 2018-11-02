@@ -44,13 +44,18 @@
               <mat-cell *matCellDef="let element"> {{element.portNumber}} </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="instanceState">
+            <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.instanceState}} </mat-cell>
+        </ng-container>
+
           <ng-container matColumnDef="action">
               <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
-               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row; let i=index;">
-                  <button mat-icon-button matTooltip="Play">
+               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row; let i=index;" >
+                  <button mat-icon-button matTooltip="Start">
                       <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
                   </button>
-                  <button mat-icon-button matTooltip="Pause">
+                  <button mat-icon-button matTooltip="Stop">
                       <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
                   </button>
                   <button mat-icon-button matTooltip="Delete">
