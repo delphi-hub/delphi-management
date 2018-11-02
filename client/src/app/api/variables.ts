@@ -29,4 +29,3 @@ export const COLLECTION_FORMATS = {
     'ssv': ' ',
     'pipes': '|'
 };
-
