@@ -20,7 +20,17 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Configuration} from '../configuration';
-import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO,NEW_INSTANCE} from '../variables';
+import {
+  BASE_PATH,
+  INSTANCES,
+  NUMBER_OF_INSTANCES,
+  SYS_INFO,
+  NEW_INSTANCE,
+  START_INSTANCE,
+  STOP_INSTANCE,
+  PAUSE_INSTANCE,
+  DELETE_INSTANCE
+} from '../variables';
 import {CustomHttpUrlEncodingCodec} from '../encoder';
 import {Instance} from '..';
 import {SysInfo} from '../model/sysInfo';
@@ -75,7 +85,7 @@ export class ApiService {
 
 
   /**
-   * Find number of running instances 
+   * Find number of running instances
    * How many instances per type are running
    * @param componentType
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -85,8 +95,24 @@ export class ApiService {
     return this.get(INSTANCES, componentType);
   }
 
-  public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Array<Instance>> {
+  public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Instance> {
     return this.post(NEW_INSTANCE, componentType, name);
+  }
+
+  public startInstance(instanceId: string) : Observable<Instance> {
+    return this.postAction(START_INSTANCE, instanceId);
+  }
+
+  public stopInstance(instanceId: string) : Observable<Instance>{
+    return this.postAction(STOP_INSTANCE, instanceId);
+  }
+
+  public pauseInstance(instanceId: string) : Observable<Instance>{
+    return this.postAction(PAUSE_INSTANCE, instanceId);
+  }
+
+  public deleteInstance(instanceId: string) : Observable<Instance>{
+    return this.postAction(DELETE_INSTANCE, instanceId);
   }
 
   private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {
@@ -152,6 +178,33 @@ export class ApiService {
         reportProgress: reportProgress
       }
     );
+  }
+
+  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false ): Observable<Instance>{
+    let queryParam= new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+    let headers = this.defaultHeaders;
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    if (idInstance === null || idInstance== undefined){
+      throw new Error('Required parameter');
+    } else {
+      queryParam = queryParam.set('InstanceID', <any>idInstance);
+    }
+
+    const url =`${this.basePath}${endpoint}`;
+    return this.httpClient.post<Instance>(url, {
+      params: queryParam,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress
+    });
   }
 
 }

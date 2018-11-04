@@ -28,7 +28,7 @@ export class AddDialogComponent implements OnInit {
   }
 
   onConfirmAddInstance(): void {
-   
+
    		console.log("added data",this.data);
        let result = {'status':'Add', 'instance' : this.data};
        console.log("added data new",this.data, this.data.instance.componentType, this.data.name);
@@ -37,11 +37,11 @@ export class AddDialogComponent implements OnInit {
         this.thisDialogRef.close(result);
         }, err => {
           console.log('error receiving data for crawler');
-        });	
+        });
   	}
 
   onCloseCancle(){
-    this.thisDialogRef.close('Cancle');
+    this.thisDialogRef.close('Cancel');
 
   }
 

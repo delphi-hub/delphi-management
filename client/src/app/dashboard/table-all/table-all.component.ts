@@ -17,7 +17,7 @@
  */
 
 import {Component, OnInit, Input, ViewChild, ɵstringify} from '@angular/core';
-import {Instance} from '../../api';
+import {ApiService, Instance} from '../../api';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatTableDataSource} from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
@@ -46,13 +46,13 @@ export class TableAllComponent implements OnInit {
   dialogResult: any;
   @ViewChild(MatTable) table: MatTable<any>;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private apiService: ApiService) {
 
   }
 
     ngOnInit() {
     }
-    
+
     // Function to Delete the data from datasource
   openDialog(i: number, instance: Instance) {
     console.log('instance',instance);
@@ -79,7 +79,7 @@ export class TableAllComponent implements OnInit {
       this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  //Function to add the data into dataSource 
+  //Function to add the data into dataSource
   openAddDialog() {
       let instance: Instance = {};
       instance.componentType = this.type;
@@ -103,6 +103,41 @@ export class TableAllComponent implements OnInit {
     });
   }
 
+  public startInstance(id:string):void{
+
+    this.apiService.startInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error receiving data for crawler');
+    });
+  }
+
+  public stopInstance(id:string):void{
+
+    this.apiService.stopInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error receiving data for crawler');
+    });
+  }
+
+  public pauseInstance(id:string):void{
+
+    this.apiService.pauseInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error receiving data for crawler');
+    });
+  }
+
+  public deleteInstance(id:string):void{
+
+    this.apiService.deleteInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error receiving data for crawler');
+    });
+  }
 }
 
 
