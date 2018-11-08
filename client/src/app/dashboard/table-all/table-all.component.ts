@@ -59,17 +59,28 @@ export class TableAllComponent implements OnInit {
     }
 
     // Function to Delete the data from datasource
-    openDialog(i: number, instance: Instance) {
-        console.log('instance', instance);
+    openDeleteDialog(i: number, instance: Instance, id: string) {
         const dialogRef = this.dialog.open(DeleteDialogComponent, {
             width: '250px',
             data: { name: instance.name }
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result === 'Confirm') {
+            console.log("delete state", instance.instanceState);
+            if (result === 'Confirm' && instance.instanceState=='Running') {
+                console.log("alert working");
+                alert('Please Stop the Instance before you try to delete');
                 console.log("data", this.dataSource.data);
+                
+            }
+            else {
+                this.apiService.deleteInstance(id).subscribe((result: any) => {
+                    console.log('result', result);
+                }, err => {
+                    console.log('error start Instance');
+                });
                 this.removeAt(i);
+
             }
             this.dialogResult = result;
         });
@@ -90,9 +101,6 @@ export class TableAllComponent implements OnInit {
         instance.componentType = this.type;
         const dialogRef = this.dialog.open(AddDialogComponent, {
             width: '300px',
-            /*data: {
-              instance: instance
-            }*/
 
         });
 
@@ -113,42 +121,45 @@ export class TableAllComponent implements OnInit {
 
                 console.log('error receiving data for crawler');
             });
+        });
+    }
 
-  public startInstance(id:string):void{
+    public startInstance(id: string): void {
 
-    this.apiService.startInstance(id).subscribe((result: any) => {
-      console.log('result', result);
-    }, err => {
-      console.log('error start Instance');
-    });
-  }
+        this.apiService.startInstance(id).subscribe((result: any) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error start Instance');
+        });
+    }
 
-  public stopInstance(id:string):void{
+    public stopInstance(id: string): void {
 
-    this.apiService.stopInstance(id).subscribe((result: any) => {
-      console.log('result', result);
-    }, err => {
-      console.log('error stop Instance');
-    });
-  }
+        this.apiService.stopInstance(id).subscribe((result: any) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error stop Instance');
+        });
+    }
 
-  public pauseInstance(id:string):void{
+    public pauseInstance(id: string): void {
 
-    this.apiService.pauseInstance(id).subscribe((result: any) => {
-      console.log('result', result);
-    }, err => {
-      console.log('error pause instance');
-    });
-  }
+        this.apiService.pauseInstance(id).subscribe((result: any) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error pause instance');
+        });
+    }
 
-  public deleteInstance(id:string):void{
+    public deleteInstance(id: string): void {
 
-    this.apiService.deleteInstance(id).subscribe((result: any) => {
-      console.log('result', result);
-    }, err => {
-      console.log('error delete instance');
-    });
-  }
+        this.apiService.deleteInstance(id).subscribe((result: any) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error delete instance');
+        });
+    }
 }
+
 
 

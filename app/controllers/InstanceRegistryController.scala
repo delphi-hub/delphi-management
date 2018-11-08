@@ -217,23 +217,22 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
         println(obj)
         if((obj \ "param").asOpt[String].get.equals("InstanceID")){
           instanceID = (obj \ "value").asOpt[String].get.substring(1)
-          //instanceID = toInt(intanceID)
-          println("winnie test send parameter-->>" +instanceID)
+          println("test for ID-->>" +instanceID)
         }
-      }
     }
-    stopInstance()
-    println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/delete")
+  }
+
+  println(instanceRegistryUri)
+    ws.url(instanceRegistryUri + "/post")
       .addQueryStringParameters("Id" -> instanceID)
       .post("")
       .map { response =>
         response.status match {
           case 202 =>
-            println("winnie start with id" +response.body)
+            println("delete with id" +response.body)
             Ok(response.body)
           case x =>
-            println("winnie error" +response)
+            println(" delete error" +response)
             new Status(x)
         }
       }(myExecutionContext)

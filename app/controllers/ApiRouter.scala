@@ -41,6 +41,7 @@ class ApiRouter @Inject()(irController: InstanceRegistryController, sysControlle
     case POST(p"/stopInstance") => irController.stopInstance()
     case POST(p"/pauseInstance") => irController.pauseInstance()
     case POST(p"/deleteInstance") => irController.deleteInstance()
+   
 
   }
 }
