@@ -3,17 +3,15 @@
 	<mat-dialog-content>
 		<form class="mat-dialog-content" #formControl="ngForm">
 			<div class="form">
-      			<mat-form-field color="primary">
-        			<input matInput #input class="form-control" placeholder="Name" [(ngModel)]="data.name"  name="name" required >
-        			<mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-        		</mat-form-field>
-      		</div>
+				<mat-form-field color="primary">
+					<input matInput #input class="form-control" placeholder="Name" [(ngModel)]="name" name="name" required>
+					<mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+				</mat-form-field>
+			</div>
 		</form>
 	</mat-dialog-content>
-<mat-dialog-actions>
-  	<button mat-raised-button color="primary" [disabled]="!formControl.valid"  [mat-dialog-close]="1" (click)="onConfirmAddInstance()">Add</button>
-  	<button mat-raised-button (click)="onCloseCancle()">Cancle</button>
-</mat-dialog-actions>
+	<mat-dialog-actions>
+		<button mat-raised-button color="primary" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="onConfirmAddInstance()">Add</button>
+		<button mat-raised-button (click)="onCloseCancle()">Cancle</button>
+	</mat-dialog-actions>
 </div>
-
-

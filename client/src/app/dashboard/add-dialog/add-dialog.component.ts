@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import {ApiService, Instance} from '../../api';
+import { ApiService, Instance } from '../../api';
 
 @Component({
   selector: 'app-add-dialog',
@@ -10,8 +10,8 @@ import {ApiService, Instance} from '../../api';
 })
 export class AddDialogComponent implements OnInit {
 
-  constructor(public thisDialogRef:MatDialogRef<AddDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private apiService: ApiService) { }
-
+  constructor(public thisDialogRef: MatDialogRef<AddDialogComponent>, private apiService: ApiService) { }
+  name: String;
   ngOnInit() {
     //console.log('data.type', this.data);
   }
@@ -28,19 +28,14 @@ export class AddDialogComponent implements OnInit {
   }
 
   onConfirmAddInstance(): void {
-   
-   		console.log("added data",this.data);
-       let result = {'status':'Add', 'instance' : this.data};
-       console.log("added data new",this.data, this.data.instance.componentType, this.data.name);
-       this.apiService.postInstance(this.data.instance.componentType, this.data.name).subscribe((result: any) => {
-       console.log('result', result);
-        this.thisDialogRef.close(result);
-        }, err => {
-          console.log('error receiving data for crawler');
-        });	
-  	}
 
-  onCloseCancle(){
+    this.thisDialogRef.close({
+      status: 'Add',
+      name: this.name
+    });
+  }
+
+  onCloseCancle() {
     this.thisDialogRef.close('Cancle');
 
   }

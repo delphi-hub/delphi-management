@@ -19,7 +19,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatTableModule} from '@angular/material';
+import { MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule} from '@angular/material';
 import { MatIconModule} from '@angular/material/icon';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDialogModule} from '@angular/material/dialog';
@@ -53,6 +53,7 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
     MatMenuModule,
     MatIconModule,
     MatTableModule,
+    MatPaginatorModule,
     MatCheckboxModule,
     MatDialogModule,
     CommonModule,
