@@ -99,11 +99,11 @@ export class ApiService {
     return this.post(NEW_INSTANCE, componentType, name);
   }
 
-  public startInstance(instanceId: string) : Observable<Instance> {
+  public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Instance> {
     return this.postAction(START_INSTANCE, instanceId);
   }
 
-  public stopInstance(instanceId: string) : Observable<Instance>{
+  public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) : Observable<Instance>{
     return this.postAction(STOP_INSTANCE, instanceId);
   }
 
@@ -192,9 +192,9 @@ export class ApiService {
     }
 
     if (idInstance === null || idInstance== undefined){
-      throw new Error('Required parameter');
+      throw new Error('Required ID Instance parameter');
     } else {
-      queryParam = queryParam.set('InstanceID', <any>idInstance);
+      queryParam = queryParam.set('InstanceID', <any>("a"+idInstance));
     }
 
     const url =`${this.basePath}${endpoint}`;

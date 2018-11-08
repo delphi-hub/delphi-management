@@ -108,7 +108,7 @@ export class TableAllComponent implements OnInit {
     this.apiService.startInstance(id).subscribe((result: any) => {
       console.log('result', result);
     }, err => {
-      console.log('error receiving data for crawler');
+      console.log('error start Instance');
     });
   }
 
@@ -117,7 +117,7 @@ export class TableAllComponent implements OnInit {
     this.apiService.stopInstance(id).subscribe((result: any) => {
       console.log('result', result);
     }, err => {
-      console.log('error receiving data for crawler');
+      console.log('error stop Instance');
     });
   }
 
@@ -126,7 +126,7 @@ export class TableAllComponent implements OnInit {
     this.apiService.pauseInstance(id).subscribe((result: any) => {
       console.log('result', result);
     }, err => {
-      console.log('error receiving data for crawler');
+      console.log('error pause instance');
     });
   }
 
@@ -135,7 +135,7 @@ export class TableAllComponent implements OnInit {
     this.apiService.deleteInstance(id).subscribe((result: any) => {
       console.log('result', result);
     }, err => {
-      console.log('error receiving data for crawler');
+      console.log('error delete instance');
     });
   }
 }

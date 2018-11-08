@@ -41,24 +41,24 @@
 
           <ng-container matColumnDef="portNumber">
               <mat-header-cell *matHeaderCellDef> Port </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.portNumber}} </mat-cell>
+              <mat-cell *matCellDef="let element;"> {{element.portNumber}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="instanceState">
             <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.instanceState}} </mat-cell>
-        </ng-container>
+        </ng-container>cd
 
           <ng-container matColumnDef="action">
               <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
-               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row; let i=index;" >
-                  <button  mat-icon-button (click)= startInstance(i) matTooltip="Start">
+               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element; let i=index; let row;" >
+                  <button  mat-icon-button (click)= startInstance(element.id) matTooltip="Start">
                       <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
                   </button>
-                 <button  mat-icon-button (click)= stopInstance(i) matTooltip="Stop">
+                 <button  mat-icon-button (click)= stopInstance(element.id) matTooltip="Stop">
                    <mat-icon aria-label="stop">stop</mat-icon>
                  </button>
-                  <button mat-icon-button (click)= pauseInstance(i) matTooltip="Stop">
+                  <button mat-icon-button (click)= pauseInstance(element.id) matTooltip="Stop">
                       <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
                   </button>
                   <button mat-icon-button matTooltip="Delete">

@@ -113,48 +113,28 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
     }
   }(myExecutionContext)
 }
-
+/*........
+*
+*
+*
+* */
   def startInstance() : Action[AnyContent] = Action.async { request =>
-  var InstanceID = ""
-
-  request.body.asJson.map { json =>
-    for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-    ){
-      val obj = jsonValue.as[JsObject]
-      if((obj \ "param").asOpt[String].get.equals("IdInstance")){
-        InstanceID = (obj \ "value").asOpt[String].get
-      }
-    }
-  }
-  ws.url(instanceRegistryUri + "/start")
-    .addQueryStringParameters("InstanceID" -> InstanceID)
-    .post("")
-    .map { response =>
-      response.status match {
-        case 202 =>
-          println("winnie start with id" +response.body)
-          Ok(response.body)
-        case x =>
-          println("winnie error" +response)
-          new Status(x)
-      }
-    }(myExecutionContext)
-}
-
-  def stopInstance() : Action[AnyContent] = Action.async { request =>
-    var InstanceID = ""
-
-    request.body.asJson.map { json =>
+    var instanceID = ""
+      request.body.asJson.map { json =>
       for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
       ){
         val obj = jsonValue.as[JsObject]
-        if((obj \ "param").asOpt[String].get.equals("IdInstance")){
-          InstanceID = (obj \ "value").asOpt[String].get
+        println(obj)
+        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
+          instanceID = (obj \ "value").asOpt[String].get.substring(1)
+          //instanceID = toInt(intanceID)
+          println("winnie test send parameter-->>" +instanceID)
         }
       }
     }
-    ws.url(instanceRegistryUri + "/stop")
-      .addQueryStringParameters("InstanceID" -> InstanceID)
+      println(instanceRegistryUri)
+    ws.url(instanceRegistryUri + "/start")
+      .addQueryStringParameters("Id" -> instanceID)
       .post("")
       .map { response =>
         response.status match {
@@ -168,20 +148,53 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
       }(myExecutionContext)
   }
 
-  def pauseInstance() : Action[AnyContent] = Action.async { request =>
-    var InstanceID = ""
-
+  def stopInstance() : Action[AnyContent] = Action.async { request =>
+    var instanceID = ""
     request.body.asJson.map { json =>
       for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
       ){
         val obj = jsonValue.as[JsObject]
-        if((obj \ "param").asOpt[String].get.equals("IdInstance")){
-          InstanceID = (obj \ "value").asOpt[String].get
+        println(obj)
+        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
+          instanceID = (obj \ "value").asOpt[String].get.substring(1)
+          //instanceID = toInt(intanceID)
+          println("winnie test send parameter-->>" +instanceID)
         }
       }
     }
+    println(instanceRegistryUri)
+    ws.url(instanceRegistryUri + "/stop")
+      .addQueryStringParameters("Id" -> instanceID)
+      .post("")
+      .map { response =>
+        response.status match {
+          case 202 =>
+            println("winnie stop with id" +response.body)
+            Ok(response.body)
+          case x =>
+            println("winnie stop error" +response)
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
+
+  def pauseInstance() : Action[AnyContent] = Action.async { request =>
+    var instanceID = ""
+    request.body.asJson.map { json =>
+      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
+      ){
+        val obj = jsonValue.as[JsObject]
+        println(obj)
+        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
+          instanceID = (obj \ "value").asOpt[String].get.substring(1)
+          //instanceID = toInt(intanceID)
+          println("winnie test send parameter-->>" +instanceID)
+        }
+      }
+    }
+    println(instanceRegistryUri)
     ws.url(instanceRegistryUri + "/pause")
-      .addQueryStringParameters("InstanceID" -> InstanceID)
+      .addQueryStringParameters("Id" -> instanceID)
       .post("")
       .map { response =>
         response.status match {
@@ -196,27 +209,31 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   }
 
   def deleteInstance() : Action[AnyContent] = Action.async { request =>
-    var InstanceID = ""
-
+    var instanceID = ""
     request.body.asJson.map { json =>
       for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
       ){
         val obj = jsonValue.as[JsObject]
-        if((obj \ "param").asOpt[String].get.equals("IdInstance")){
-          InstanceID = (obj \ "value").asOpt[String].get
+        println(obj)
+        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
+          instanceID = (obj \ "value").asOpt[String].get.substring(1)
+          //instanceID = toInt(intanceID)
+          println("winnie test send parameter-->>" +instanceID)
         }
       }
     }
+    stopInstance()
+    println(instanceRegistryUri)
     ws.url(instanceRegistryUri + "/delete")
-      .addQueryStringParameters("InstanceID" -> InstanceID)
+      .addQueryStringParameters("Id" -> instanceID)
       .post("")
       .map { response =>
         response.status match {
           case 202 =>
-            println("winnie delete with id" +response.body)
+            println("winnie start with id" +response.body)
             Ok(response.body)
           case x =>
-            println("winnie delete error" +response)
+            println("winnie error" +response)
             new Status(x)
         }
       }(myExecutionContext)
