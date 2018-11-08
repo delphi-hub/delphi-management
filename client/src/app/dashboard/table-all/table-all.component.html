@@ -58,9 +58,12 @@
                  <button  mat-icon-button (click)= stopInstance(element.id) matTooltip="Stop">
                    <mat-icon aria-label="stop">stop</mat-icon>
                  </button>
-                  <button mat-icon-button (click)= pauseInstance(element.id) matTooltip="Stop">
+                  <button mat-icon-button (click)= pauseInstance(element.id) matTooltip="Pause">
                       <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
                   </button>
+                 <button mat-icon-button (click)= resumeInstance(element.id) matTooltip="Resume">
+                   <mat-icon aria-label="play_circle_outline">play_circle_outline</mat-icon>
+                 </button>
                   <button mat-icon-button matTooltip="Delete">
                       <mat-icon aria-label="delete" (click)="openDeleteDialog(i,row, element.id)">delete</mat-icon>
                   </button>

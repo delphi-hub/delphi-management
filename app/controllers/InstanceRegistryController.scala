@@ -208,6 +208,36 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
       }(myExecutionContext)
   }
 
+  def resumeInstance() : Action[AnyContent] = Action.async { request =>
+    var instanceID = ""
+    request.body.asJson.map { json =>
+      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
+      ){
+        val obj = jsonValue.as[JsObject]
+        println(obj)
+        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
+          instanceID = (obj \ "value").asOpt[String].get.substring(1)
+          //instanceID = toInt(intanceID)
+          println("winnie test send parameter-->>" +instanceID)
+        }
+      }
+    }
+    println(instanceRegistryUri)
+    ws.url(instanceRegistryUri + "/resume")
+      .addQueryStringParameters("Id" -> instanceID)
+      .post("")
+      .map { response =>
+        response.status match {
+          case 202 =>
+            println("winnie pause with id" +response.body)
+            Ok(response.body)
+          case x =>
+            println("winnie pause error" +response)
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
+
   def deleteInstance() : Action[AnyContent] = Action.async { request =>
     var instanceID = ""
     request.body.asJson.map { json =>
@@ -223,7 +253,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
   }
 
   println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/post")
+    ws.url(instanceRegistryUri + "/delete")
       .addQueryStringParameters("Id" -> instanceID)
       .post("")
       .map { response =>

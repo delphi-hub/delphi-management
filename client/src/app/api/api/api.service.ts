@@ -29,6 +29,7 @@ import {
   START_INSTANCE,
   STOP_INSTANCE,
   PAUSE_INSTANCE,
+  RESUME_INSTANCE,
   DELETE_INSTANCE
 } from '../variables';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
@@ -110,6 +111,12 @@ export class ApiService {
   public pauseInstance(instanceId: string): Observable<Instance> {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
+
+  public resumeInstance(instanceId: string): Observable<Instance> {
+    return this.postAction(RESUME_INSTANCE, instanceId);
+  }
+
+
 
   public deleteInstance(instanceId: string): Observable<Instance> {
     return this.postAction(DELETE_INSTANCE, instanceId);

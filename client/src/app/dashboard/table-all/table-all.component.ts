@@ -71,7 +71,7 @@ export class TableAllComponent implements OnInit {
                 console.log("alert working");
                 alert('Please Stop the Instance before you try to delete');
                 console.log("data", this.dataSource.data);
-                
+
             }
             else {
                 this.apiService.deleteInstance(id).subscribe((result: any) => {
@@ -95,7 +95,7 @@ export class TableAllComponent implements OnInit {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    //Function to add the data into dataSource 
+    //Function to add the data into dataSource
     openAddDialog() {
         let instance: Instance = {};
         instance.componentType = this.type;
@@ -151,7 +151,17 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-    public deleteInstance(id: string): void {
+  public resumeInstance(id: string): void {
+
+    this.apiService.resumeInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error pause instance');
+    });
+  }
+
+
+  public deleteInstance(id: string): void {
 
         this.apiService.deleteInstance(id).subscribe((result: any) => {
             console.log('result', result);

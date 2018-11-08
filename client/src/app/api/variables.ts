@@ -26,6 +26,7 @@ export const NEW_INSTANCE = 'api/postInstance';
 export const START_INSTANCE ='api/startInstance';
 export const STOP_INSTANCE ='api/stopInstance';
 export const PAUSE_INSTANCE ='api/pauseInstance';
+export const RESUME_INSTANCE ='api/resumeInstance';
 export const DELETE_INSTANCE ='api/deleteInstance';
 export const COLLECTION_FORMATS = {
     'csv': ',',
