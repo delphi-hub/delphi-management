@@ -114,9 +114,41 @@ export class TableAllComponent implements OnInit {
                 console.log('error receiving data for crawler');
             });
 
-        });
-    }
+  public startInstance(id:string):void{
 
+    this.apiService.startInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error start Instance');
+    });
+  }
+
+  public stopInstance(id:string):void{
+
+    this.apiService.stopInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error stop Instance');
+    });
+  }
+
+  public pauseInstance(id:string):void{
+
+    this.apiService.pauseInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error pause instance');
+    });
+  }
+
+  public deleteInstance(id:string):void{
+
+    this.apiService.deleteInstance(id).subscribe((result: any) => {
+      console.log('result', result);
+    }, err => {
+      console.log('error delete instance');
+    });
+  }
 }
 
 

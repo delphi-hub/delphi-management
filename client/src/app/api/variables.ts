@@ -22,7 +22,11 @@ export const BASE_PATH = new InjectionToken<string>('basePath');
 export const INSTANCES = '/api/instances';
 export const SYS_INFO = '/api/systemInfo';
 export const NUMBER_OF_INSTANCES = '/api/numberOfInstances';
-export const NEW_INSTANCE = 'api/postinstance';
+export const NEW_INSTANCE = 'api/postInstance';
+export const START_INSTANCE ='api/startInstance';
+export const STOP_INSTANCE ='api/stopInstance';
+export const PAUSE_INSTANCE ='api/pauseInstance';
+export const DELETE_INSTANCE ='api/deleteInstance';
 export const COLLECTION_FORMATS = {
     'csv': ',',
     'tsv': '   ',
