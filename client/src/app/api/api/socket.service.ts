@@ -44,14 +44,6 @@ interface ObserverMap {
  */
 export class SocketService {
 
-  /**
-   * Really useful stuff regarding observers and subjects and reactive event programming
-   * https://medium.com/@benlesh/on-the-subject-of-subjects-in-rxjs-2b08b7198b93
-   * https://medium.com/@benlesh/hot-vs-cold-observables-f8094ed53339
-   * https://blog.angularindepth.com/rxjs-understanding-the-publish-and-share-operators-16ea2f446635
-   * https://blog.angularindepth.com/rxjs-understanding-subjects-5c585188c3e1
-   *
-   */
   readonly wsUri;
   private socket: WebSocket;
   /**

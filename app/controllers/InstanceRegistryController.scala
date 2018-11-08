@@ -18,21 +18,20 @@
 
 package controllers
 
-import akka.Done
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.{Http, server}
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import javax.inject.Inject
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import akka.stream.Materializer
+import akka.stream.{Materializer, OverflowStrategy}
 import akka.stream.scaladsl._
 import models.{EventType, SocketMessage}
 import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.streams.ActorFlow
 import play.api.mvc.WebSocket.MessageFlowTransformer
 
 trait MyExecutionContext extends ExecutionContext
@@ -64,6 +63,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     implicit val messageFlowTransformer: MessageFlowTransformer[SocketMessage, SocketMessage] =
       MessageFlowTransformer.jsonMessageFlowTransformer[SocketMessage, SocketMessage]
 
+  val pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
 
   def instances(componentType: String): Action[AnyContent] = Action.async {
     ws.url("http://localhost:8087/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -73,56 +73,44 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }(myExecutionContext)
   }
 
-  def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
-    request => { // Log events to the console
-      val in = Sink.foreach[SocketMessage](println)
-
-
-      // TODO: parse the response and send it to the client via socket connection
-      // Future[Done] is the materialized value of Sink.foreach,
-      // emitted when the stream completes
-      val incoming: Sink[Message, Future[Done]] =
-      Sink.foreach[Message] {
-        case message: TextMessage.Strict =>
-          println(message.text)
+//  val (eventActor, eventPublisher) = Source.actorRef[Any](0, OverflowStrategy.dropNew).
+//    toMat(Sink.asPublisher(fanout = true))(Keep.both).run()
+    def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
+    request => {
+      ActorFlow.actorRef { out =>
+        PublishSocketMessageActor.props
       }
 
-      // TODO: check with infrastructure team what they expect to register for events
-      val outgoing = Source.single(TextMessage("hello world!"))
-      // TODO: figure out actual endpoint
-      val webSocketFlow = Http().webSocketClientFlow(WebSocketRequest("ws://localhost:8087/events"))
-
-
-      // TODO: scala akka magic as seen here https://doc.akka.io/docs/akka-http/current/client-side/websocket-support.html
-      // the materialized value is a tuple with
-      // upgradeResponse is a Future[WebSocketUpgradeResponse] that
-      // completes or fails when the connection succeeds or fails
-      // and closed is a Future[Done] with the stream completion from the incoming sink
-      val (upgradeResponse, closed) =
-      outgoing
-        .viaMat(webSocketFlow)(Keep.right) // keep the materialized Future[WebSocketUpgradeResponse]
-        .toMat(incoming)(Keep.both) // also keep the Future[Done]
-        .run()
-
-      // just like a regular http request we can access response status which is available via upgrade.response.status
-      // status code 101 (Switching Protocols) indicates that server support WebSockets
-      val connected = upgradeResponse.flatMap { upgrade =>
-        if (upgrade.response.status == StatusCodes.SwitchingProtocols) {
-          Future.successful(Done)
-        } else {
-          throw new RuntimeException(s"Connection failed: ${upgrade.response.status}")
-        }
-      }
-
-      // in a real application you would not side effect here
-      connected.onComplete(println)
-      closed.foreach(_ => println("closed"))
-      val msg = new SocketMessage(event=EventType.InstanceNumbersCrawler, payload = Option("wow so much information"))
-      val out = Source.single(msg).concat(Source.maybe)
-
-      Flow.fromSinkAndSource(in, out)
     }
-  }
+    }
+//  def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
+//    request => { // Log events to the console
+//
+//
+//      // using emit "one" and "two" and then keep the connection open
+//      val flow: Flow[Message, Message, Promise[Option[Message]]] =
+//        Flow.fromSinkAndSourceMat(
+//          Sink.foreach[Message](println),
+//          Source(List(TextMessage("one"), TextMessage("two")))
+//            .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
+//
+//      val (upgradeResponse, promise) =
+//        Http().singleWebSocketRequest(
+//          WebSocketRequest("ws://localhost:8087/events"),
+//          flow)
+//
+//      // at some later time we want to disconnect
+////      promise.success(None)
+//
+//
+//
+//      val in = Sink.foreach[SocketMessage](println)
+//      val msg = new SocketMessage(event=EventType.InstanceNumbersCrawler, payload = Option("wow so much information"))
+//      val out = Source.single(msg).concat(Source.maybe)
+//
+//      Flow.fromSinkAndSource(in, out)
+//    }
+//  }
 
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
