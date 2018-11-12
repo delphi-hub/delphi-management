@@ -17,10 +17,13 @@ class ClientSocketActor(out: ActorRef, event: String, publisher: ActorRef) exten
     println("pre start called")
     println("publisher", publisher)
     publisher ! AddOutActor(self, EventType.InstanceNumbersCrawler)
+    out ! SocketMessage(event=EventType.InstanceNumbersCrawler, payload=Option("test"))
   }
 
   override def postStop() {
     println("post stop called in client")
+    //TODO: send a stop method to publisher
+    // publisher ! StopMessage(self)
   }
 
   def receive: PartialFunction[Any, Unit] = {

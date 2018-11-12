@@ -78,15 +78,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 //    toMat(Sink.asPublisher(fanout = true))(Keep.both).run()
     def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
       if(pubActor == null) {
-        pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor123")
+        pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
       }
-    request => {
-      ActorFlow.actorRef { out => {
-        ClientSocketActor.props(out, request.rawQueryString, pubActor)
+      request => {
+        ActorFlow.actorRef { out => 
+          ClientSocketActor.props(out, request.rawQueryString, pubActor)
         }
       }
-
-    }
     }
 //  def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
 //    request => { // Log events to the console
