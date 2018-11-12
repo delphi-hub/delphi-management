@@ -18,7 +18,7 @@
 
 package controllers
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorRef, ActorSystem}
 import akka.http.scaladsl.{Http, server}
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import javax.inject.Inject
@@ -29,6 +29,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import akka.stream.{Materializer, OverflowStrategy}
 import akka.stream.scaladsl._
+import controllers.PublishSocketMessageActor.AddOutActor
 import models.{EventType, SocketMessage}
 import play.api.libs.json.{Json, Reads, Writes}
 import play.api.libs.streams.ActorFlow
@@ -63,7 +64,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     implicit val messageFlowTransformer: MessageFlowTransformer[SocketMessage, SocketMessage] =
       MessageFlowTransformer.jsonMessageFlowTransformer[SocketMessage, SocketMessage]
 
-  val pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
+  var pubActor: ActorRef = null
 
   def instances(componentType: String): Action[AnyContent] = Action.async {
     ws.url("http://localhost:8087/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -76,9 +77,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 //  val (eventActor, eventPublisher) = Source.actorRef[Any](0, OverflowStrategy.dropNew).
 //    toMat(Sink.asPublisher(fanout = true))(Keep.both).run()
     def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
+      if(pubActor == null) {
+        pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor123")
+      }
     request => {
-      ActorFlow.actorRef { out =>
-        PublishSocketMessageActor.props
+      ActorFlow.actorRef { out => {
+        ClientSocketActor.props(out, request.rawQueryString, pubActor)
+        }
       }
 
     }

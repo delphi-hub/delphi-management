@@ -1,17 +1,34 @@
 package controllers
 import akka.actor._
 import controllers.ClientSocketActor.PublishMessageToClient
+import controllers.PublishSocketMessageActor.AddOutActor
+import models.{EventType, SocketMessage}
 
 
 object ClientSocketActor {
-  def props(out: ActorRef, event: String): Props = Props(new ClientSocketActor(out, event))
+  def props(out: ActorRef, event: String, publisher: ActorRef): Props = Props(new ClientSocketActor(out, event, publisher))
   final case class PublishMessageToClient(msg: Any)
 }
 
-class ClientSocketActor(out: ActorRef, event: String) extends Actor {
+class ClientSocketActor(out: ActorRef, event: String, publisher: ActorRef) extends Actor {
+
+
+  override def preStart() {
+    println("pre start called")
+    println("publisher", publisher)
+    publisher ! AddOutActor(self, EventType.InstanceNumbersCrawler)
+  }
+
+  override def postStop() {
+    println("post stop called in client")
+  }
 
   def receive: PartialFunction[Any, Unit] = {
+    case SocketMessage =>
+      println("received socket message", SocketMessage)
+      publisher ! SocketMessage
     case PublishMessageToClient(msg) =>
+      println("received publish message")
       out ! msg
   }
 
