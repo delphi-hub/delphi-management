@@ -142,6 +142,14 @@ export class SocketService {
   public initSocket(): Promise<void> {
     if (this.socket === null) {
       this.socket = new WebSocket(this.wsUri);
+      this.socket.addEventListener('close', () => {
+        console.log('websocket was closed. Resetting socket to null');
+        this.socket = null;
+      });
+      this.socket.addEventListener('error', () => {
+        console.log('websocket had an error. Resetting socket to null');
+        this.socket = null;
+      });
     }
     return new Promise<void>((resolve) => {
       if (this.socket.readyState === this.socket.OPEN) {
