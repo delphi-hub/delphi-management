@@ -82,7 +82,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }
       request => {
         ActorFlow.actorRef { out => 
-          ClientSocketActor.props(out, request.rawQueryString, pubActor)
+          ClientSocketActor.props(out, pubActor)
         }
       }
     }

@@ -1,37 +1,38 @@
 package controllers
 import akka.actor._
-import controllers.ClientSocketActor.PublishMessageToClient
-import controllers.PublishSocketMessageActor.{ AddOutActor, StopMessage}
+import controllers.PublishSocketMessageActor.{ AddOutActor, StopMessage, PublishMessage}
 import models.{EventType, SocketMessage}
-
+import models.EventType.MessageType
+import scala.collection.mutable.HashSet
 
 object ClientSocketActor {
-  def props(out: ActorRef, event: String, publisher: ActorRef): Props = Props(new ClientSocketActor(out, event, publisher))
-  final case class PublishMessageToClient(msg: Any)
+  def props(out: ActorRef, publisher: ActorRef): Props = Props(new ClientSocketActor(out, publisher))
 }
 
-class ClientSocketActor(out: ActorRef, event: String, publisher: ActorRef) extends Actor {
+class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor {
 
+  val myEvents: HashSet[MessageType] = HashSet.empty[MessageType]
 
   override def preStart() {
-    println("pre start called", self)
-    println("publisher", publisher)
-    publisher ! AddOutActor(self, EventType.InstanceNumbersCrawler)
-    // out ! SocketMessage(event=EventType.InstanceNumbersCrawler, payload=Option("test"))
+    println("pre start called in client", self)
+    // publisher ! AddOutActor(self, EventType.InstanceNumbersCrawler)
   }
 
   override def postStop() {
     println("post stop called in client", self)
-    //TODO: send a stop method to publisher
     publisher ! StopMessage(self)
   }
 
   def receive: PartialFunction[Any, Unit] = {
-    case SocketMessage =>
-      println("received socket message", SocketMessage)
-      publisher ! SocketMessage
-    case PublishMessageToClient(msg) =>
-      println("received publish message")
+    case SocketMessage(event, payload) =>
+      println("received socket message in client", SocketMessage)
+      if (!myEvents.contains(event)) {
+        myEvents += event
+        publisher ! AddOutActor(self, event)
+      }
+
+    case PublishMessage(msg) =>
+      println("received publish message in client", self)
       out ! msg
   }
 
