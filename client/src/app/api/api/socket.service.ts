@@ -64,7 +64,7 @@ export class SocketService {
    * is registered and the message is send once the socket connection is open.
    * @param message
    */
-  public send(message: SocketMessage|EventType) {
+  public send(message: SocketMessage) {
     if (this.socket) {
       if (this.socket.readyState === this.socket.OPEN) {
         this.socket.send(JSON.stringify(message));
@@ -99,6 +99,7 @@ export class SocketService {
       console.log('observers: ', this.observers);
       if (!registeredEvents.includes(eventName)) {
         this.observers[eventName] = new Subject<any>();
+        console.log('registering for event', eventName);
         this.socket.send(eventName);
       }
       this.observers[eventName].subscribe(observer);
@@ -142,6 +143,9 @@ export class SocketService {
   public initSocket(): Promise<void> {
     if (this.socket === null) {
       this.socket = new WebSocket(this.wsUri);
+      // setInterval(() => {
+      //   this.send({event: EventType.InstanceNumbersCrawler, payload: ''});
+      // }, 500);
       this.socket.addEventListener('close', () => {
         console.log('websocket was closed. Resetting socket to null');
         this.socket = null;

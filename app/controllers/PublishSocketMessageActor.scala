@@ -17,13 +17,21 @@ object PublishSocketMessageActor {
 class PublishSocketMessageActor() extends Actor {
   
   val eventActorMap: mutable.HashMap[MessageType, ListBuffer[ActorRef]] = new mutable.HashMap[MessageType, ListBuffer[ActorRef]]()
+  
+  override def preStart() {
+    println("pre start called in publisher", self)
+  }
 
+  override def postStop() {
+    println("post stop called in publisher", self)
+  }
+  
   def receive: PartialFunction[Any, Unit] = {
     
     case StopMessage(toStop) =>
       println("stop received", toStop)
       for ((k, v) <- eventActorMap) v -= toStop
-      
+
     case AddOutActor(out, event) =>
       println("received add out actor", out)
       if (!eventActorMap.contains(event)){

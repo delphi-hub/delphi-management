@@ -24,6 +24,8 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor {
   }
 
   def receive: PartialFunction[Any, Unit] = {
+    case msg: String =>
+      println("here", msg)
     case SocketMessage(event, payload) =>
       println("received socket message in client", SocketMessage)
       if (!myEvents.contains(event)) {

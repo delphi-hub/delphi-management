@@ -76,7 +76,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
 //  val (eventActor, eventPublisher) = Source.actorRef[Any](0, OverflowStrategy.dropNew).
 //    toMat(Sink.asPublisher(fanout = true))(Keep.both).run()
-    def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
+    def socket: WebSocket = WebSocket.accept[String, String]{
       if(pubActor == null) {
         pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
       }
