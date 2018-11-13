@@ -1,7 +1,7 @@
 package controllers
 import akka.actor._
 import controllers.ClientSocketActor.PublishMessageToClient
-import controllers.PublishSocketMessageActor.AddOutActor
+import controllers.PublishSocketMessageActor.{ AddOutActor, StopMessage}
 import models.{EventType, SocketMessage}
 
 
@@ -14,16 +14,16 @@ class ClientSocketActor(out: ActorRef, event: String, publisher: ActorRef) exten
 
 
   override def preStart() {
-    println("pre start called")
+    println("pre start called", self)
     println("publisher", publisher)
     publisher ! AddOutActor(self, EventType.InstanceNumbersCrawler)
-    out ! SocketMessage(event=EventType.InstanceNumbersCrawler, payload=Option("test"))
+    // out ! SocketMessage(event=EventType.InstanceNumbersCrawler, payload=Option("test"))
   }
 
   override def postStop() {
-    println("post stop called in client")
+    println("post stop called in client", self)
     //TODO: send a stop method to publisher
-    // publisher ! StopMessage(self)
+    publisher ! StopMessage(self)
   }
 
   def receive: PartialFunction[Any, Unit] = {
