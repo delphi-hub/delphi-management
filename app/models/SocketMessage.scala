@@ -28,6 +28,8 @@ final case class SocketMessage(event: MessageType, payload: Option[String])
   object EventType extends Enumeration {
     type MessageType = EventType.Value
     val InstanceNumbersCrawler: Value = Value("InstanceNumbersCrawler")
+    val InstanceNumbersWebApi: Value = Value("InstanceNumbersWebApi")
+    val InstanceNumbersWebApp: Value = Value("InstanceNumbersWebApp")
     val InstanceDetails: Value = Value("InstanceDetails")
 
     implicit val MessageTypeReads: Reads[MessageType] = Reads.enumNameReads(EventType)

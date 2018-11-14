@@ -59,11 +59,6 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   extends BaseController {
 
 
-    implicit val messageReads: Reads[SocketMessage] = Json.reads[SocketMessage]
-    implicit val messageWrites: Writes[SocketMessage] = Json.writes[SocketMessage]
-    implicit val messageFlowTransformer: MessageFlowTransformer[SocketMessage, SocketMessage] =
-      MessageFlowTransformer.jsonMessageFlowTransformer[SocketMessage, SocketMessage]
-
   var pubActor: ActorRef = null
 
   def instances(componentType: String): Action[AnyContent] = Action.async {

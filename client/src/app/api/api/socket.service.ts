@@ -100,7 +100,7 @@ export class SocketService {
       if (!registeredEvents.includes(eventName)) {
         this.observers[eventName] = new Subject<any>();
         console.log('registering for event', eventName);
-        this.socket.send(eventName);
+        this.send({event: eventName});
       }
       this.observers[eventName].subscribe(observer);
 

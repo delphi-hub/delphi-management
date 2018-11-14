@@ -18,12 +18,25 @@ class PublishSocketMessageActor() extends Actor {
   
   val eventActorMap: mutable.HashMap[MessageType, ListBuffer[ActorRef]] = new mutable.HashMap[MessageType, ListBuffer[ActorRef]]()
   
+  //      val flow: Flow[Message, Message, Promise[Option[Message]]] =
+//        Flow.fromSinkAndSourceMat(
+//          Sink.foreach[Message](println),
+//          Source(List(TextMessage("one"), TextMessage("two")))
+//            .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
+
+
   override def preStart() {
     println("pre start called in publisher", self)
+    //      val (upgradeResponse, promise) =
+//        Http().singleWebSocketRequest(
+//          WebSocketRequest("ws://localhost:8087/events"),
+//          flow)
   }
 
   override def postStop() {
     println("post stop called in publisher", self)
+    //      // at some later time we want to disconnect
+////      promise.success(None)
   }
   
   def receive: PartialFunction[Any, Unit] = {
@@ -47,7 +60,6 @@ class PublishSocketMessageActor() extends Actor {
         println("found list in actor map for msg", list)
         list.foreach((actor) => {
           println("sending message to actor", actor)
-          actor ! msg
           actor ! PublishMessage(msg)
         })
       }
