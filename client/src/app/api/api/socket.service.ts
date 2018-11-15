@@ -136,33 +136,36 @@ export class SocketService {
    */
   private socketOnMessage(e: MessageEvent) {
     console.log('received on socket connection', e);
-
-    const msg: RegistryEvent = JSON.parse(e.data);
-    if (objectIsMessage(msg)) {
-      console.log('object is message', msg)
-      let event: EventType;
-      let toSend;
-      if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
-        const payload: NumbersChanged = msg.payload;
-        if (payloadIsNumbersChanged(payload)) {
-          toSend = payload.newNumber;
-          switch (payload.componentType) {
-            case ComponentTypeEnum.WebApp:
-              event = EventTypeEnum.InstanceNumbersWebApp;
-              break;
-            case ComponentTypeEnum.WebApi:
-              event = EventTypeEnum.InstanceNumbersWebApi;
-              break;
-            case ComponentTypeEnum.Crawler:
-              event = EventTypeEnum.InstanceNumbersCrawler;
-              break;
+    try {
+      const msg: RegistryEvent = JSON.parse(e.data);
+      if (objectIsMessage(msg)) {
+        console.log('object is message', msg)
+        let event: EventType;
+        let toSend;
+        if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
+          const payload: NumbersChanged = msg.payload;
+          if (payloadIsNumbersChanged(payload)) {
+            toSend = payload.newNumber;
+            switch (payload.componentType) {
+              case ComponentTypeEnum.WebApp:
+                event = EventTypeEnum.InstanceNumbersWebApp;
+                break;
+              case ComponentTypeEnum.WebApi:
+                event = EventTypeEnum.InstanceNumbersWebApi;
+                break;
+              case ComponentTypeEnum.Crawler:
+                event = EventTypeEnum.InstanceNumbersCrawler;
+                break;
+            }
           }
         }
-      }
-      const relevantSubject: Subject<any> = this.observers[event];
-      if (relevantSubject) {
+        const relevantSubject: Subject<any> = this.observers[event];
+        if (relevantSubject) {
           relevantSubject.next(toSend);
+        }
       }
+    } catch (err) {
+      console.log('received message is no json', e.data);
     }
   }
 
@@ -175,9 +178,9 @@ export class SocketService {
   public initSocket(): Promise<void> {
     if (this.socket === null) {
       this.socket = new WebSocket(this.wsUri);
-      // setInterval(() => {
-      //   this.send({event: EventType.InstanceNumbersCrawler, payload: ''});
-      // }, 500);
+      setInterval(() => {
+        this.send({event: EventTypeEnum.Heartbeat});
+      }, 5000);
       this.socket.addEventListener('close', () => {
         console.log('websocket was closed. Resetting socket to null');
         this.socket = null;

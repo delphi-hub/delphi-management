@@ -33,7 +33,7 @@ export interface RegistryEvent {
 
 
   export type EventType = 'NumbersChangedEvent' | 'InstanceAddedEvent' | 'InstanceRemovedEvent' | 'StateChangedEvent' |
-    'InstanceNumbersCrawler'| 'InstanceNumbersWebApi' | 'InstanceNumbersWebApp' | 'InstanceDetails';
+    'InstanceNumbersCrawler'| 'InstanceNumbersWebApi' | 'InstanceNumbersWebApp' | 'InstanceDetails' | 'Heartbeat';
   export const EventTypeEnum = {
     NumbersChangedEvent: 'NumbersChangedEvent' as EventType,
     InstanceAddedEvent: 'InstanceAddedEvent' as EventType,
@@ -43,6 +43,7 @@ export interface RegistryEvent {
     InstanceNumbersWebApi: 'InstanceNumbersWebApi' as EventType,
     InstanceNumbersWebApp: 'InstanceNumbersWebApp' as EventType,
     InstanceDetails: 'InstanceDetails' as EventType,
+    Heartbeat: 'Heartbeat' as EventType
   };
 
 

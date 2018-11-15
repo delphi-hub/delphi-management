@@ -39,7 +39,11 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with E
         errors => {println("error parsing message to json", msg)},
         socketMsg => {
           println("successfully parsed socket message", socketMsg)
-          publisher ! AddOutActor(self, socketMsg.event)
+          if (socketMsg.event == EventType.Heartbeat) {
+            out ! "Heartbeat"
+          } else {
+            publisher ! AddOutActor(self, socketMsg.event)
+          }
         }
       )
       

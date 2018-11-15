@@ -231,6 +231,7 @@ object EventEnums {
     val DockerOperationErrorEvent: Value = Value("DockerOperationErrorEvent")
     val LinkAddedEvent: Value = Value("LinkAddedEvent")
     val LinkStateChangedEvent: Value = Value("LinkStateChangedEvent")
+    val Heartbeat: Value = Value("Heartbeat")
 
     implicit val EventTypeReads: Reads[EventType] = Reads.enumNameReads(EventType)
     implicit val EventTypeWrites: Writes[EventType] = Writes.enumNameWrites
