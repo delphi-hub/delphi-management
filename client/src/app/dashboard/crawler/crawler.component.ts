@@ -17,8 +17,8 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {ApiService, ComponentTypeEnum} from '../../api';
-import {Instance} from '../../api/model/instance';
+import {ComponentTypeEnum, Instance} from '../../api/model/instance';
+import {ApiService} from '../../api/api/api.service';
 
 @Component({
   selector: 'app-crawler',

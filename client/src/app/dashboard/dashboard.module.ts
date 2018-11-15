@@ -38,8 +38,8 @@ import {HeaderComponent} from './header/header.component';
 import {StatusCardComponent} from './status-card/status-card.component';
 import {DeletedialogComponent} from './deletedialog/deletedialog.component';
 import {UserManagementComponent} from './user-management/user-management.component';
-import {ApiService, SocketService} from '../api';
 import {UserProfileComponent} from './user-profile/user-profile.component';
+import {ApiModule} from '../api/api.module';
 
 
 @NgModule({
@@ -56,7 +56,8 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
     MatFormFieldModule,
     MatInputModule,
     DashboardRoutingModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    ApiModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -75,6 +76,6 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
   entryComponents: [
     DeletedialogComponent
   ],
-  providers: [ApiService, SocketService],
+  providers: [],
 })
 export class DashboardModule { }

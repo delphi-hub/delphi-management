@@ -25,7 +25,7 @@ import {
   payloadIsNumbersChanged,
   RegistryEvent
 } from '../model/socketMessage';
-import {ComponentTypeEnum, Instance} from '..';
+import {ComponentTypeEnum, Instance} from '../model/instance';
 
 
 interface ObserverMap {

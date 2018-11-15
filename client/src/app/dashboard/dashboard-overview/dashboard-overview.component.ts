@@ -17,7 +17,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import {ComponentTypeEnum} from '../../api';
+import {ComponentTypeEnum} from '../../api/model/instance';
+
 
 @Component({
   selector: 'app-dashboard-overview',

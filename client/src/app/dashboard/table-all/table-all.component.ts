@@ -17,9 +17,9 @@
  */
 
 import { Component, OnInit, Input } from '@angular/core';
-import {Instance} from '../../api';
+import {Instance} from '../../api/model/instance';
 import { SelectionModel} from '@angular/cdk/collections';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
+import { MatDialog, MatTableDataSource} from '@angular/material';
 import { DeletedialogComponent } from '../deletedialog/deletedialog.component';
 
 

@@ -17,7 +17,9 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import {ApiService, ComponentTypeEnum, Instance} from '../../api';
+import {ComponentTypeEnum, Instance} from '../../api/model/instance';
+import {ApiService} from '../../api/api/api.service';
+
 
 @Component({
   selector: 'app-web-api',

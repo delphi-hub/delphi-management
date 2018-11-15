@@ -17,8 +17,10 @@
  */
 
 import {Component, Input, OnInit} from '@angular/core';
-import {ApiService, ComponentType, ComponentTypeEnum, SocketService} from '../../api';
 import {EventType, EventTypeEnum} from '../../api/model/socketMessage';
+import {ComponentType, ComponentTypeEnum} from '../../api/model/instance';
+import {ApiService} from '../../api/api/api.service';
+import {SocketService} from '../../api/api/socket.service';
 
 
 
