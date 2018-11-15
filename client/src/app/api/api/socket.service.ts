@@ -19,12 +19,13 @@
 import {Injectable} from '@angular/core';
 import {Observable, Observer, Subject} from 'rxjs';
 import {
-  checkMessageType,
-  EventType, InstanceNumbers,
+  EventType, EventTypeEnum,
+  NumbersChanged,
   objectIsMessage,
-  SocketMessage
+  payloadIsNumbersChanged,
+  RegistryEvent
 } from '../model/socketMessage';
-import {Instance} from '..';
+import {ComponentTypeEnum, Instance} from '..';
 
 
 interface ObserverMap {
@@ -64,7 +65,7 @@ export class SocketService {
    * is registered and the message is send once the socket connection is open.
    * @param message
    */
-  public send(message: SocketMessage) {
+  public send(message: {event: string}) {
     if (this.socket) {
       if (this.socket.readyState === this.socket.OPEN) {
         this.socket.send(JSON.stringify(message));
@@ -82,10 +83,10 @@ export class SocketService {
   /**
    * Subscribes to the event of the given type. Returns an observable to subscribe
    * to in order to receive the corresponding updates.
-
+   *
    * @param eventName
    */
-  public subscribeForEvent(eventName: EventType): Observable<InstanceNumbers | Instance> {
+  public subscribeForEvent(eventName: EventType): Observable<number | Instance> {
     console.log('creating observer for event type', eventName);
 
     return new Observable((observer: Observer<any>) => {
@@ -96,11 +97,22 @@ export class SocketService {
        */
       const registeredEvents = Object.keys(this.observers);
 
-      console.log('observers: ', this.observers);
+      let publishEventName;
+      /**
+       * Map all numbers changed event to global registry event
+       */
+      if (eventName === EventTypeEnum.InstanceNumbersCrawler ||
+        eventName === EventTypeEnum.InstanceNumbersWebApp ||
+        eventName === EventTypeEnum.InstanceNumbersWebApi) {
+
+        publishEventName = EventTypeEnum.NumbersChangedEvent;
+      }
+
       if (!registeredEvents.includes(eventName)) {
         this.observers[eventName] = new Subject<any>();
         console.log('registering for event', eventName);
-        this.send({event: eventName});
+
+        this.send({event: publishEventName});
       }
       this.observers[eventName].subscribe(observer);
 
@@ -124,12 +136,32 @@ export class SocketService {
    */
   private socketOnMessage(e: MessageEvent) {
     console.log('received on socket connection', e);
-    const msg: SocketMessage = JSON.parse(e.data);
+
+    const msg: RegistryEvent = JSON.parse(e.data);
     if (objectIsMessage(msg)) {
-      const relevantSubject: Subject<any> = this.observers[msg.event];
+      console.log('object is message', msg)
+      let event: EventType;
+      let toSend;
+      if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
+        const payload: NumbersChanged = msg.payload;
+        if (payloadIsNumbersChanged(payload)) {
+          toSend = payload.newNumber;
+          switch (payload.componentType) {
+            case ComponentTypeEnum.WebApp:
+              event = EventTypeEnum.InstanceNumbersWebApp;
+              break;
+            case ComponentTypeEnum.WebApi:
+              event = EventTypeEnum.InstanceNumbersWebApi;
+              break;
+            case ComponentTypeEnum.Crawler:
+              event = EventTypeEnum.InstanceNumbersCrawler;
+              break;
+          }
+        }
+      }
+      const relevantSubject: Subject<any> = this.observers[event];
       if (relevantSubject) {
-          checkMessageType(msg);
-          relevantSubject.next(msg.payload);
+          relevantSubject.next(toSend);
       }
     }
   }

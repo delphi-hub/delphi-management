@@ -19,21 +19,18 @@
 package controllers
 
 import akka.actor.{ActorRef, ActorSystem}
-import akka.http.scaladsl.{Http, server}
+import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import javax.inject.Inject
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ExecutionContext, Promise}
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import akka.stream.{Materializer, OverflowStrategy}
-import akka.stream.scaladsl._
-import controllers.PublishSocketMessageActor.AddOutActor
-import models.{EventType, SocketMessage}
-import play.api.libs.json.{Json, Reads, Writes}
+import akka.stream.Materializer
+import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import play.api.libs.streams.ActorFlow
-import play.api.mvc.WebSocket.MessageFlowTransformer
+
 
 trait MyExecutionContext extends ExecutionContext
 
@@ -71,9 +68,24 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
 //  val (eventActor, eventPublisher) = Source.actorRef[Any](0, OverflowStrategy.dropNew).
 //    toMat(Sink.asPublisher(fanout = true))(Keep.both).run()
-    def socket: WebSocket = WebSocket.accept[String, String]{
+    def socket: WebSocket = WebSocket.accept[String, String] {
       if(pubActor == null) {
         pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
+        val flow: Flow[Message, Message, Promise[Option[Message]]] =
+          Flow.fromSinkAndSourceMat(
+            Sink.foreach[Message]{ msg =>
+              println("message received", msg)
+              pubActor ! msg},
+            Source(List(TextMessage("one"), TextMessage("two")))
+              .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
+
+        val (upgradeResponse, promise) =
+          Http().singleWebSocketRequest(
+            WebSocketRequest("ws://localhost:8087/events"),
+            flow)
+
+        // at some later time we want to disconnect
+       // promise.success(None)
       }
       request => {
         ActorFlow.actorRef { out => 

@@ -17,7 +17,8 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {ApiService, Instance} from '../../api';
+import {ApiService, ComponentTypeEnum} from '../../api';
+import {Instance} from '../../api/model/instance';
 
 @Component({
   selector: 'app-crawler',
@@ -36,7 +37,7 @@ export class CrawlerComponent implements OnInit {
 
     this.table_data = [];
 
-    this.apiService.getInstances(Instance.ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
+    this.apiService.getInstances(ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
       this.table_data = result;
     }, err => {
       console.log('error receiving data for crawler');

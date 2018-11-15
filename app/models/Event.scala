@@ -1,26 +1,10 @@
-/*
- * Copyright (C) 2018 The Delphi Team.
- * See the LICENCE file distributed with this work for additional
- * information regarding copyright ownership.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package models
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import spray.json._
-
+import models.EventEnums.EventType
+import models.InstanceEnums.ComponentType
+import play.api.libs.json.{Reads, Writes}
+import spray.json.{DefaultJsonProtocol, DeserializationException, JsObject, JsString, JsValue, JsonFormat}
 
 /**
   * Trait defining the implicit JSON formats needed to work with RegistryEvents
@@ -83,7 +67,7 @@ trait EventJsonSupport extends SprayJsonSupport with DefaultJsonProtocol with In
     def read(json: JsValue): RegistryEventPayload = json match{
       case jso: JsObject => if(jso.fields.isDefinedAt("instance")){
         instancePayloadFormat.read(jso)
-      } else if(jso.fields.isDefinedAt("noOfCrawlers")){
+      } else if(jso.fields.isDefinedAt("newNumber")){
         numbersChangedPayloadFormat.read(jso)
       } else if(jso.fields.isDefinedAt("errorMessage")) {
         dockerOperationErrorPayloadFormat.read(jso)
@@ -247,5 +231,8 @@ object EventEnums {
     val DockerOperationErrorEvent: Value = Value("DockerOperationErrorEvent")
     val LinkAddedEvent: Value = Value("LinkAddedEvent")
     val LinkStateChangedEvent: Value = Value("LinkStateChangedEvent")
+
+    implicit val EventTypeReads: Reads[EventType] = Reads.enumNameReads(EventType)
+    implicit val EventTypeWrites: Writes[EventType] = Writes.enumNameWrites
   }
 }

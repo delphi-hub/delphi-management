@@ -16,58 +16,47 @@
  * limitations under the License.
  */
 
-import {Instance, objIsInstance} from './instance';
 
-export enum EventType {
-  InstanceNumbersCrawler = 'InstanceNumbersCrawler',
-  InstanceNumbersWebApi = 'InstanceNumbersWebApi',
-  InstanceNumbersWebApp = 'InstanceNumbersWebApp',
-  InstanceDetails = 'InstanceDetails',
+
+
+
+
+import {ComponentType, ComponentTypeEnum} from './instance';
+
+export interface RegistryEvent {
+  /**
+   * Valid types for events
+   */
+  eventType: EventType;
+  payload: any;
 }
 
-export interface SocketMessage {
-  event: EventType;
-  payload?: any;
+
+  export type EventType = 'NumbersChangedEvent' | 'InstanceAddedEvent' | 'InstanceRemovedEvent' | 'StateChangedEvent' |
+    'InstanceNumbersCrawler'| 'InstanceNumbersWebApi' | 'InstanceNumbersWebApp' | 'InstanceDetails';
+  export const EventTypeEnum = {
+    NumbersChangedEvent: 'NumbersChangedEvent' as EventType,
+    InstanceAddedEvent: 'InstanceAddedEvent' as EventType,
+    InstanceRemovedEvent: 'InstanceRemovedEvent' as EventType,
+    StateChangedEvent: 'StateChangedEvent' as EventType,
+    InstanceNumbersCrawler: 'InstanceNumbersCrawler' as EventType,
+    InstanceNumbersWebApi: 'InstanceNumbersWebApi' as EventType,
+    InstanceNumbersWebApp: 'InstanceNumbersWebApp' as EventType,
+    InstanceDetails: 'InstanceDetails' as EventType,
+  };
+
+
+export interface NumbersChanged {
+  componentType: ComponentType;
+  newNumber: number;
 }
 
-export function messageHasPayload(msg: SocketMessage): msg is SocketMessage {
-  return msg.payload !== undefined;
-}
-
-export function objectIsMessage(obj: any): obj is SocketMessage {
-  return obj.event !== undefined;
-}
-
-/**
- * Verifies if the given message's payload matches the expected format
- * according to the given message's type.
- * @param msg
- */
-export function checkMessageType(msg: SocketMessage) {
-  let successfulTypeCheck = true;
-  switch (msg.event) {
-    case EventType.InstanceNumbersCrawler || EventType.InstanceNumbersWebApi || EventType.InstanceNumbersWebApp:
-      successfulTypeCheck = messageHasPayload(msg) ? payloadIsInstanceNumber(msg.payload) : false;
-      break;
-    case EventType.InstanceDetails:
-      successfulTypeCheck = messageHasPayload(msg) ? objIsInstance(msg.payload) : false;
-      break;
-  }
-
-  if (!successfulTypeCheck) {
-    console.log('should be here');
-    throw new Error('Expected message type for message ' + msg + ' was not met.');
+export function payloadIsNumbersChanged(payload: any): payload is NumbersChanged {
+  if (payload.componentType !== undefined && payload.newNumber !== undefined) {
+    return payload.componentType in ComponentTypeEnum;
   }
 }
 
-
-export interface InstanceNumbers {
-    kind: Instance.ComponentTypeEnum;
-    amount: Number;
-}
-
-export function payloadIsInstanceNumber(payload: any): payload is InstanceNumbers {
-  console.log('payload kind in enum', payload.kind in EventType);
-  return ((payload.kind !== undefined && typeof payload.kind === 'string' && payload.kind in EventType)
-    && (payload.amount !== undefined && typeof payload.amount === 'number'));
+export function objectIsMessage(obj: any): obj is RegistryEvent {
+  return obj.eventType !== undefined && obj.payload !== undefined;
 }

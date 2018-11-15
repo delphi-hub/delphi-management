@@ -17,9 +17,10 @@
  */
 
 import {Component, Input, OnInit} from '@angular/core';
-import {ApiService, Instance, SocketService} from '../../api';
-import {EventType, InstanceNumbers} from '../../api/model/socketMessage';
-import ComponentTypeEnum = Instance.ComponentTypeEnum;
+import {ApiService, ComponentType, ComponentTypeEnum, SocketService} from '../../api';
+import {EventType, EventTypeEnum} from '../../api/model/socketMessage';
+
+
 
 
 @Component({
@@ -40,15 +41,15 @@ export class DashboardCardComponent implements OnInit {
    * Map used to dynamically decide which event type the component should register to.
    */
   static compTypeEventMap = {
-    [ComponentTypeEnum.Crawler]: EventType.InstanceNumbersCrawler,
-    [ComponentTypeEnum.WebApp]: EventType.InstanceNumbersWebApp,
-    [ComponentTypeEnum.WebApi]: EventType.InstanceNumbersWebApi,
+    [ComponentTypeEnum.Crawler]: EventTypeEnum.InstanceNumbersCrawler,
+    [ComponentTypeEnum.WebApp]: EventTypeEnum.InstanceNumbersWebApp,
+    [ComponentTypeEnum.WebApi]: EventTypeEnum.InstanceNumbersWebApi,
   };
 
   @Input() img: string;
   @Input() route: string;
   @Input() title: string;
-  @Input() componentType: ComponentTypeEnum;
+  @Input() componentType: ComponentType;
 
   numberOfInstances: string;
   numberOfFailedInstances: string;
@@ -66,13 +67,10 @@ export class DashboardCardComponent implements OnInit {
 
       const eventType: EventType = DashboardCardComponent.compTypeEventMap[this.componentType];
 
-      this.socketService.subscribeForEvent(eventType).subscribe((data: InstanceNumbers) => {
+      this.socketService.subscribeForEvent(eventType).subscribe((data: number) => {
         console.log('data callback in card component', data);
-        if (data.kind !== this.componentType) {
-          throw new Error('Received component type does not match dashboard cards component type ' + data);
-        }
 
-        this.numberOfInstances = '' + data.amount;
+        this.numberOfInstances = '' + data;
       });
     });
 

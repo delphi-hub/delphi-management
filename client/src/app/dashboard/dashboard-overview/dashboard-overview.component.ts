@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import {Instance} from "../../api";
+import {ComponentTypeEnum} from '../../api';
 
 @Component({
   selector: 'app-dashboard-overview',
@@ -28,9 +28,9 @@ export class DashboardOverviewComponent implements OnInit {
 
   constructor() { }
 
-  crawler = Instance.ComponentTypeEnum.Crawler;
-  webApi = Instance.ComponentTypeEnum.WebApi;
-  webApp = Instance.ComponentTypeEnum.WebApp;
+  crawler = ComponentTypeEnum.Crawler;
+  webApi = ComponentTypeEnum.WebApi;
+  webApp = ComponentTypeEnum.WebApp;
 
   ngOnInit() {
   }

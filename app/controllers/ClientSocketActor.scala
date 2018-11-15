@@ -1,8 +1,10 @@
 package controllers
 import akka.actor._
-import controllers.PublishSocketMessageActor.{ AddOutActor, StopMessage, PublishMessage}
-import models.{EventType, SocketMessage}
-import models.EventType.MessageType
+import controllers.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
+import models.EventEnums.EventType
+import models.{EventJsonSupport, SocketMessage}
+import spray.json._
+
 import scala.collection.mutable.HashSet
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -11,18 +13,16 @@ object ClientSocketActor {
   def props(out: ActorRef, publisher: ActorRef): Props = Props(new ClientSocketActor(out, publisher))
 }
 
-class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor {
+class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with EventJsonSupport {
 
-  val myEvents: HashSet[MessageType] = HashSet.empty[MessageType]
+  val myEvents: HashSet[EventType] = HashSet.empty[EventType]
 
-  // implicit val messageReads: Reads[SocketMessage] = Json.reads[SocketMessage]
-  implicit val messageReads: Reads[SocketMessage] = ((JsPath \ "event").read[EventType.MessageType] and 
+  implicit val messageReads: Reads[SocketMessage] = ((JsPath \ "event").read[EventType] and
   (JsPath \ "payload").readNullable[String])(SocketMessage.apply _)
   implicit val messageWrites: Writes[SocketMessage] = Json.writes[SocketMessage]
 
   override def preStart() {
     println("pre start called in client", self)
-    // publisher ! AddOutActor(self, EventType.InstanceNumbersCrawler)
     out ! "successfully registered"
   }
 
@@ -52,7 +52,7 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor {
 
     case PublishMessage(msg) =>
       println("received publish message in client", self)
-      out ! msg
+      out ! msg.toJson(eventFormat).toString()
   }
 
 }
