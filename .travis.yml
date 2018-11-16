@@ -1,10 +1,18 @@
 language: scala
 scala:
   -  2.12.4
+
+addons:
+apt:
+  sources:
+    - google-chrome
+  packages:
+    - google-chrome-stable
+
 before_install:
   -  npm install -g @angular/cli
 script:
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then sbt ++$TRAVIS_SCALA_VERSION test; cd client && npm install && ng build --prod && cd .. ; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then sbt ++$TRAVIS_SCALA_VERSION test; cd client && npm install && ng build --prod && npm run test -- --single-run --no-progress --browser=ChromeHeadlessCI && cd .. ; fi'
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport coverageAggregate codacyCoverage; cd client && npm install && ng build --prod && cd .. ; fi'
 after_success:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash <(curl -s https://codecov.io/bash); fi'
