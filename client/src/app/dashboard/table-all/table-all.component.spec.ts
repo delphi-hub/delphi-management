@@ -16,10 +16,12 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BrowserModule, By} from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatTableModule, MatInputModule} from '@angular/material';
+import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatIconModule} from '@angular/material/icon';
@@ -27,6 +29,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/mater
 import { MatDialogModule} from '@angular/material/dialog';
 import { TableAllComponent } from './table-all.component';
 import { DebugElement } from '@angular/core';
+import { ApiService} from '../../api';
 
 
 describe('TableAllComponent', () => {
@@ -37,7 +40,7 @@ describe('TableAllComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TableAllComponent ],
-      imports: [BrowserModule, BrowserAnimationsModule, MatTableModule, MatInputModule,
+      imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatTableModule, MatInputModule, MatPaginatorModule,
          MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule],
       providers: [{
       provide: MatDialogRef,
@@ -61,7 +64,8 @@ describe('TableAllComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it(`should create`, async(inject([HttpTestingController, ApiService],
+    (httpClient: HttpTestingController, apiService: ApiService) => {
+      expect(apiService).toBeTruthy();
+  })));
 });
