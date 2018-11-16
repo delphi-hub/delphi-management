@@ -17,12 +17,14 @@
  */
 
 import { TestBed, inject } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService } from './api.service';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('ApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, HttpClientModule],
       providers: [ApiService]
     });
   });

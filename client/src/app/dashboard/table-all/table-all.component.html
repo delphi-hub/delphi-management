@@ -21,7 +21,7 @@
 <ng-template #tableBlock>
   <div class="container">
       <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      <input id="filter_data" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
       </mat-form-field>
     <table class="mat-elevation-z8 mat-table" mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="ID">
@@ -59,27 +59,8 @@
           </td>
           </ng-container>
 
-          <!--<ng-container matColumnDef="action">-->
-              <!--<mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>-->
-              <!--<mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> -->
-              <!---->
-               <!--<button mat-button><i class="material-icons">play_circle_filled_white</i></button><button mat-button><i class="material-icons warn">pause_circle_outline</i></button><button mat-button><i class="material-icons">delete</i></button></mat-cell>-->
-               <!--<mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row;">-->
-                  <!--<button mat-icon-button>-->
-                    <!--<mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>-->
-                  <!--</button>-->
-              <!--<button mat-icon-button>-->
-                    <!--<mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>-->
-                  <!--</button>-->
-                <!--</mat-cell>-->
-          <!--</ng-container>-->
-
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
       </table>
   </div>
 </ng-template>
-<!--<div class="button-row">-->
-<!--<button mat-raised-button color="primary" (click)="openDialog()">Delete Selected</button>-->
-<!--<button mat-raised-button color="primary">Add Instance</button>-->
-<!--</div>-->

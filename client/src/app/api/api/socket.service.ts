@@ -150,7 +150,7 @@ export class SocketService {
         }
       }
     } catch (err) {
-        if (e.data === EventTypeEnum.Heartbeat) {
+        if (e.data !== EventTypeEnum.Heartbeat) {
           console.log('received message is no json', e.data, err);
         }
 

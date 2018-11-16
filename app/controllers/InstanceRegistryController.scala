@@ -22,6 +22,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import javax.inject.Inject
+import play.api.Configuration
 
 import scala.concurrent.{ExecutionContext, Promise}
 import play.api.libs.concurrent.CustomExecutionContext
@@ -31,6 +32,9 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
+
+import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+
 
 trait MyExecutionContext extends ExecutionContext
 
@@ -52,14 +56,16 @@ class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
 
 class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Materializer, myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
-                                           ws: WSClient)
+                                           ws: WSClient, config: Configuration)
   extends BaseController {
 
 
   var pubActor: ActorRef = null
-
+  val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
+  
   def instances(componentType: String): Action[AnyContent] = Action.async {
-    ws.url("http://localhost:8087/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
+
+    ws.url(instanceRegistryUri + "/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
       // TODO: possible handling of parsing the data can be done here
 
       Ok(response.body)
@@ -72,7 +78,6 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         val flow: Flow[Message, Message, Promise[Option[Message]]] =
           Flow.fromSinkAndSourceMat(
             Sink.foreach[Message]{ msg =>
-              println("message received", msg)
               pubActor ! msg},
             Source(List(TextMessage("one"), TextMessage("two")))
               .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
@@ -95,7 +100,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
-    ws.url("http://localhost:8087/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
+    ws.url(instanceRegistryUri + "/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       if (response.status == 200) {
         Ok(response.body)

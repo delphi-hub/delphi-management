@@ -64,25 +64,4 @@ describe('TableAllComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should check for openDialog function call', async(() => {
-  spyOn(component, 'openDialog');
-
-  const button = fixture.debugElement.nativeElement.querySelector('button');
-  button.click();
-
-  fixture.whenStable().then(() => {
-    expect(component.openDialog).toHaveBeenCalled();
-  });
-}));
-
-it('should check for apply filter keyup event', () => {
-    spyOn(component, 'applyFilter');
-    fixture.detectChanges();
-    const input = debugElement.query(By.css('#filter_data'));
-    const inputElement = input.nativeElement;
-    inputElement.dispatchEvent(new Event('keyup'));
-
-    expect(component.applyFilter).toHaveBeenCalled();
-  });
 });
