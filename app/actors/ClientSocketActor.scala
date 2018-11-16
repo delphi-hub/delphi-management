@@ -1,6 +1,6 @@
-package controllers
+package actors
 import akka.actor._
-import controllers.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
+import actors.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
 import models.EventEnums.EventType
 import models.{EventJsonSupport, SocketMessage}
 import spray.json._

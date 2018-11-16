@@ -1,7 +1,7 @@
-package controllers
+package actors
 import akka.actor._
 import akka.http.scaladsl.model.ws.TextMessage
-import controllers.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
+import actors.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
 import models.EventEnums.EventType
 import models.{EventJsonSupport, RegistryEvent, SocketMessage}
 import spray.json._
