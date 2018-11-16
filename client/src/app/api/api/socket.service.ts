@@ -23,9 +23,11 @@ import {
   NumbersChanged,
   objectIsMessage, payloadIsInstanceLink,
   payloadIsNumbersChanged,
-  RegistryEvent
+  RegistryEvent,
+  DockerOperationError,
+  payloadIsDockerOperationError
 } from '../model/socketMessage';
-import {ComponentTypeEnum } from '../model/instance';
+import {ComponentTypeEnum, objIsInstance, Instance } from '../model/instance';
 import {InstanceLink} from '../model/instanceLink';
 
 
@@ -155,7 +157,8 @@ export class SocketService {
     }
   }
 
-  private getEventAndPayload(msg: RegistryEvent): [EventType, number] | [EventType, InstanceLink] {
+  private getEventAndPayload(msg: RegistryEvent): [EventType, number] | [EventType, InstanceLink] |
+  [EventType, DockerOperationError]| [EventType, Instance] {
     let toSend: any;
     let event: EventType;
 
@@ -176,10 +179,11 @@ export class SocketService {
             event = EventTypeEnum.InstanceNumbersCrawler;
             break;
         }
-      } else { if (payloadIsInstanceLink(payload)) {
-        toSend = payload;
-        event = msg.eventType;
-      }}
+      } else { if (payloadIsInstanceLink(payload) || payloadIsDockerOperationError(payload) || objIsInstance(payload)) {
+          toSend = payload;
+          event = msg.eventType;
+        }
+      }
     }
 
     return [event, toSend];

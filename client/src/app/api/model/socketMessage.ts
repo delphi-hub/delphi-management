@@ -21,7 +21,7 @@
 
 
 
-import {ComponentType, ComponentTypeEnum} from './instance';
+import {ComponentType, ComponentTypeEnum, Instance} from './instance';
 import {InstanceLink, LinkStateEnum} from './instanceLink';
 
 export interface RegistryEvent {
@@ -53,10 +53,19 @@ export interface NumbersChanged {
   newNumber: number;
 }
 
+export interface DockerOperationError {
+  affectedInstance?: Instance;
+  errorMessage: string;
+}
+
 export function payloadIsNumbersChanged(payload: any): payload is NumbersChanged {
   if (payload.componentType !== undefined && payload.newNumber !== undefined) {
     return payload.componentType in ComponentTypeEnum;
   }
+}
+
+export function payloadIsDockerOperationError(payload: any): payload is DockerOperationError {
+  return payload.errorMessage !== undefined;
 }
 
 export function payloadIsInstanceLink(payload: any): payload is InstanceLink {
@@ -64,6 +73,7 @@ export function payloadIsInstanceLink(payload: any): payload is InstanceLink {
     payload.idTo !== undefined &&
     payload.linkState !== undefined && payload.linkState in LinkStateEnum;
 }
+
 
 export function objectIsMessage(obj: any): obj is RegistryEvent {
   return obj.eventType !== undefined && obj.payload !== undefined;
