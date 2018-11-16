@@ -142,11 +142,11 @@ export class SocketService {
       if (objectIsMessage(msg)) {
 
 
-        const eventPayload = this.getEventAndPayload(msg);
+        const {event, toSend} = this.getEventAndPayload(msg);
 
-        const relevantSubject: Subject<any> = this.observers[eventPayload[0]];
+        const relevantSubject: Subject<any> = this.observers[event];
         if (relevantSubject) {
-          relevantSubject.next(eventPayload[1]);
+          relevantSubject.next(toSend);
         }
       }
     } catch (err) {
@@ -164,8 +164,7 @@ export class SocketService {
    * CrawlerNumbersChanged, WebapiNumbersChanged)
    * @param msg
    */
-  private getEventAndPayload(msg: RegistryEvent): [EventType, number] | [EventType, InstanceLink] |
-  [EventType, DockerOperationError]| [EventType, Instance] {
+  private getEventAndPayload(msg: RegistryEvent) {
     let toSend: any;
     let event: EventType;
 
@@ -193,7 +192,7 @@ export class SocketService {
       }
     }
 
-    return [event, toSend];
+    return {event, toSend};
   }
 
   /**
