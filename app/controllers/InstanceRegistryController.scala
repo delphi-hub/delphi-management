@@ -66,8 +66,6 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }(myExecutionContext)
   }
 
-//  val (eventActor, eventPublisher) = Source.actorRef[Any](0, OverflowStrategy.dropNew).
-//    toMat(Sink.asPublisher(fanout = true))(Keep.both).run()
     def socket: WebSocket = WebSocket.accept[String, String] {
       if(pubActor == null) {
         pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
@@ -83,8 +81,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
           Http().singleWebSocketRequest(
             WebSocketRequest("ws://localhost:8087/events"),
             flow)
-
-        // at some later time we want to disconnect
+        // TODO: at some later time we want to disconnect
        // promise.success(None)
       }
       request => {
@@ -93,34 +90,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }
     }
-//  def socket: WebSocket = WebSocket.accept[SocketMessage, SocketMessage]{
-//    request => { // Log events to the console
-//
-//
-//      // using emit "one" and "two" and then keep the connection open
-//      val flow: Flow[Message, Message, Promise[Option[Message]]] =
-//        Flow.fromSinkAndSourceMat(
-//          Sink.foreach[Message](println),
-//          Source(List(TextMessage("one"), TextMessage("two")))
-//            .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
-//
-//      val (upgradeResponse, promise) =
-//        Http().singleWebSocketRequest(
-//          WebSocketRequest("ws://localhost:8087/events"),
-//          flow)
-//
-//      // at some later time we want to disconnect
-////      promise.success(None)
-//
-//
-//
-//      val in = Sink.foreach[SocketMessage](println)
-//      val msg = new SocketMessage(event=EventType.InstanceNumbersCrawler, payload = Option("wow so much information"))
-//      val out = Source.single(msg).concat(Source.maybe)
-//
-//      Flow.fromSinkAndSource(in, out)
-//    }
-//  }
+
 
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.

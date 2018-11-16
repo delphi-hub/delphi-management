@@ -22,6 +22,7 @@
 
 
 import {ComponentType, ComponentTypeEnum} from './instance';
+import {InstanceLink, LinkStateEnum} from './instanceLink';
 
 export interface RegistryEvent {
   /**
@@ -56,6 +57,12 @@ export function payloadIsNumbersChanged(payload: any): payload is NumbersChanged
   if (payload.componentType !== undefined && payload.newNumber !== undefined) {
     return payload.componentType in ComponentTypeEnum;
   }
+}
+
+export function payloadIsInstanceLink(payload: any): payload is InstanceLink {
+  return payload.idFrom !== undefined &&
+    payload.idTo !== undefined &&
+    payload.linkState !== undefined && payload.linkState in LinkStateEnum;
 }
 
 export function objectIsMessage(obj: any): obj is RegistryEvent {

@@ -21,11 +21,12 @@ import {Observable, Observer, Subject} from 'rxjs';
 import {
   EventType, EventTypeEnum,
   NumbersChanged,
-  objectIsMessage,
+  objectIsMessage, payloadIsInstanceLink,
   payloadIsNumbersChanged,
   RegistryEvent
 } from '../model/socketMessage';
-import {ComponentTypeEnum, Instance} from '../model/instance';
+import {ComponentTypeEnum } from '../model/instance';
+import {InstanceLink} from '../model/instanceLink';
 
 
 interface ObserverMap {
@@ -86,8 +87,7 @@ export class SocketService {
    *
    * @param eventName
    */
-  public subscribeForEvent(eventName: EventType): Observable<number | Instance> {
-    console.log('creating observer for event type', eventName);
+  public subscribeForEvent(eventName: EventType): Observable<number | InstanceLink> {
 
     return new Observable((observer: Observer<any>) => {
 
@@ -135,38 +135,54 @@ export class SocketService {
    * @param e
    */
   private socketOnMessage(e: MessageEvent) {
-    console.log('received on socket connection', e);
     try {
       const msg: RegistryEvent = JSON.parse(e.data);
       if (objectIsMessage(msg)) {
-        console.log('object is message', msg)
-        let event: EventType;
-        let toSend;
-        if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
-          const payload: NumbersChanged = msg.payload;
-          if (payloadIsNumbersChanged(payload)) {
-            toSend = payload.newNumber;
-            switch (payload.componentType) {
-              case ComponentTypeEnum.WebApp:
-                event = EventTypeEnum.InstanceNumbersWebApp;
-                break;
-              case ComponentTypeEnum.WebApi:
-                event = EventTypeEnum.InstanceNumbersWebApi;
-                break;
-              case ComponentTypeEnum.Crawler:
-                event = EventTypeEnum.InstanceNumbersCrawler;
-                break;
-            }
-          }
-        }
-        const relevantSubject: Subject<any> = this.observers[event];
+
+
+        const eventPayload = this.getEventAndPayload(msg);
+
+        const relevantSubject: Subject<any> = this.observers[eventPayload[0]];
         if (relevantSubject) {
-          relevantSubject.next(toSend);
+          relevantSubject.next(eventPayload[1]);
         }
       }
     } catch (err) {
-      console.log('received message is no json', e.data);
+        if (e.data === EventTypeEnum.Heartbeat) {
+          console.log('received message is no json', e.data, err);
+        }
+
     }
+  }
+
+  private getEventAndPayload(msg: RegistryEvent): [EventType, number] | [EventType, InstanceLink] {
+    let toSend: any;
+    let event: EventType;
+
+    if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
+
+      const payload: NumbersChanged = msg.payload;
+
+      if (payloadIsNumbersChanged(payload)) {
+        toSend = payload.newNumber;
+        switch (payload.componentType) {
+          case ComponentTypeEnum.WebApp:
+            event = EventTypeEnum.InstanceNumbersWebApp;
+            break;
+          case ComponentTypeEnum.WebApi:
+            event = EventTypeEnum.InstanceNumbersWebApi;
+            break;
+          case ComponentTypeEnum.Crawler:
+            event = EventTypeEnum.InstanceNumbersCrawler;
+            break;
+        }
+      } else { if (payloadIsInstanceLink(payload)) {
+        toSend = payload;
+        event = msg.eventType;
+      }}
+    }
+
+    return [event, toSend];
   }
 
   /**
