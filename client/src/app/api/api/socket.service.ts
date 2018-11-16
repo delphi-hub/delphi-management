@@ -89,7 +89,7 @@ export class SocketService {
    *
    * @param eventName
    */
-  public subscribeForEvent(eventName: EventType): Observable<number | InstanceLink> {
+  public subscribeForEvent(eventName: EventType): Observable<number | InstanceLink | Instance | DockerOperationError> {
 
     return new Observable((observer: Observer<any>) => {
 
@@ -157,6 +157,13 @@ export class SocketService {
     }
   }
 
+  /**
+   * Returns a tuple of event type and payload type. Here the matching of client events to
+   * server events is done.
+   * Example: NumbersChanged server event is mapped to three client events (WebappNumbersChanged,
+   * CrawlerNumbersChanged, WebapiNumbersChanged)
+   * @param msg
+   */
   private getEventAndPayload(msg: RegistryEvent): [EventType, number] | [EventType, InstanceLink] |
   [EventType, DockerOperationError]| [EventType, Instance] {
     let toSend: any;
@@ -194,6 +201,9 @@ export class SocketService {
    * a promise. The promise resolves successfully once the connection
    * is open. If there already is a connection the promise resolves
    * instantly.
+   * After opening the socket connection a heartbeat is send every
+   * 5000ms to the server to keep the connection alive. The heartbeat
+   * uses the setInterval() method.
    */
   public initSocket(): Promise<void> {
     if (this.socket === null) {
