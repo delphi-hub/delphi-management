@@ -7,6 +7,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import models.EventEnums.EventType
 import models.{EventJsonSupport, RegistryEvent}
+import play.api.Logger
 import spray.json._
 
 import scala.collection.mutable
@@ -25,7 +26,8 @@ class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys:
   val eventActorMap: mutable.HashMap[EventType, ListBuffer[ActorRef]] = new mutable.HashMap[EventType, ListBuffer[ActorRef]]()
 
   override def preStart() {
-    println("pre start called in publisher", self)
+
+    Logger.debug("pre start called in publisher" + self)
     val flow: Flow[Message, Message, Promise[Option[Message]]] =
       Flow.fromSinkAndSourceMat(
         Sink.foreach[Message]{ msg =>
@@ -33,7 +35,7 @@ class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys:
         Source(List(TextMessage("one"), TextMessage("two")))
           .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
 
-    val (upgradeResponse, promise) =
+
       Http()(actorSys).singleWebSocketRequest(
         WebSocketRequest("ws://" + irBasePath + "/events"),
         flow)(mat)
@@ -42,17 +44,17 @@ class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys:
   }
 
   override def postStop() {
-    println("post stop called in publisher", self)
+    Logger.debug("post stop called in publisher" + self)
   }
   
   def receive: PartialFunction[Any, Unit] = {
     
     case StopMessage(toStop) =>
-      println("stop received", toStop)
+      Logger.debug("stop received" + toStop)
       for ((k, v) <- eventActorMap) v -= toStop
 
     case AddOutActor(out, event) =>
-      println("received add out actor", out)
+      Logger.debug("received add out actor" + out)
       if (!eventActorMap.contains(event)){
         eventActorMap += (event -> new ListBuffer[ActorRef]())
       }
@@ -60,18 +62,17 @@ class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys:
 
 
     case TextMessage.Strict(msg) =>
-      println("received something ", msg)
+      Logger.debug("received something " + msg)
       val registryEvent = msg.parseJson.convertTo[RegistryEvent](eventFormat)
       self ! PublishMessage(registryEvent)
 
     case PublishMessage(msg) =>
-      println("publish message called with message", msg)
+      Logger.debug("publish message called with message" + msg)
       if(eventActorMap.contains(msg.eventType)){
 
         val list = eventActorMap(msg.eventType)
-        println("found list in actor map for msg", list)
-        list.foreach((actor) => {
-          println("sending message to actor", actor)
+        list.foreach(actor => {
+          Logger.debug("sending message to actor" + actor)
           actor ! PublishMessage(msg)
         })
       }

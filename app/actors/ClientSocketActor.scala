@@ -3,6 +3,7 @@ import akka.actor._
 import actors.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
 import models.EventEnums.EventType
 import models.{EventJsonSupport, SocketMessage}
+import play.api.Logger
 import spray.json._
 
 import scala.collection.mutable.HashSet
@@ -22,12 +23,12 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with E
   implicit val messageWrites: Writes[SocketMessage] = Json.writes[SocketMessage]
 
   override def preStart() {
-    println("pre start called in client", self)
+    Logger.debug("pre start called in client" + self)
     out ! "successfully registered"
   }
 
   override def postStop() {
-    println("post stop called in client", self)
+    Logger.debug("post stop called in client" + self)
     publisher ! StopMessage(self)
   }
 
@@ -36,9 +37,9 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with E
       val json = Json.parse(msg)
       val result = json.validate[SocketMessage]
       result.fold(
-        errors => {println("error parsing message to json", msg)},
+        errors => {Logger.error("error parsing message to json" + msg + " with error " + errors)},
         socketMsg => {
-          println("successfully parsed socket message", socketMsg)
+          Logger.debug("successfully parsed socket message" + socketMsg)
           if (socketMsg.event == EventType.Heartbeat) {
             out ! "Heartbeat"
           } else {
@@ -48,14 +49,14 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with E
       )
       
     case SocketMessage(event, payload) =>
-      println("received socket message in client", SocketMessage)
+      Logger.debug("received socket message in client" + SocketMessage)
       if (!myEvents.contains(event)) {
         myEvents += event
         publisher ! AddOutActor(self, event)
       }
 
     case PublishMessage(msg) =>
-      println("received publish message in client", self)
+      Logger.debug("received publish message in client" + self)
       out ! msg.toJson(eventFormat).toString()
   }
 

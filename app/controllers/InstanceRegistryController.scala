@@ -19,21 +19,16 @@
 package controllers
 
 import akka.actor.{ActorRef, ActorSystem}
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import javax.inject.Inject
 import play.api.Configuration
 
-import scala.concurrent.{ExecutionContext, Promise}
+import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.WSClient
-import play.api.mvc._
 import akka.stream.Materializer
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
-
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import play.api.mvc._
 
 
 trait MyExecutionContext extends ExecutionContext
