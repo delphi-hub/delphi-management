@@ -60,8 +60,10 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   extends BaseController {
 
 
-  var pubActor: ActorRef = null
+  lazy val pubActor: Option[ActorRef] = Some(system.actorOf(PublishSocketMessageActor.props(instanceRegistryBasePath, mat, system), "publish-actor"))
+
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
+  val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
   
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
@@ -72,29 +74,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }(myExecutionContext)
   }
 
-    def socket: WebSocket = WebSocket.accept[String, String] {
-      if(pubActor == null) {
-        pubActor = system.actorOf(PublishSocketMessageActor.props, "publish-actor")
-        val flow: Flow[Message, Message, Promise[Option[Message]]] =
-          Flow.fromSinkAndSourceMat(
-            Sink.foreach[Message]{ msg =>
-              pubActor ! msg},
-            Source(List(TextMessage("one"), TextMessage("two")))
-              .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
-
-        val (upgradeResponse, promise) =
-          Http().singleWebSocketRequest(
-            WebSocketRequest("ws://localhost:8087/events"),
-            flow)
-        // TODO: at some later time we want to disconnect
-       // promise.success(None)
-      }
-      request => {
-        ActorFlow.actorRef { out => 
-          ClientSocketActor.props(out, pubActor)
-        }
+  def socket: WebSocket = WebSocket.accept[String, String] {
+    request => {
+      ActorFlow.actorRef { out =>
+        ClientSocketActor.props(out, pubActor.get)
       }
     }
+  }
 
 
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {

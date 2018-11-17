@@ -1,28 +1,42 @@
 package actors
 import akka.actor._
-import akka.http.scaladsl.model.ws.TextMessage
+import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import actors.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
+import akka.http.scaladsl.Http
+import akka.stream.Materializer
+import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import models.EventEnums.EventType
-import models.{EventJsonSupport, RegistryEvent, SocketMessage}
+import models.{EventJsonSupport, RegistryEvent}
 import spray.json._
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.Promise
 
 object PublishSocketMessageActor {
-  def props:Props = Props[PublishSocketMessageActor]
+  def props(irBasePath: String, mat: Materializer, actorSys: ActorSystem):Props = Props(new PublishSocketMessageActor(irBasePath, mat, actorSys))
   final case class AddOutActor(out: ActorRef, event: EventType)
   final case class PublishMessage(msg: RegistryEvent)
   final case class StopMessage(toStop: ActorRef)
 }
 
-class PublishSocketMessageActor() extends Actor with EventJsonSupport {
+class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys: ActorSystem) extends Actor with EventJsonSupport {
   
   val eventActorMap: mutable.HashMap[EventType, ListBuffer[ActorRef]] = new mutable.HashMap[EventType, ListBuffer[ActorRef]]()
 
-
   override def preStart() {
     println("pre start called in publisher", self)
+    val flow: Flow[Message, Message, Promise[Option[Message]]] =
+      Flow.fromSinkAndSourceMat(
+        Sink.foreach[Message]{ msg =>
+          self ! msg},
+        Source(List(TextMessage("one"), TextMessage("two")))
+          .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
+
+    val (upgradeResponse, promise) =
+      Http()(actorSys).singleWebSocketRequest(
+        WebSocketRequest("ws://" + irBasePath + "/events"),
+        flow)(mat)
 
 
   }
