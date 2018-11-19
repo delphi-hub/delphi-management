@@ -29,10 +29,10 @@ import { CrawlerComponent } from '../crawler/crawler.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { HeaderComponent } from '../header/header.component';
-import { ApiService} from '../../api';
 import { DashboardCardComponent } from './dashboard-card.component';
 import { HttpClientModule} from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ApiService } from 'src/app/api/api/api.service';
 
 
 describe('component: DashboardCardComponent', () => {

@@ -22,7 +22,7 @@ import {Observable} from 'rxjs';
 import {Configuration} from '../configuration';
 import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
 import {CustomHttpUrlEncodingCodec} from '../encoder';
-import {Instance} from '..';
+import {Instance} from '../model/instance';
 import {SysInfo} from '../model/sysInfo';
 
 

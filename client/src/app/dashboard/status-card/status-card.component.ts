@@ -17,8 +17,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../api';
 import {SysInfo} from '../../api/model/sysInfo';
+import {ApiService} from '../../api/api/api.service';
 
 @Component({
   selector: 'app-statuscard',

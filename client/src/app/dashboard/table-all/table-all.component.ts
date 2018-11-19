@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit, Input } from '@angular/core';
-import {Instance} from '../../api';
+import {Instance} from '../../api/model/instance';
 import { SelectionModel} from '@angular/cdk/collections';
 import { MatDialog, MatTableDataSource} from '@angular/material';
 
