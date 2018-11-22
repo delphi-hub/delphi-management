@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Instance} from './models/instance';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 
 export interface State {
@@ -34,11 +34,19 @@ export class StoreService {
     this.stateSubject = new BehaviorSubject<State>(EMPTY_STATE);
   }
 
+  public getStoreObservable(): Observable<State> {
+    return new Observable ((observer) => {
+      this.stateSubject.subscribe(observer);
+      observer.next(this.stateSubject.value);
+    });
+
+  }
+
   public getState() {
     return this.stateSubject.value;
   }
 
-  public addToState(instances: Array<Instance>) {
+  public addInstancesToState(instances: Array<Instance>) {
     const newState: State = instances.reduce((accumulator: State, currentValue: Instance) => {
       return StoreService.addNewInstanceToState(accumulator, currentValue);
     }, EMPTY_STATE);
@@ -46,7 +54,7 @@ export class StoreService {
     this.stateSubject.next(newState);
   }
 
-  public addToState(instance: Instance) {
+  public addInstanceToState(instance: Instance) {
     const newState = StoreService.addNewInstanceToState(this.stateSubject.getValue(), instance);
     // maybe calculate diff before
     this.stateSubject.next(newState);

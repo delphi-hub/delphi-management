@@ -4,7 +4,8 @@ import {ApiService} from '../api/api/api.service';
 import {Instance} from './models/instance';
 
 import {EventTypeEnum} from './models/socketMessage';
-import {StoreService} from './store.service';
+import {State, StoreService} from './store.service';
+import {BehaviorSubject} from 'rxjs';
 
 
 @Injectable({
@@ -12,22 +13,25 @@ import {StoreService} from './store.service';
 })
 export class ModelService {
 
+  private instanceSubject: BehaviorSubject;
 
   constructor(private socketService: SocketService, private apiService: ApiService, private storeService: StoreService) {
+    this.storeService.getStoreObservable().subscribe((state: State) => {
 
+    });
   }
 
   public initInstances() {
     // get current instances and update the current state
     this.apiService.getInstanceNetwork().subscribe((network: Array<Instance>) => {
       // parse network to state and update after diff
-      this.storeService.addToState(network);
+      this.storeService.addInstancesToState(network);
     }, (error) => {
       console.log('get network error', error);
     });
     // register for event updates
     this.socketService.subscribeForEvent(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
-      this.storeService.addToState(newInstance);
+      this.storeService.addInstanceToState(newInstance);
     });
 
     this.socketService.subscribeForEvent(EventTypeEnum.InstanceRemovedEvent).subscribe((removedInstance: Instance) => {
