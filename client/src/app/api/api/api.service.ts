@@ -20,10 +20,10 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Configuration} from '../configuration';
-import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
+import {BASE_PATH, INSTANCE_NETWORK, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
 import {CustomHttpUrlEncodingCodec} from '../encoder';
-import {Instance} from '../model/instance';
-import {SysInfo} from '../model/sysInfo';
+import {Instance} from '../../model/models/instance';
+import {SysInfo} from '../../model/models/sysInfo';
 
 
 @Injectable({
@@ -47,7 +47,15 @@ export class ApiService {
     }
   }
 
-  public getSysInfo(reportProgress: boolean = false): Observable<SysInfo> {
+  public getSysInfo(): Observable<SysInfo> {
+    return this.get<SysInfo>(SYS_INFO);
+  }
+
+  public getInstanceNetwork(): Observable<Array<Instance>> {
+    return this.get<Array<Instance>>(INSTANCE_NETWORK);
+  }
+
+  private get<T>(path: String) {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
@@ -58,10 +66,9 @@ export class ApiService {
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
-    return this.httpClient.get<SysInfo>(`${this.basePath}${SYS_INFO}`,
-      {headers: headers, observe: 'body', reportProgress: reportProgress});
+    return this.httpClient.get<T>(`${this.basePath}${path}`,
+      {headers: headers, observe: 'body'});
     }
-
   /**
    * Find number of running instances
    * How many instances per type are running

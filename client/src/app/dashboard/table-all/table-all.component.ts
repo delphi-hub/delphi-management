@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
-import {Instance} from '../../api/model/instance';
-import { SelectionModel} from '@angular/cdk/collections';
-import { MatDialog, MatTableDataSource} from '@angular/material';
+import {Component, Input, OnInit} from '@angular/core';
+import {Instance} from '../../model/models/instance';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatDialog, MatTableDataSource} from '@angular/material';
 
 
 @Component({

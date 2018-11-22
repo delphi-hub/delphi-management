@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 export const BASE_PATH = new InjectionToken<string>('basePath');
 export const INSTANCES = '/api/instances';
+export const INSTANCE_NETWORK = 'api/network';
 export const SYS_INFO = '/api/systemInfo';
 export const NUMBER_OF_INSTANCES = '/api/numberOfInstances';
 export const COLLECTION_FORMATS = {

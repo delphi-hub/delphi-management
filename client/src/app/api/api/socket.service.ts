@@ -19,16 +19,18 @@
 import {Injectable} from '@angular/core';
 import {Observable, Observer, Subject} from 'rxjs';
 import {
-  EventType, EventTypeEnum,
-  NumbersChanged,
-  objectIsMessage, payloadIsInstanceLink,
-  payloadIsNumbersChanged,
-  RegistryEvent,
   DockerOperationError,
-  payloadIsDockerOperationError
-} from '../model/socketMessage';
-import {ComponentTypeEnum, objIsInstance, Instance } from '../model/instance';
-import {InstanceLink} from '../model/instanceLink';
+  EventType,
+  EventTypeEnum,
+  NumbersChanged,
+  objectIsMessage,
+  payloadIsDockerOperationError,
+  payloadIsInstanceLink,
+  payloadIsNumbersChanged,
+  RegistryEvent
+} from '../../model/models/socketMessage';
+import {ComponentTypeEnum, Instance, objIsInstance} from '../../model/models/instance';
+import {InstanceLink} from '../../model/models/instanceLink';
 
 
 interface ObserverMap {

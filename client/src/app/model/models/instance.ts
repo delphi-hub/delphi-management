@@ -17,6 +17,8 @@
  */
 
 
+import {InstanceLink} from './instanceLink';
+
 export type ComponentType= 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement';
 export const ComponentTypeEnum = {
   Crawler: 'Crawler' as ComponentType,
@@ -31,6 +33,8 @@ export interface Instance {
   host: string;
   portNumber: number;
   name: string;
+  linksTo: Array<InstanceLink>;
+  linksFrom: Array<InstanceLink>;
   /**
    * Component Type
    */

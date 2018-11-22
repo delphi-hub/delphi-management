@@ -39,6 +39,7 @@ import {StatusCardComponent} from './status-card/status-card.component';
 import {UserManagementComponent} from './user-management/user-management.component';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {ApiModule} from '../api/api.module';
+import {GraphViewModule} from './graph-view/graph-view.module';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import {ApiModule} from '../api/api.module';
     MatInputModule,
     DashboardRoutingModule,
     DashboardRoutingModule,
-    ApiModule
+    ApiModule,
+    GraphViewModule
   ],
   declarations: [
     DashboardCardComponent,

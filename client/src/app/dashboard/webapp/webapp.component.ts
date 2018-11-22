@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import {ComponentTypeEnum, Instance} from '../../api/model/instance';
+import {Component, OnInit} from '@angular/core';
+import {ComponentTypeEnum, Instance} from '../../model/models/instance';
 import {ApiService} from '../../api/api/api.service';
 
 
@@ -39,7 +39,7 @@ export class WebappComponent implements OnInit {
       this.table_data = result;
 
     }, err => {
-      console.log('error during get instances for web app');
+      console.log('error during get instances for web app', err);
     });
   }
 
