@@ -101,7 +101,7 @@ export class SocketService {
        */
       const registeredEvents = Object.keys(this.observers);
 
-      let publishEventName;
+      let publishEventName = eventName;
       /**
        * Map all numbers changed event to global registry event
        */
