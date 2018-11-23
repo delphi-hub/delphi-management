@@ -19,11 +19,12 @@
 
 import {InstanceLink} from './instanceLink';
 
-export type ComponentType= 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement';
+export type ComponentType= 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement' | 'ElasticSearch';
 export const ComponentTypeEnum = {
   Crawler: 'Crawler' as ComponentType,
   WebApi: 'WebApi' as ComponentType,
   WebApp: 'WebApp' as ComponentType,
+  ElasticSearch: 'ElasticSearch' as ComponentType,
   DelphiManagement: 'DelphiManagement' as ComponentType
 };
 

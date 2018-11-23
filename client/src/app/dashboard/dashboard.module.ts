@@ -40,6 +40,7 @@ import {UserManagementComponent} from './user-management/user-management.compone
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {ApiModule} from '../api/api.module';
 import {GraphViewModule} from './graph-view/graph-view.module';
+import {ModelModule} from '../model/model.module';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import {GraphViewModule} from './graph-view/graph-view.module';
     DashboardRoutingModule,
     DashboardRoutingModule,
     ApiModule,
+    ModelModule,
     GraphViewModule
   ],
   declarations: [

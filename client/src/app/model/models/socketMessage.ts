@@ -36,8 +36,8 @@ export interface RegistryEvent {
     | 'InstanceDetails'
     | 'Heartbeat'
     | 'LinkAddedEvent'
-    |
-    'LinkStateChangedEvent';
+    | 'LinkStateChangedEvent';
+
   export const EventTypeEnum = {
     NumbersChangedEvent: 'NumbersChangedEvent' as EventType,
     InstanceAddedEvent: 'InstanceAddedEvent' as EventType,
