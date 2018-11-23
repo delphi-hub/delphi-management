@@ -58,10 +58,10 @@ export const StateEnum = {
 };
 
 export function objIsInstance(obj: any): obj is Instance {
-  return (obj.host !== undefined && typeof obj.host === 'string' &&
-          obj.portNumber !== undefined && typeof obj.portNumber === 'number' &&
-          obj.name !== undefined && typeof obj.name === 'string' &&
-          obj.componentType !== undefined && obj.componentType in ComponentTypeEnum);
+    return (obj.host !== undefined && typeof obj.host === 'string' &&
+            obj.portNumber !== undefined && typeof obj.portNumber === 'number' &&
+            obj.name !== undefined && typeof obj.name === 'string' &&
+            obj.componentType !== undefined && obj.linksFrom !== undefined && obj.linksTo !== undefined);
 }
 
 

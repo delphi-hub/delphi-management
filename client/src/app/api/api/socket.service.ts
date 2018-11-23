@@ -139,13 +139,14 @@ export class SocketService {
    * @param e
    */
   private socketOnMessage(e: MessageEvent) {
+    console.log('received socket message', e);
     try {
       const msg: RegistryEvent = JSON.parse(e.data);
       if (objectIsMessage(msg)) {
-
+        console.log('received socket message is message', msg);
 
         const {event, toSend} = this.getEventAndPayload(msg);
-
+        console.log('parsed event and payload', event, toSend);
         const relevantSubject: Subject<any> = this.observers[event];
         if (relevantSubject) {
           relevantSubject.next(toSend);
@@ -170,9 +171,9 @@ export class SocketService {
     let toSend: any;
     let event: EventType;
 
-    if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
+    const payload: any = msg.payload;
 
-      const payload: NumbersChanged = msg.payload;
+    if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
 
       if (payloadIsNumbersChanged(payload)) {
         toSend = payload.newNumber;
@@ -187,12 +188,12 @@ export class SocketService {
             event = EventTypeEnum.InstanceNumbersCrawler;
             break;
         }
-      } else { if (payloadIsInstanceLink(payload) || payloadIsDockerOperationError(payload) || objIsInstance(payload)) {
-          toSend = payload;
+      } } else {
+        if (objIsInstance(payload.instance)) {
+          toSend = payload.instance;
           event = msg.eventType;
         }
       }
-    }
 
     return {event, toSend};
   }
