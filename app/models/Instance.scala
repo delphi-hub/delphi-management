@@ -7,7 +7,7 @@ import spray.json.{DefaultJsonProtocol, DeserializationException, JsString, JsVa
 /**
   * Trait defining the implicit JSON formats needed to work with Instances
   */
-trait InstanceJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+trait InstanceJsonSupport extends SprayJsonSupport with DefaultJsonProtocol with InstanceLinkJsonSupport {
 
   //Custom JSON format for an ComponentType
   implicit val componentTypeFormat : JsonFormat[ComponentType] = new JsonFormat[ComponentType] {
@@ -69,7 +69,7 @@ trait InstanceJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   }
 
   //JSON format for Instances
-  implicit val instanceFormat : JsonFormat[Instance] = jsonFormat8(Instance)
+  implicit val instanceFormat : JsonFormat[Instance] = jsonFormat10(Instance)
 }
 
 /**
@@ -83,15 +83,17 @@ trait InstanceJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   * @param instanceState State of the instance
   */
 final case class Instance (
-     id: Option[Long],
-     host: String,
-     portNumber: Long,
-     name: String,
-     componentType: ComponentType,
-     dockerId: Option[String],
-     instanceState: InstanceState,
-     labels: List[String]
-)
+                            id: Option[Long],
+                            host: String,
+                            portNumber: Long,
+                            name: String,
+                            componentType: ComponentType,
+                            dockerId: Option[String],
+                            instanceState: InstanceState,
+                            labels: List[String],
+                            linksTo: List[InstanceLink],
+                            linksFrom: List[InstanceLink]
+                          )
 
 /**
   * Enumerations concerning instances

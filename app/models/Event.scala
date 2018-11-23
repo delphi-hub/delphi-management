@@ -106,9 +106,9 @@ trait EventJsonSupport extends SprayJsonSupport with DefaultJsonProtocol with In
   * @param payload Payload of the event, depends on the type
   */
 final case class RegistryEvent (
-  eventType: EventType.Value,
-  payload: RegistryEventPayload
-)
+                                 eventType: EventType.Value,
+                                 payload: RegistryEventPayload
+                               )
 
 /**
   * Factory object for creating different types of events
@@ -237,3 +237,4 @@ object EventEnums {
     implicit val EventTypeWrites: Writes[EventType] = Writes.enumNameWrites
   }
 }
+

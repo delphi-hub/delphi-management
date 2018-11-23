@@ -20,7 +20,7 @@ package controllers
 
 import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
-import play.api.Configuration
+import play.api.{Configuration, Logger}
 
 import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
@@ -77,6 +77,17 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }
   }
 
+  def getNetwork(): Action[AnyContent] = Action.async {
+    ws.url(instanceRegistryUri + "/network").get().map { response =>
+      // TODO: possible handling of parsing the data can be done here
+      Logger.debug(response.body)
+      if (response.status == 200) {
+        Ok(response.body)
+      } else {
+        new Status(response.status)
+      }
+    }(myExecutionContext)
+  }
 
   def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
