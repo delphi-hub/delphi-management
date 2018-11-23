@@ -81,6 +81,7 @@ export class ModelService {
     this.updateAllInstances();
     // register for event updates
     this.socketService.subscribeForEvent(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+      console.log('received instance added event', newInstance);
       this.storeService.addInstanceToState(newInstance);
     });
 

@@ -1,8 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as cytoscape from 'cytoscape';
-import {ModelService} from '../../../model/model.service';
 import {GraphViewService} from '../graph-view.service';
-import {Instance} from '../../../model/models/instance';
 
 @Component({
   selector: 'app-graph-view',
@@ -13,7 +11,7 @@ export class GraphViewComponent implements OnInit {
   @ViewChild('cy') cyDiv: ElementRef;
   private cy: cytoscape.Core;
 
-  constructor(private graphViewService: GraphViewService, private modelService: ModelService) {
+  constructor(private graphViewService: GraphViewService) {
 
   }
 
@@ -24,18 +22,31 @@ export class GraphViewComponent implements OnInit {
       container: this.cyDiv.nativeElement, // container to render in
       elements: [ // list of graph elements to start with
       ],
+      layout: {
+        name: 'preset'
+      },
+      style: [{
+        selector: 'node',
+        style: {
+          label: 'data(name)',
+          'background-image': 'data(image)',
+          'width': '70%',
+          'height': '70%',
+          'background-opacity': 0,
+
+          'background-fit': 'contain',
+          'background-clip': 'none',
+        }
+      }
+      ]
     });
-    this.modelService.getObservableForInstances().subscribe((instances: Array<Instance>) => {
-      if (instances !== undefined) {
-        console.log('received new instance', instances);
-        instances.forEach((instance) => {
-          // this.cy.add({group: 'nodes', data: {id: '' + instance.id}});
-          const ele: cytoscape.ElementDefinition = {data: {id: '' + instance.id}};
-          console.log('trying to add element', ele);
-          this.cy.add(ele);
-        });
+
+    this.graphViewService.getElementObservable().subscribe((newElements: Array<cytoscape.ElementDefinition>) => {
+      if (newElements) {
+        this.cy.add(newElements);
       }
     });
+
   }
 
 }
