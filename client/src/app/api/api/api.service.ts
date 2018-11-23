@@ -77,7 +77,7 @@ export class ApiService {
    * @param reportProgress flag to report request and response progress.
    */
   public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<number> {
-    return this.get(NUMBER_OF_INSTANCES, componentType);
+    return this.genericGet(NUMBER_OF_INSTANCES, componentType);
   }
 
   /**
@@ -88,10 +88,10 @@ export class ApiService {
    * @param reportProgress flag to report request and response progress.
    */
   public getInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<Array<Instance>> {
-    return this.get(INSTANCES, componentType);
+    return this.genericGet(INSTANCES, componentType);
   }
 
-  private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {
+  private genericGet(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {
     if (componentType === null || componentType === undefined) {
       throw new Error('Required parameter componentType was null or undefined when calling getInstanceNumber.');
     }
