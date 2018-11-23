@@ -12,7 +12,7 @@ interface NodeEdgeMap {
 const TYPE_TO_IMG = {'Crawler': '../../../assets/images/crawler.png',
  'WebApp': '../../../assets/images/webapp.png',
  'WebApi': '../../../assets/images/webapi.png',
- 'ElasticSearch': '../../../assets/images/webapi.png'};
+ 'ElasticSearch': '../../../assets/images/Elasticsearch.png'};
 @Injectable({
   providedIn: 'root'
 })
