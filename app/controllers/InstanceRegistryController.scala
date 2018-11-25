@@ -21,15 +21,12 @@ package controllers
 import akka.actor.ActorSystem
 import javax.inject.Inject
 import play.api.Configuration
-
-import scala.concurrent.Future
-
-import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
+import play.api.libs.json._
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
-import play.api.libs.json._
 
+import scala.concurrent.ExecutionContext
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -37,6 +34,7 @@ trait MyExecutionContext extends ExecutionContext
 /**
   * Custom execution context. Used to prevent overflowing of the thread pool,
   * which should be used to handle client connections.
+  *
   * @param system
   */
 class MyExecutionContextImpl @Inject()(system: ActorSystem)
@@ -44,6 +42,7 @@ class MyExecutionContextImpl @Inject()(system: ActorSystem)
 
 /**
   * Controller used to manage the requests regarding the instance registry.
+  *
   * @param myExecutionContext
   * @param controllerComponents
   * @param ws
@@ -52,9 +51,10 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
                                            val controllerComponents: ControllerComponents,
                                            ws: WSClient, config: Configuration)
   extends BaseController {
-  
+
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
+
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
     ws.url(instanceRegistryUri + "/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -62,11 +62,10 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
 
       Ok(response.body)
     }(myExecutionContext)
-      }
+  }
 
-  
 
-  def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
+  def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -76,195 +75,73 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
       } else {
         new Status(response.status)
       }
-  }(myExecutionContext)
+    }(myExecutionContext)
   }
 
   //This function is for POST method to the Scala web server
- 
 
-  def postInstance () : Action[AnyContent] = Action.async { request =>
-  var compType = ""
-  var name = ""
-  
-  request.body.asJson.map { json =>
-    for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-    ){
-      val obj = jsonValue.as[JsObject]
-      if((obj \ "param").asOpt[String].get.equals("componentType")){
+
+  def handleRequest(action: String): Action[AnyContent] = Action.async { request =>
+    var instanceID = ""
+    request.body.asJson.map { json =>
+      for (jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
+      ) {
+        val obj = jsonValue.as[JsObject]
+        println(obj)
+        if ((obj \ "param").asOpt[String].get.equals("InstanceID")) {
+          instanceID = (obj \ "value").asOpt[String].get.substring(1)
+          println("test for ID-->>" + instanceID)
+        }
+      }
+    }
+
+    println(instanceRegistryUri)
+    ws.url(instanceRegistryUri + action)
+      .addQueryStringParameters("Id" -> instanceID)
+      .post("")
+      .map { response =>
+        response.status match {
+          case 202 =>
+            println(s"$action with id" + response.body)
+            Ok(response.body)
+          case x =>
+            println(s" $action error" + response)
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
+
+
+  def postInstance(): Action[AnyContent] = Action.async { request =>
+    var compType = ""
+    var name = ""
+
+    request.body.asJson.map { json =>
+      for (jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
+      ) {
+        val obj = jsonValue.as[JsObject]
+        if ((obj \ "param").asOpt[String].get.equals("componentType")) {
           compType = (obj \ "value").asOpt[String].get
-      } else if((obj \ "param").asOpt[String].get.equals("name")){
+        } else if ((obj \ "param").asOpt[String].get.equals("name")) {
           name = (obj \ "value").asOpt[String].get
-      }
-    }
-
-  }
-
-  ws.url(instanceRegistryUri + "/deploy")
-  .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
-  .post("")
-  .map { response =>
-    response.status match {
-      case 202 =>
-        println("created with id" +response.body)
-        Ok(response.body)
-      case x => 
-        println("error" +response)
-        new Status(x)
-    }
-  }(myExecutionContext)
-}
-/*........
-*
-*
-*
-* */
-  def startInstance() : Action[AnyContent] = Action.async { request =>
-    var instanceID = ""
-      request.body.asJson.map { json =>
-      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ){
-        val obj = jsonValue.as[JsObject]
-        println(obj)
-        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
-          instanceID = (obj \ "value").asOpt[String].get.substring(1)
-          //instanceID = toInt(intanceID)
-          println("winnie test send parameter-->>" +instanceID)
         }
       }
+
     }
-      println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/start")
-      .addQueryStringParameters("Id" -> instanceID)
+
+    ws.url(instanceRegistryUri + "/deploy")
+      .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
       .post("")
       .map { response =>
         response.status match {
           case 202 =>
-            println("winnie start with id" +response.body)
+            println("created with id" + response.body)
             Ok(response.body)
           case x =>
-            println("winnie error" +response)
+            println("error" + response)
             new Status(x)
         }
       }(myExecutionContext)
   }
 
-  def stopInstance() : Action[AnyContent] = Action.async { request =>
-    var instanceID = ""
-    request.body.asJson.map { json =>
-      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ){
-        val obj = jsonValue.as[JsObject]
-        println(obj)
-        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
-          instanceID = (obj \ "value").asOpt[String].get.substring(1)
-          //instanceID = toInt(intanceID)
-          println("winnie test send parameter-->>" +instanceID)
-        }
-      }
-    }
-    println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/stop")
-      .addQueryStringParameters("Id" -> instanceID)
-      .post("")
-      .map { response =>
-        response.status match {
-          case 202 =>
-            println("winnie stop with id" +response.body)
-            Ok(response.body)
-          case x =>
-            println("winnie stop error" +response)
-            new Status(x)
-        }
-      }(myExecutionContext)
-  }
-
-  def pauseInstance() : Action[AnyContent] = Action.async { request =>
-    var instanceID = ""
-    request.body.asJson.map { json =>
-      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ){
-        val obj = jsonValue.as[JsObject]
-        println(obj)
-        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
-          instanceID = (obj \ "value").asOpt[String].get.substring(1)
-          //instanceID = toInt(intanceID)
-          println("winnie test send parameter-->>" +instanceID)
-        }
-      }
-    }
-    println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/pause")
-      .addQueryStringParameters("Id" -> instanceID)
-      .post("")
-      .map { response =>
-        response.status match {
-          case 202 =>
-            println("winnie pause with id" +response.body)
-            Ok(response.body)
-          case x =>
-            println("winnie pause error" +response)
-            new Status(x)
-        }
-      }(myExecutionContext)
-  }
-
-  def resumeInstance() : Action[AnyContent] = Action.async { request =>
-    var instanceID = ""
-    request.body.asJson.map { json =>
-      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ){
-        val obj = jsonValue.as[JsObject]
-        println(obj)
-        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
-          instanceID = (obj \ "value").asOpt[String].get.substring(1)
-          //instanceID = toInt(intanceID)
-          println("winnie test send parameter-->>" +instanceID)
-        }
-      }
-    }
-    println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/resume")
-      .addQueryStringParameters("Id" -> instanceID)
-      .post("")
-      .map { response =>
-        response.status match {
-          case 202 =>
-            println("winnie pause with id" +response.body)
-            Ok(response.body)
-          case x =>
-            println("winnie pause error" +response)
-            new Status(x)
-        }
-      }(myExecutionContext)
-  }
-
-  def deleteInstance() : Action[AnyContent] = Action.async { request =>
-    var instanceID = ""
-    request.body.asJson.map { json =>
-      for(jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ){
-        val obj = jsonValue.as[JsObject]
-        println(obj)
-        if((obj \ "param").asOpt[String].get.equals("InstanceID")){
-          instanceID = (obj \ "value").asOpt[String].get.substring(1)
-          println("test for ID-->>" +instanceID)
-        }
-    }
-  }
-
-  println(instanceRegistryUri)
-    ws.url(instanceRegistryUri + "/delete")
-      .addQueryStringParameters("Id" -> instanceID)
-      .post("")
-      .map { response =>
-        response.status match {
-          case 202 =>
-            println("delete with id" +response.body)
-            Ok(response.body)
-          case x =>
-            println(" delete error" +response)
-            new Status(x)
-        }
-      }(myExecutionContext)
-  }
 }
