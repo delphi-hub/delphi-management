@@ -165,12 +165,34 @@ export class ApiService {
       queryParameters = queryParameters.set('name', <any>name);
     }
 
+
+    return this.commonConf(endpoint, queryParameters, observe, reportProgress);
+  }
+
+  // postAction(id)
+
+  // post(instance.name, type,  )
+
+  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+    let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+
+    if (idInstance === null || idInstance == undefined) {
+      throw new Error('Required ID Instance parameter');
+    } else {
+      queryParam = queryParam.set('InstanceID', <any>("a" + idInstance));
+    }
+
+    return this.commonConf(endpoint, queryParam, observe, reportProgress);
+  }
+
+  commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
     const httpHeaderAccepts: string[] = [
       'application/json'
     ];
+
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -185,32 +207,5 @@ export class ApiService {
         reportProgress: reportProgress
       }
     );
-  }
-
-  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
-    let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
-    let headers = this.defaultHeaders;
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
-    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    if (idInstance === null || idInstance == undefined) {
-      throw new Error('Required ID Instance parameter');
-    } else {
-      queryParam = queryParam.set('InstanceID', <any>("a" + idInstance));
-    }
-
-    const url = `${this.basePath}${endpoint}`;
-    return this.httpClient.post<Instance>(url, {
-      params: queryParam,
-      withCredentials: this.configuration.withCredentials,
-      headers: headers,
-      observe: observe,
-      reportProgress: reportProgress
-    });
   }
 }

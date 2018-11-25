@@ -33,19 +33,19 @@ import { ApiService } from '../../api';
 export class TableAllComponent implements OnInit {
     @Input() type: Instance.ComponentTypeEnum;
 
-    @Input() set data_array(data_array: Instance[]) {
+    @Input() set dataArray(dataArray: Instance[]) {
         if (this.dataSource != null) {
-            this.dataSource = new MatTableDataSource<Instance>(data_array);
+            this.dataSource = new MatTableDataSource<Instance>(dataArray);
         } else {
-            this.dataSource.data = data_array;
+            this.dataSource.data = dataArray;
         }
     }
     @Input() compType: string;
 
 
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
-    dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
-    dialogResult: any;
+    dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
+    dialogResult: string;
     @ViewChild(MatTable) table: MatTable<any>;
 
     constructor(public dialog: MatDialog, private apiService: ApiService) {
@@ -105,9 +105,7 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            console.log("result abcd", dialogResult);
             this.apiService.postInstance(instance.componentType, dialogResult.name).subscribe((result: any) => {
-                console.log("result xyz", result);
                 this.dataSource.data.push({
                     id: result,
                     host: '',

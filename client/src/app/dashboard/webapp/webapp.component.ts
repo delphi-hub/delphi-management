@@ -26,15 +26,15 @@ import {ApiService, Instance} from '../../api';
 })
 export class WebappComponent implements OnInit {
   // this array is inserted into the table all component in the html code
-  table_data: Instance[];
+  tableData: Instance[];
   constructor(private apiService: ApiService) {
   }
 
   ngOnInit() {
-    this.table_data = [];
+    this.tableData = [];
 
     this.apiService.getInstances(Instance.ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
-      this.table_data = result;
+      this.tableData = result;
 
     }, err => {
       console.log('error during get instances for web app');

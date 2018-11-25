@@ -19,17 +19,20 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { BrowserModule, By} from '@angular/platform-browser';
-import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/material';
-import { MatFormFieldModule} from '@angular/material/form-field';
-import { MatCheckboxModule} from '@angular/material/checkbox';
-import { MatIconModule} from '@angular/material/icon';
-import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
-import { MatDialogModule} from '@angular/material/dialog';
+import { BrowserModule, By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+import { MatTableModule, MatInputModule, MatPaginatorModule } from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { TableAllComponent } from './table-all.component';
+import { AddDialogComponent } from '../add-dialog/add-dialog.component';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { DebugElement } from '@angular/core';
-import { ApiService} from '../../api';
+import { ApiService } from '../../api';
 
 
 describe('TableAllComponent', () => {
@@ -39,22 +42,28 @@ describe('TableAllComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableAllComponent ],
+      declarations: [TableAllComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatTableModule, MatInputModule, MatPaginatorModule,
-         MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule],
+        MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule],
       providers: [{
-      provide: MatDialogRef,
-      useValue: {}
+        provide: MatDialogRef,
+        useValue: {}
       }, {
-      provide: MAT_DIALOG_DATA,
-      useValue: {} // Add any data you wish to test if it is passed/used correctly
+        provide: MAT_DIALOG_DATA,
+        useValue: {} // Add any data you wish to test if it is passed/used correctly
       },
       {
-      provide: MatTableDataSource,
-      useValue: {} // Add any data you wish to test if it is passed/used correctly
-  }]
+        provide: MatTableDataSource,
+        useValue: {} // Add any data you wish to test if it is passed/used correctly
+      }]
     })
-    .compileComponents();
+      .compileComponents();
+
+    TestBed.overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: [AddDialogComponent, DeleteDialogComponent],
+      }
+    });
   }));
 
   beforeEach(() => {
@@ -67,5 +76,32 @@ describe('TableAllComponent', () => {
   it(`should create`, async(inject([HttpTestingController, ApiService],
     (httpClient: HttpTestingController, apiService: ApiService) => {
       expect(apiService).toBeTruthy();
-  })));
+    })));
+
+  it('should check for apply filter keyup event', () => {
+    spyOn(component, 'applyFilter');
+    fixture.detectChanges();
+    const input = debugElement.query(By.css('#filter_data'));
+    const inputElement = input.nativeElement;
+    inputElement.dispatchEvent(new Event('keyup'));
+    expect(component.applyFilter).toHaveBeenCalled();
+  });
+
+  it('should check for Add Dialog open functionality', async(() => {
+    const openAddDialog = spyOn(component, 'openAddDialog');
+    fixture.debugElement.query(By.css('#addButton')).triggerEventHandler('click', null);
+    expect(openAddDialog).toHaveBeenCalled();
+  }));
+
+  it('should check for Delete Dialog open functionality', async(() => {
+    const openDeleteDialog = spyOn(component, 'openDeleteDialog');
+    fixture.detectChanges(); 
+    let el = fixture.debugElement.query(By.css('#deleteButton'))
+    el.triggerEventHandler('click', null)
+
+    fixture.detectChanges()
+    fixture.whenStable().then(() => {
+      expect(component.openDeleteDialog).toHaveBeenCalled();
+  });
+  }));
 });
