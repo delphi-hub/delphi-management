@@ -17,6 +17,8 @@ describe('AddDialogComponent', () => {
   let component: AddDialogComponent;
   let fixture: ComponentFixture<AddDialogComponent>;
   let debugElement: DebugElement;
+  let dialog: any;
+  let overlayContainerElement: HTMLElement;
   
   //fixture.detectChanges();
 
@@ -58,14 +60,14 @@ describe('AddDialogComponent', () => {
       expect(apiService).toBeTruthy();
     })));
 
-  /*it('should check for Add Dialog function call', async(() => {
-    spyOn(component, 'onConfirmAddInstance');
-    const button = fixture.debugElement.nativeElement.querySelector('button');
-    button.click();
-    fixture.whenStable().then(() => {
+  it('should check for Add Dialog function call', async(() => {
+    const onConfirmAddInstance = spyOn(component, 'onConfirmAddInstance');
+    fixture.debugElement.query(By.css('#confirmButton')).triggerEventHandler('click', null);
     expect(component.onConfirmAddInstance).toHaveBeenCalled();
-    });
-  }));*/
+  }));
+
+  
+    
 
   /*it(`should create`, async(inject([HttpTestingController, ApiService],
     (httpClient: HttpTestingController, apiService: ApiService) => {
