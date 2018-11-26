@@ -67,7 +67,7 @@ export class TableAllComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("delete state", instance.instanceState);
-            if (result === 'Confirm' && instance.instanceState=='Running') {
+            if (result === 'Confirm' && instance.instanceState == 'Running') {
                 console.log("alert working");
                 alert('Please Stop the Instance before you try to delete');
                 console.log("data", this.dataSource.data);
@@ -122,6 +122,7 @@ export class TableAllComponent implements OnInit {
         });
     }
 
+    //Function to 'start' the instance
     public startInstance(id: string): void {
 
         this.apiService.startInstance(id).subscribe((result: any) => {
@@ -131,6 +132,7 @@ export class TableAllComponent implements OnInit {
         });
     }
 
+    //Function to 'stop' the instance
     public stopInstance(id: string): void {
 
         this.apiService.stopInstance(id).subscribe((result: any) => {
@@ -140,6 +142,7 @@ export class TableAllComponent implements OnInit {
         });
     }
 
+    //Function to 'pause' the instance
     public pauseInstance(id: string): void {
 
         this.apiService.pauseInstance(id).subscribe((result: any) => {
@@ -149,24 +152,16 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-  public resumeInstance(id: string): void {
+    //Function to 'resume' the instance
+    public resumeInstance(id: string): void {
 
-    this.apiService.resumeInstance(id).subscribe((result: any) => {
-      console.log('result', result);
-    }, err => {
-      console.log('error pause instance');
-    });
-  }
-
-
-  public deleteInstance(id: string): void {
-
-        this.apiService.deleteInstance(id).subscribe((result: any) => {
+        this.apiService.resumeInstance(id).subscribe((result: any) => {
             console.log('result', result);
         }, err => {
-            console.log('error delete instance');
+            console.log('error pause instance');
         });
     }
+
 }
 
 

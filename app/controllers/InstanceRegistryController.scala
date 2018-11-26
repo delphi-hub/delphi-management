@@ -78,7 +78,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
     }(myExecutionContext)
   }
 
-  //This function is for POST method to the Scala web server
+  //This function is for all the  POST methods to the Scala web server
 
 
   def handleRequest(action: String): Action[AnyContent] = Action.async { request =>
@@ -106,7 +106,7 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
       }(myExecutionContext)
   }
 
-
+  //This function is for adding an instance to the Scala web server
   def postInstance(): Action[AnyContent] = Action.async { request =>
     var compType = ""
     var name = ""

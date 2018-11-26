@@ -14,6 +14,9 @@ describe('DeleteDialogComponent', () => {
   let component: DeleteDialogComponent;
   let fixture: ComponentFixture<DeleteDialogComponent>;
   let debugElement: DebugElement;
+  const mockDialogRef = {
+    close: jasmine.createSpy('close')
+  };
 
 
   beforeEach(async(() => {
@@ -23,15 +26,11 @@ describe('DeleteDialogComponent', () => {
          MatFormFieldModule, MatIconModule, MatDialogModule],
       providers: [{
       provide: MatDialogRef,
-      useValue: {}
+      useValue: mockDialogRef
       }, {
       provide: MAT_DIALOG_DATA,
-      useValue: {} // Add any data you wish to test if it is passed/used correctly
-      },
-      {
-      provide: MatTableDataSource,
-      useValue: {} // Add any data you wish to test if it is passed/used correctly
-  }]
+      useValue: {} 
+      }]
     })
     .compileComponents();
   }));
@@ -42,7 +41,17 @@ describe('DeleteDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create Delete Dialog component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should check for confirm button inside the Delete dialog', () => {
+    component.onCloseConfirm();
+    expect(mockDialogRef.close).toHaveBeenCalled();
+  });
+
+  it('should check for cancle button inside the Delete dialog', () => {
+    component.onCloseCancle();
+    expect(mockDialogRef.close).toHaveBeenCalled();
   });
 });

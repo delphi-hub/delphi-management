@@ -17,9 +17,10 @@ describe('AddDialogComponent', () => {
   let component: AddDialogComponent;
   let fixture: ComponentFixture<AddDialogComponent>;
   let debugElement: DebugElement;
-  let dialog: any;
-  let overlayContainerElement: HTMLElement;
-  
+  const mockDialogRef = {
+    close: jasmine.createSpy('close')
+  };
+
   //fixture.detectChanges();
 
   beforeEach(async(() => {
@@ -29,23 +30,13 @@ describe('AddDialogComponent', () => {
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatIconModule, MatInputModule, MatDialogModule, FormsModule, MatFormFieldModule],
       providers: [{
         provide: MatDialogRef,
-        useValue: {}
+        useValue: mockDialogRef
       }, {
         provide: MAT_DIALOG_DATA,
-        useValue: {} // Add any data you wish to test if it is passed/used correctly
-      },
-      {
-        provide: MatTableDataSource,
-        useValue: {} // Add any data you wish to test if it is passed/used correctly
+        useValue: {} 
       }]
 
     }).compileComponents();
-
-    TestBed.overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [AddDialogComponent],
-      }
-    });
   }));
 
   beforeEach(() => {
@@ -55,25 +46,18 @@ describe('AddDialogComponent', () => {
   });
 
 
-  it(`should create`, async(inject([HttpTestingController, ApiService],
+  it(`should create Add dialog Component`, async(inject([HttpTestingController, ApiService],
     (httpClient: HttpTestingController, apiService: ApiService) => {
       expect(apiService).toBeTruthy();
     })));
 
-  it('should check for Add Dialog function call', async(() => {
-    const onConfirmAddInstance = spyOn(component, 'onConfirmAddInstance');
-    fixture.debugElement.query(By.css('#confirmButton')).triggerEventHandler('click', null);
-    expect(component.onConfirmAddInstance).toHaveBeenCalled();
-  }));
+    it('should check for confirm button inside the Add dialog', () => {
+      component.onConfirmAddInstance();
+      expect(mockDialogRef.close).toHaveBeenCalled();
+    });
 
-  
-    
-
-  /*it(`should create`, async(inject([HttpTestingController, ApiService],
-    (httpClient: HttpTestingController, apiService: ApiService) => {
-      const onConfirmAddInstance = spyOn(component, 'onConfirmAddInstance');
-    fixture.debugElement.query(By.css('#buttonR')).triggerEventHandler('click', null);
-    expect(onConfirmAddInstance).toHaveBeenCalled();
-    })));*/
-
+  it('should check for button inside the Add dialog', () => {
+    component.onCloseCancle();
+    expect(mockDialogRef.close).toHaveBeenCalled();
+  });
 });

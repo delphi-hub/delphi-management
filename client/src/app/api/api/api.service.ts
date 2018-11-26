@@ -117,7 +117,6 @@ export class ApiService {
   }
 
 
-
   public deleteInstance(instanceId: string): Observable<Instance> {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
@@ -153,6 +152,7 @@ export class ApiService {
       }
     );
   }
+
   // This is to send the POST request to the server
   private post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
@@ -169,10 +169,6 @@ export class ApiService {
     return this.commonConf(endpoint, queryParameters, observe, reportProgress);
   }
 
-  // postAction(id)
-
-  // post(instance.name, type,  )
-
   private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
@@ -185,6 +181,8 @@ export class ApiService {
     return this.commonConf(endpoint, queryParam, observe, reportProgress);
   }
 
+
+  // This method is a common configuration to set the headers and query params 
   commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     let headers = this.defaultHeaders;
 

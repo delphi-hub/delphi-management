@@ -92,16 +92,4 @@ describe('TableAllComponent', () => {
     fixture.debugElement.query(By.css('#addButton')).triggerEventHandler('click', null);
     expect(openAddDialog).toHaveBeenCalled();
   }));
-
- /* it('should check for Delete Dialog open functionality', async(() => {
-    const openDeleteDialog = spyOn(component, 'openDeleteDialog');
-    fixture.detectChanges(); 
-    let el = fixture.debugElement.query(By.css('#deleteButton'))
-    el.triggerEventHandler('click', null)
-
-    fixture.detectChanges()
-    fixture.whenStable().then(() => {
-      expect(component.openDeleteDialog).toHaveBeenCalled();
-  });
-  }));*/
 });
