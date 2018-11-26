@@ -46,7 +46,7 @@ export class TableAllComponent implements OnInit {
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
     dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
     dialogResult: string;
-    @ViewChild(MatTable) table: MatTable<any>;
+    @ViewChild(MatTable) table: MatTable<Instance>;
 
     constructor(public dialog: MatDialog, private apiService: ApiService) {
 
