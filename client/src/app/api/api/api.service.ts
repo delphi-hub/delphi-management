@@ -42,7 +42,7 @@ import { SysInfo } from '../model/sysInfo';
 })
 export class ApiService {
 
-  protected basePath = '';
+  public basePath = '';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 
@@ -96,27 +96,63 @@ export class ApiService {
     return this.get(INSTANCES, componentType);
   }
 
+  /**
+   * Create an Instance
+   * @param componentType
+   * @param InstanceName
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     return this.post(NEW_INSTANCE, componentType, name);
   }
 
+  /**
+   * Start an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     return this.postAction(START_INSTANCE, instanceId);
   }
 
+  /**
+   * Stop an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     return this.postAction(STOP_INSTANCE, instanceId);
   }
 
+  /**
+   * Pause an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public pauseInstance(instanceId: string): Observable<Instance> {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
 
+  /**
+   * resume an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public resumeInstance(instanceId: string): Observable<Instance> {
     return this.postAction(RESUME_INSTANCE, instanceId);
   }
 
-
+  /**
+   * Delete an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
   public deleteInstance(instanceId: string): Observable<Instance> {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
@@ -152,9 +188,8 @@ export class ApiService {
       }
     );
   }
-
-  // This is to send the POST request to the server
-  private post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
+  
+  public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
       throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
     }
@@ -169,7 +204,7 @@ export class ApiService {
     return this.commonConf(endpoint, queryParameters, observe, reportProgress);
   }
 
-  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+  public postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
     if (idInstance === null || idInstance == undefined) {
@@ -182,7 +217,7 @@ export class ApiService {
   }
 
 
-  // This method is a common configuration to set the headers and query params 
+  // This method is a common configuration to set the headers and query params
   commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     let headers = this.defaultHeaders;
 
