@@ -33,7 +33,7 @@ import {
   DELETE_INSTANCE
 } from '../variables';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
-import { Instance } from '..';
+import { Instance } from '../model/instance';
 import { SysInfo } from '../model/sysInfo';
 
 
@@ -133,7 +133,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public pauseInstance(instanceId: string): Observable<Instance> {
+  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
 
@@ -143,7 +143,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public resumeInstance(instanceId: string): Observable<Instance> {
+  public resumeInstance(instanceId: string,observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     return this.postAction(RESUME_INSTANCE, instanceId);
   }
 
@@ -188,7 +188,7 @@ export class ApiService {
       }
     );
   }
-  
+
   public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
       throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');

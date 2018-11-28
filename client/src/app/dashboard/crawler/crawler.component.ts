@@ -40,7 +40,7 @@ export class CrawlerComponent implements OnInit {
   this.tableData = [];
 
     this.apiService.getInstances(ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
-      this.table_data = result;
+      this.tableData = result;
     }, err => {
       console.log('error receiving data for crawler');
     });

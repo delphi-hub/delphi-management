@@ -32,7 +32,7 @@ import { TableAllComponent } from './table-all.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { DebugElement } from '@angular/core';
-import { ApiService } from '../../api';
+import { ApiService } from '../../api/api/api.service';
 
 
 describe('TableAllComponent', () => {
