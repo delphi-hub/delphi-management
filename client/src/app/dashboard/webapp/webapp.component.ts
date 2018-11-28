@@ -17,7 +17,9 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import {ApiService, Instance} from '../../api';
+import {ComponentTypeEnum, Instance} from '../../api/model/instance';
+import {ApiService} from '../../api/api/api.service';
+
 
 @Component({
   selector: 'app-webapp',
@@ -33,8 +35,8 @@ export class WebappComponent implements OnInit {
   ngOnInit() {
     this.tableData = [];
 
-    this.apiService.getInstances(Instance.ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
-      this.tableData = result;
+    this.apiService.getInstances(ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
+      this.table_data = result;
 
     }, err => {
       console.log('error during get instances for web app');

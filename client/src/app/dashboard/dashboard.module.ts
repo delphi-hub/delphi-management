@@ -43,6 +43,7 @@ import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
+import {ApiModule} from '../api/api.module';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
     MatInputModule,
     MatTooltipModule,
     DashboardRoutingModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    ApiModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -83,6 +85,6 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent
   ],
-  providers: [ApiService],
+  providers: [],
 })
 export class DashboardModule { }

@@ -18,13 +18,16 @@
 
 package controllers
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.Configuration
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import akka.stream.Materializer
+import play.api.libs.streams.ActorFlow
+import actors.{ClientSocketActor, PublishSocketMessageActor}
+import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 
@@ -37,7 +40,7 @@ trait MyExecutionContext extends ExecutionContext
   *
   * @param system
   */
-class MyExecutionContextImpl @Inject()(system: ActorSystem)
+class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
   extends CustomExecutionContext(system, "my.executor") with MyExecutionContext
 
 /**
@@ -47,14 +50,19 @@ class MyExecutionContextImpl @Inject()(system: ActorSystem)
   * @param controllerComponents
   * @param ws
   */
-class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContext,
+
+
+class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Materializer, myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
                                            ws: WSClient, config: Configuration)
   extends BaseController {
 
 
-  val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
+  lazy val pubActor: Option[ActorRef] = Some(system.actorOf(PublishSocketMessageActor.props(instanceRegistryBasePath, mat, system), "publish-actor"))
 
+  val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
+  val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
+  
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
     ws.url(instanceRegistryUri + "/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -64,8 +72,16 @@ class InstanceRegistryController @Inject()(myExecutionContext: MyExecutionContex
     }(myExecutionContext)
   }
 
+  def socket: WebSocket = WebSocket.accept[String, String] {
+    request => {
+      ActorFlow.actorRef { out =>
+        ClientSocketActor.props(out, pubActor.get)
+      }
+    }
+  }
 
-  def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
+
+  def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>

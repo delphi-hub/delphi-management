@@ -18,7 +18,7 @@
 
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import { MatFormFieldModule} from '@angular/material/form-field';
@@ -27,7 +27,8 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatDialogModule} from '@angular/material/dialog';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { WebappComponent } from './webapp.component';
-import { ApiService} from '../../api';
+import { ApiService } from 'src/app/api/api/api.service';
+
 
 describe('WebappComponent', () => {
   let component: WebappComponent;

@@ -16,8 +16,14 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
-import {ApiService} from '../../api';
+import {Component, Input, OnInit} from '@angular/core';
+import {EventType, EventTypeEnum} from '../../api/model/socketMessage';
+import {ComponentType, ComponentTypeEnum} from '../../api/model/instance';
+import {ApiService} from '../../api/api/api.service';
+import {SocketService} from '../../api/api/socket.service';
+
+
+
 
 @Component({
   selector: 'app-dashboard-card',
@@ -28,20 +34,29 @@ import {ApiService} from '../../api';
 /**
  * The dashboard-card component is used to provide
  * an overview of the status of the given component.
- * The needed information are querried based on the
+ * The needed information are queried based on the
  * given componentType.
  */
 export class DashboardCardComponent implements OnInit {
 
+  /**
+   * Map used to dynamically decide which event type the component should register to.
+   */
+  static compTypeEventMap = {
+    [ComponentTypeEnum.Crawler]: EventTypeEnum.InstanceNumbersCrawler,
+    [ComponentTypeEnum.WebApp]: EventTypeEnum.InstanceNumbersWebApp,
+    [ComponentTypeEnum.WebApi]: EventTypeEnum.InstanceNumbersWebApi,
+  };
+
   @Input() img: string;
   @Input() route: string;
   @Input() title: string;
-  @Input() componentType: string;
+  @Input() componentType: ComponentType;
 
   numberOfInstances: string;
   numberOfFailedInstances: string;
 
-  constructor(private irService: ApiService) {
+  constructor(private irService: ApiService, private socketService: SocketService) {
     this.numberOfFailedInstances = 'No server connection';
    }
 
@@ -50,6 +65,17 @@ export class DashboardCardComponent implements OnInit {
     // to the component lifecycle. Input's are not initialized in
     // the constructor.
     this.setInstanceNumber();
+    this.socketService.initSocket().then(() => {
+
+      const eventType: EventType = DashboardCardComponent.compTypeEventMap[this.componentType];
+
+      this.socketService.subscribeForEvent(eventType).subscribe((data: number) => {
+        console.log('data callback in card component', data);
+
+        this.numberOfInstances = '' + data;
+      });
+    });
+
   }
 
   /**
@@ -59,7 +85,7 @@ export class DashboardCardComponent implements OnInit {
   private setInstanceNumber() {
     this.irService.getNumberOfInstances(this.componentType).subscribe((amount: number) => {
       this.numberOfInstances = '' + amount;
-    }, (error) => {
+    }, () => {
       this.numberOfInstances = 'No server connection';
     });
   }

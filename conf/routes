@@ -3,9 +3,7 @@
 GET     /                           controllers.FrontendController.index
 
 ->      /api                        controllers.ApiRouter
-#controllers.HomeController.index
-#controllers.FrontendController.index()
-
+GET     /ws                         controllers.InstanceRegistryController.socket
 
 # Public assets
 # Serve static assets under public directory

@@ -16,6 +16,9 @@
  * limitations under the License.
  */
 
-export * from './api.service';
-import { ApiService } from './api.service';
-export const APIS = [ApiService];
+package models
+
+import models.EventEnums.EventType
+
+
+final case class SocketMessage(event: EventType, payload: Option[String])
