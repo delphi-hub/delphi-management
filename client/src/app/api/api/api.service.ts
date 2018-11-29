@@ -113,7 +113,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+  public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     return this.postAction(START_INSTANCE, instanceId);
   }
 
@@ -123,7 +123,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+  public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     return this.postAction(STOP_INSTANCE, instanceId);
   }
 
@@ -133,7 +133,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
 
@@ -143,7 +143,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public resumeInstance(instanceId: string,observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+  public resumeInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     return this.postAction(RESUME_INSTANCE, instanceId);
   }
 
@@ -153,7 +153,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteInstance(instanceId: string): Observable<Instance> {
+  public deleteInstance(instanceId: string): Observable<number> {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
 
@@ -200,17 +200,36 @@ export class ApiService {
       queryParameters = queryParameters.set('name', <any>name);
     }
 
+    let headers = this.defaultHeaders;
 
-    return this.commonConf(endpoint, queryParameters, observe, reportProgress);
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<Instance>(`${this.basePath}${endpoint}`,
+      {
+        params: queryParameters,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
   }
 
-  public postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+
+  public postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
     if (idInstance === null || idInstance == undefined) {
       throw new Error('Required ID Instance parameter');
     } else {
-      queryParam = queryParam.set('InstanceID', <any>("a" + idInstance));
+      queryParam = queryParam.set('InstanceID', <any>('a' + idInstance));
     }
 
     return this.commonConf(endpoint, queryParam, observe, reportProgress);
@@ -218,7 +237,7 @@ export class ApiService {
 
 
   // This method is a common configuration to set the headers and query params
-  commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+  commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
@@ -231,7 +250,7 @@ export class ApiService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
-    return this.httpClient.post<Instance>(`${this.basePath}${endpoint}`,
+    return this.httpClient.post<number>(`${this.basePath}${endpoint}`,
       {
         params: queryParameters,
         withCredentials: this.configuration.withCredentials,

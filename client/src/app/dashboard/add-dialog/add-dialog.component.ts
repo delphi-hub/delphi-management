@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { ApiService} from "../../api/api/api.service";
+import { ApiService} from '../../api/api/api.service';
 
 @Component({
   selector: 'app-add-dialog',
@@ -12,14 +12,14 @@ export class AddDialogComponent implements OnInit {
 
   constructor(public thisDialogRef: MatDialogRef<AddDialogComponent>, private apiService: ApiService) { }
   name: String;
-  ngOnInit() {
-    //console.log('data.type', this.data);
-  }
 
   formControl = new FormControl('', [
     Validators.required
     // Validators.email,
   ]);
+  ngOnInit() {
+    // console.log('data.type', this.data);
+  }
 
   getErrorMessage() {
     return this.formControl.hasError('required') ? 'Required field' :

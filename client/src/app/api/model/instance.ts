@@ -28,13 +28,13 @@ export const ComponentTypeEnum = {
 
 export interface Instance {
   id?: number;
-  host: string;
-  portNumber: number;
-  name: string;
+  host?: string;
+  portNumber?: number;
+  name?: string;
   /**
    * Component Type
    */
-  componentType: ComponentType;
+  componentType?: Instance.ComponentTypeEnum;
   dockerId?: string;
   /**
    * State of the instance
@@ -46,10 +46,10 @@ export interface Instance {
 export namespace Instance {
   export type ComponentTypeEnum = 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement';
   export const ComponentTypeEnum = {
-      Crawler: 'Crawler' as ComponentTypeEnum,
-      WebApi: 'WebApi' as ComponentTypeEnum,
-      WebApp: 'WebApp' as ComponentTypeEnum,
-      DelphiManagement: 'DelphiManagement' as ComponentTypeEnum
+    Crawler: 'Crawler' as ComponentTypeEnum,
+    WebApi: 'WebApi' as ComponentTypeEnum,
+    WebApp: 'WebApp' as ComponentTypeEnum,
+    DelphiManagement: 'DelphiManagement' as ComponentTypeEnum
   };
 }
 

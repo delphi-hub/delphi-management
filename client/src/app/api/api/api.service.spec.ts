@@ -33,7 +33,7 @@ describe('ApiService', () => {
       providers: [ApiService],
     });
 
-    service = TestBed.get(ApiService);
+   service = TestBed.get(ApiService);
     http = TestBed.get(HttpTestingController);
   });
 
@@ -42,65 +42,67 @@ describe('ApiService', () => {
     backend.verify();
   }));
 
-  it('should be created', inject([ApiService], (service: ApiService) => {
-    expect(service).toBeTruthy();
+  it('should be created', inject([ApiService], (apiService: ApiService) => {
+    expect(apiService).toBeTruthy();
   }));
 
 
-  it(`should post the ID in backend to stop, start, pause, resume and  delete an instance`, async(inject([ApiService, HttpTestingController], (service: ApiService, backend: HttpTestingController) => {
-    service.postAction('endpoint', 'id').subscribe();
+  it(`should post the ID in backend to stop, start, pause, resume and  delete an instance`,
+    async(inject([ApiService, HttpTestingController], (apiService: ApiService, backend: HttpTestingController) => {
+      apiService.postAction('endpoint', 'id').subscribe();
     backend.expectOne((req: HttpRequest<any>) => {
       const body = new HttpParams({ fromString: req.body });
-      return req.url === `${service.basePath}${'endpoint'}`
-      req.method === 'POST'
+      return req.url === `${apiService.basePath}${'endpoint'}`
+      && req.method === 'POST'
       && body.get('Id') === 'id';
     }, `POST to stop, start, pause, resume and  delete an instance`);
   })));
 
-  it(`should post the Instance type and instance name in backend to deploy an instance`, async(inject([ApiService, HttpTestingController], (service: ApiService, backend: HttpTestingController) => {
-    service.post('endpoint' ,'type', 'name' ).subscribe();
+  it(`should post the Instance type and instance name in backend to deploy an instance`,
+    async(inject([ApiService, HttpTestingController], (apiService: ApiService, backend: HttpTestingController) => {
+      apiService.post('endpoint' , 'type', 'name' ).subscribe();
     backend.expectOne((req: HttpRequest<any>) => {
       const body = new HttpParams({ fromString: req.body });
-      return req.url === `${service.basePath}${'endpoint'}`
-      req.method === 'POST'
+      return req.url === `${apiService.basePath}${'endpoint'}`
+      && req.method === 'POST'
       && body.get('componentType') === 'type'
       && body.get('name') === 'name';
     }, `POST to deploy an instance`);
   })));
 
-  it(`should post an instance calling postAction`,async(inject([ApiService], (service: ApiService)=>{
-    spyOn(service, 'post');
-    service.postInstance('id', 'name');
-    expect(service.post).toHaveBeenCalled();
+  it(`should post an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'post');
+    apiService.postInstance('id', 'name');
+    expect(apiService.post).toHaveBeenCalled();
   })));
-  it(`should start an instance calling postAction`,async(inject([ApiService], (service: ApiService)=>{
-    spyOn(service, 'postAction');
-    service.startInstance('id');
-    expect(service.postAction).toHaveBeenCalled();
-  })));
-
-  it(`should stop an instance calling postAction`,async(inject([ApiService], (service: ApiService)=>{
-    spyOn(service, 'postAction');
-    service.stopInstance('id');
-    expect(service.postAction).toHaveBeenCalled();
+  it(`should start an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'postAction');
+    apiService.startInstance('id');
+    expect(apiService.postAction).toHaveBeenCalled();
   })));
 
-  it(`should pause an instance calling postAction`,async(inject([ApiService], (service: ApiService)=>{
-    spyOn(service, 'postAction');
-    service.pauseInstance('id');
-    expect(service.postAction).toHaveBeenCalled();
+  it(`should stop an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'postAction');
+    apiService.stopInstance('id');
+    expect(apiService.postAction).toHaveBeenCalled();
   })));
 
-  it(`should resume an instance calling postAction`,async(inject([ApiService], (service: ApiService)=>{
-    spyOn(service, 'postAction');
-    service.resumeInstance('id');
-    expect(service.postAction).toHaveBeenCalled();
+  it(`should pause an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'postAction');
+    apiService.pauseInstance('id');
+    expect(apiService.postAction).toHaveBeenCalled();
   })));
 
-  it(`should delete an instance calling postAction`,async(inject([ApiService], (service: ApiService)=>{
-    spyOn(service, 'postAction');
-    service.deleteInstance('id');
-    expect(service.postAction).toHaveBeenCalled();
+  it(`should resume an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'postAction');
+    apiService.resumeInstance('id');
+    expect(apiService.postAction).toHaveBeenCalled();
+  })));
+
+  it(`should delete an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'postAction');
+    apiService.deleteInstance('id');
+    expect(apiService.postAction).toHaveBeenCalled();
   })));
 
 });
