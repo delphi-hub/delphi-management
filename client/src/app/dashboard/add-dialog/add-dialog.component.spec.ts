@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DebugElement } from '@angular/core';
 import { AddDialogComponent } from './add-dialog.component';
-import { ApiService } from '../../api';
+import { ApiService } from '../../api/api/api.service';
 
 describe('AddDialogComponent', () => {
   let component: AddDialogComponent;
@@ -20,8 +20,6 @@ describe('AddDialogComponent', () => {
   const mockDialogRef = {
     close: jasmine.createSpy('close')
   };
-
-  //fixture.detectChanges();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

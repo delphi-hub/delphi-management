@@ -37,7 +37,7 @@ export class WebApiComponent implements OnInit {
     this.tableData = [];
 
     this.apiService.getInstances(ComponentTypeEnum.WebApi).subscribe((result: Array<Instance>) => {
-      this.table_data = result;
+      this.tableData = result;
     }, (err) => {
       console.log('error during get instances for Web Api');
     });
