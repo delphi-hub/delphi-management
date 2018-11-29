@@ -97,7 +97,7 @@ export class TableAllComponent implements OnInit {
 
     // Function to add the data into dataSource
     openAddDialog() {
-        let instance: Instance ;
+        let instance: Instance = {};
         instance.componentType = this.type;
         const dialogRef = this.dialog.open(AddDialogComponent, {
             width: '300px',
