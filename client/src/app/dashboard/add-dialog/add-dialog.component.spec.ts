@@ -16,7 +16,7 @@ import { ApiService } from '../../api/api/api.service';
 describe('AddDialogComponent', () => {
   let component: AddDialogComponent;
   let fixture: ComponentFixture<AddDialogComponent>;
-  let debugElement: DebugElement;
+  let debugElement: DebugElement;ApiService
   const mockDialogRef = {
     close: jasmine.createSpy('close')
   };

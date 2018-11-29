@@ -22,7 +22,6 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTa
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { ApiService } from '../../api/api/api.service';
-import {Observable} from 'rxjs/Rx';
 
 
 

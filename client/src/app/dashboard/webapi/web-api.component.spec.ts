@@ -27,7 +27,7 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatDialogModule} from '@angular/material/dialog';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { WebApiComponent } from './web-api.component';
-import { ApiService } from 'src/app/api/api/api.service';
+import { ApiService } from '../../api/api/api.service';
 
 
 describe('WebApiComponent', () => {
