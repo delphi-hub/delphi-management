@@ -38,7 +38,7 @@ describe('CrawlerComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CrawlerComponent, TableAllComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule,
-         MatTableModule, MatInputModule, MatFormFieldModule, MatCheckboxModule,MatPaginatorModule, MatIconModule, MatDialogModule]
+         MatTableModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatPaginatorModule, MatIconModule, MatDialogModule]
     })
     .compileComponents();
   }));

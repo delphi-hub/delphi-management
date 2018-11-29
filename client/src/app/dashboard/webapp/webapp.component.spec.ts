@@ -38,7 +38,7 @@ describe('WebappComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ WebappComponent, TableAllComponent],
       imports: [HttpClientTestingModule,  HttpClientModule, BrowserAnimationsModule,
-         MatTableModule, MatInputModule,MatPaginatorModule, MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule]
+         MatTableModule, MatInputModule, MatPaginatorModule, MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule]
     })
     .compileComponents();
   }));

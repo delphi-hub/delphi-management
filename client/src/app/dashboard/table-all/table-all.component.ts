@@ -22,7 +22,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTa
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { ApiService } from '../../api/api/api.service';
-import {Observable} from "rxjs/Rx";
+import {Observable} from 'rxjs/Rx';
 
 
 
@@ -67,15 +67,14 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log("delete state", instance.state);
+            console.log('delete state', instance.state);
             if (result === 'Confirm' && instance.state == 'Running') {
-                console.log("alert working");
+                console.log('alert working');
                 alert('Please Stop the Instance before you try to delete');
-                console.log("data", this.dataSource.data);
+                console.log('data', this.dataSource.data);
 
-            }
-            else {
-                this.apiService.deleteInstance(id).subscribe((result: any) => {
+            } else {
+                this.apiService.deleteInstance(id).subscribe((result: number) => {
                     console.log('result', result);
                 }, err => {
                     console.log('error start Instance');
@@ -96,9 +95,9 @@ export class TableAllComponent implements OnInit {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    //Function to add the data into dataSource
+    // Function to add the data into dataSource
     openAddDialog() {
-        let instance: Instance = {};
+        const instance: Instance = {};
         instance.componentType = this.type;
         const dialogRef = this.dialog.open(AddDialogComponent, {
             width: '300px',
@@ -123,41 +122,41 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-    //Function to 'start' the instance
+    // Function to 'start' the instance
     public startInstance(id: string): void {
 
-        this.apiService.startInstance(id).subscribe((result: Instance) => {
+        this.apiService.startInstance(id).subscribe((result: number) => {
             console.log('result', result);
         }, err => {
-            console.log('error start Instance');
+            console.log('error start Instance', err);
         });
     }
 
-    //Function to 'stop' the instance
+    // Function to 'stop' the instance
     public stopInstance(id: string): void {
 
-        this.apiService.stopInstance(id).subscribe((result: Instance) => {
-            console.log('result', result.id, result.host);
+        this.apiService.stopInstance(id).subscribe((result: number) => {
+            console.log('result', result);
         }, err => {
             console.log('error stop Instance', err);
         });
     }
 
-    //Function to 'pause' the instance
+    // Function to 'pause' the instance
     public pauseInstance(id: string): void {
 
-        this.apiService.pauseInstance(id).subscribe((result: Instance) => {
-            console.log('result', result.id, result.host);
+        this.apiService.pauseInstance(id).subscribe((result: number) => {
+            console.log('result', result);
         }, err => {
             console.log('error pause instance', err);
         });
     }
 
-    //Function to 'resume' the instance
+    // Function to 'resume' the instance
     public resumeInstance(id: string): void {
 
-        this.apiService.resumeInstance(id).subscribe((result: Instance) => {
-            console.log('result', result.id, result.host);
+        this.apiService.resumeInstance(id).subscribe((result: number) => {
+            console.log('result', result);
         }, err => {
             console.log('error pause instance', err);
         });

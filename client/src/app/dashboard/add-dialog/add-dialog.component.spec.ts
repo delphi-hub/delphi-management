@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatInputModule } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DebugElement } from '@angular/core';
 import { AddDialogComponent } from './add-dialog.component';
-import { ApiService } from '../../api';
+import { ApiService } from '../../api/api/api.service';
 
 describe('AddDialogComponent', () => {
   let component: AddDialogComponent;
@@ -21,7 +21,7 @@ describe('AddDialogComponent', () => {
     close: jasmine.createSpy('close')
   };
 
-  //fixture.detectChanges();
+  // fixture.detectChanges();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('AddDialogComponent', () => {
         useValue: mockDialogRef
       }, {
         provide: MAT_DIALOG_DATA,
-        useValue: {} 
+        useValue: {}
       }]
 
     }).compileComponents();

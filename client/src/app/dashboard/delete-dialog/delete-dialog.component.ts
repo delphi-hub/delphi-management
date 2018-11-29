@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatDialogModule} from '@angular/material/dialog';
-import { Instance } from '../../api';
+import { Instance } from '../../api/model/instance';
 
 @Component({
   selector: 'app-delete-dialog',
@@ -10,16 +10,16 @@ import { Instance } from '../../api';
 })
 export class DeleteDialogComponent implements OnInit {
 
-  constructor(public thisDialogRef:MatDialogRef<DeleteDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Instance) { }
+  constructor(public thisDialogRef: MatDialogRef<DeleteDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Instance) { }
 
   ngOnInit() {
   }
 
-  onCloseConfirm(){
+  onCloseConfirm() {
   	this.thisDialogRef.close('Confirm');
   }
 
-  onCloseCancle(){
+  onCloseCancle() {
   	this.thisDialogRef.close('Cancle');
 
   }

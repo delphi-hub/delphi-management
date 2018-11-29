@@ -39,7 +39,6 @@ import { TableAllComponent } from './table-all/table-all.component';
 import { HeaderComponent } from './header/header.component';
 import { StatusCardComponent } from './status-card/status-card.component';
 import { UserManagementComponent } from './user-management/user-management.component';
-import {ApiService} from '../api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';

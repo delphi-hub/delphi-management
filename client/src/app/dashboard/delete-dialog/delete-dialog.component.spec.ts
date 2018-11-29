@@ -29,7 +29,7 @@ describe('DeleteDialogComponent', () => {
       useValue: mockDialogRef
       }, {
       provide: MAT_DIALOG_DATA,
-      useValue: {} 
+      useValue: {}
       }]
     })
     .compileComponents();
