@@ -80,12 +80,12 @@ export class ModelService {
   private initInstances() {
     this.updateAllInstances();
     // register for event updates
-    this.socketService.subscribeForEvent(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
       console.log('received instance added event', newInstance);
       this.storeService.addInstanceToState(newInstance);
     });
 
-    this.socketService.subscribeForEvent(EventTypeEnum.InstanceRemovedEvent).subscribe((removedInstance: Instance) => {
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removedInstance: Instance) => {
       this.storeService.removeFromState(removedInstance);
     });
   }
