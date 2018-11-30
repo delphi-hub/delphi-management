@@ -34,9 +34,9 @@ import {InstanceLink} from '../../model/models/instanceLink';
 
 
 interface ObserverMap {
-  [key: string]: Subject<any>;
+  [key: string]: Subject<ReturnType>;
 }
-
+type ReturnType = Instance | InstanceLink | number | DockerOperationError;
 @Injectable({
   providedIn: 'root'
 })
@@ -91,9 +91,8 @@ export class SocketService {
    *
    * @param eventName
    */
-  public subscribeForEvent(eventName: EventType): Observable<number | InstanceLink | Instance | DockerOperationError> {
-
-    return new Observable((observer: Observer<any>) => {
+  public subscribeForEvent<T extends ReturnType>(eventName: EventType): Observable<T> {
+    return new Observable<T>((observer: Observer<T>) => {
 
       /**
        * First step to subscribe for an event is to append the new observer to the set
@@ -113,7 +112,7 @@ export class SocketService {
       }
 
       if (!registeredEvents.includes(eventName)) {
-        this.observers[eventName] = new Subject<any>();
+        this.observers[eventName] = new Subject<T>();
         console.log('registering for event', eventName);
 
         this.send({event: publishEventName});
@@ -146,8 +145,8 @@ export class SocketService {
         console.log('received socket message is message', msg);
 
         const {event, toSend} = this.getEventAndPayload(msg);
-        console.log('parsed event and payload', event, toSend);
-        const relevantSubject: Subject<any> = this.observers[event];
+
+        const relevantSubject = this.observers[event];
         if (relevantSubject) {
           relevantSubject.next(toSend);
         }
@@ -168,7 +167,7 @@ export class SocketService {
    * @param msg
    */
   private getEventAndPayload(msg: RegistryEvent) {
-    let toSend: any;
+    let toSend: ReturnType;
     let event: EventType;
 
     const payload: any = msg.payload;

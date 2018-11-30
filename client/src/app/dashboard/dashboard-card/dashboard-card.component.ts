@@ -67,7 +67,7 @@ export class DashboardCardComponent implements OnInit {
 
       const eventType: EventType = DashboardCardComponent.compTypeEventMap[this.componentType];
 
-      this.socketService.subscribeForEvent(eventType).subscribe((data: number) => {
+      this.socketService.subscribeForEvent<number>(eventType).subscribe((data: number) => {
         console.log('data callback in card component', data);
 
         this.numberOfInstances = '' + data;
