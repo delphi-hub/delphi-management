@@ -9,14 +9,12 @@ import { MatTableDataSource, MatInputModule } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DebugElement } from '@angular/core';
 import { AddDialogComponent } from './add-dialog.component';
 import { ApiService } from '../../api/api/api.service';
 
 describe('AddDialogComponent', () => {
   let component: AddDialogComponent;
   let fixture: ComponentFixture<AddDialogComponent>;
-  let debugElement: DebugElement;ApiService
   const mockDialogRef = {
     close: jasmine.createSpy('close')
   };
@@ -24,8 +22,8 @@ describe('AddDialogComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AddDialogComponent],
-
-      imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatIconModule, MatInputModule, MatDialogModule, FormsModule, MatFormFieldModule],
+      imports: [ HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatIconModule,
+       MatInputModule, MatDialogModule, FormsModule, MatFormFieldModule ],
       providers: [{
         provide: MatDialogRef,
         useValue: mockDialogRef

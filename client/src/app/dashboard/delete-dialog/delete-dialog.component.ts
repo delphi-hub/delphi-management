@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { Instance } from '../../api/model/instance';
 
 @Component({
@@ -16,11 +16,11 @@ export class DeleteDialogComponent implements OnInit {
   }
 
   onCloseConfirm() {
-  	this.thisDialogRef.close('Confirm');
+      this.thisDialogRef.close('Confirm');
   }
 
   onCloseCancle() {
-  	this.thisDialogRef.close('Cancle');
+      this.thisDialogRef.close('Cancle');
 
   }
 

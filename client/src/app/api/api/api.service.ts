@@ -226,7 +226,7 @@ export class ApiService {
   public postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
-    if (idInstance === null || idInstance == undefined) {
+    if (idInstance === null || idInstance === undefined) {
       throw new Error('Required ID Instance parameter');
     } else {
       queryParam = queryParam.set('InstanceID', <any>('a' + idInstance));

@@ -104,7 +104,4 @@ describe('ApiService', () => {
     apiService.deleteInstance('id');
     expect(apiService.postAction).toHaveBeenCalled();
   })));
-
-  
-
 });

@@ -43,7 +43,8 @@ describe('TableAllComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TableAllComponent],
-      imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatTableModule, MatInputModule, MatPaginatorModule,
+      imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule,
+        MatTableModule, MatInputModule, MatPaginatorModule,
         MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule],
       providers: [{
         provide: MatDialogRef,
