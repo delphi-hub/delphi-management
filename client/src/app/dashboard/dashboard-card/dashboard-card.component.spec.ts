@@ -45,8 +45,10 @@ describe('component: DashboardCardComponent', () => {
       providers: [ApiService],
       imports: [RouterTestingModule.withRoutes([
         { path: 'dashboard/crawler', component: CrawlerComponent}
-      ]), HttpClientTestingModule, HttpClientModule, MatTableModule, MatInputModule, MatPaginatorModule,  MatFormFieldModule, MatCheckboxModule, MatIconModule],
-      declarations: [ DashboardCardComponent, CrawlerComponent, DashboardComponent, TableAllComponent, HeaderComponent]
+      ]), HttpClientTestingModule, HttpClientModule, MatTableModule, MatInputModule, MatPaginatorModule,
+        MatFormFieldModule, MatCheckboxModule, MatIconModule],
+      declarations: [ DashboardCardComponent, CrawlerComponent, DashboardComponent, TableAllComponent,
+         HeaderComponent]
     });
   });
 

@@ -76,7 +76,7 @@ export class TableAllComponent implements OnInit {
                 this.apiService.deleteInstance(id).subscribe((result: number) => {
                     console.log('result', result);
                 }, err => {
-                    console.log('error start Instance');
+                    console.log('error delete Instance');
                 });
                 this.removeAt(i);
 
@@ -96,7 +96,7 @@ export class TableAllComponent implements OnInit {
 
     // Function to add the data into dataSource
     openAddDialog() {
-        let instance: Instance = {};
+        const instance: Instance = {};
         instance.componentType = this.type;
         const dialogRef = this.dialog.open(AddDialogComponent, {
             width: '300px',
@@ -110,7 +110,7 @@ export class TableAllComponent implements OnInit {
                     host: result.host,
                     portNumber: result.portNumber,
                     name: dialogResult.name,
-                    state: result.state,
+                    instanceState: result.instanceState,
                     componentType: instance.componentType
                 });
                 this.table.renderRows();
