@@ -14,7 +14,11 @@ export interface State {
 }
 export interface StateUpdate {
   state: State;
-  change: {type: Actions; elements?: Array<Instance>};
+  change: Change;
+}
+export interface Change {
+  type: Actions;
+  elements?: Array<Instance>;
 }
 
 export const EMPTY_STATE = {instances: {}, instancesByType: {'Crawler': [], 'WebApi': [], 'WebApp': [], 'ElasticSearch': []}};

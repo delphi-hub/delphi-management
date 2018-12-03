@@ -4,7 +4,7 @@ import {ApiService} from '../api/api/api.service';
 import {ComponentType, Instance} from './models/instance';
 
 import {EventTypeEnum} from './models/socketMessage';
-import {StateUpdate, StoreService} from './store.service';
+import {StateUpdate, Change, StoreService, Actions} from './store.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 
@@ -13,12 +13,12 @@ import {BehaviorSubject, Observable} from 'rxjs';
 })
 export class ModelService {
 
-  private readonly instanceSubject: BehaviorSubject<Array<Instance>>;
+  private readonly instanceSubject: BehaviorSubject<Change>;
   private readonly instanceIdSubjects: {[compType: string]: BehaviorSubject<Array<number>>};
   private readonly instanceSubjects: {[compType: string]: BehaviorSubject<Array<Instance>>};
 
   constructor(private socketService: SocketService, private apiService: ApiService, private storeService: StoreService) {
-    this.instanceSubject = new BehaviorSubject<Array<Instance>>([]);
+    this.instanceSubject = new BehaviorSubject<Change>({type: Actions.NONE});
 
     this.instanceIdSubjects = {
       'Crawler': new BehaviorSubject<Array<number>>([]),
@@ -52,7 +52,7 @@ export class ModelService {
       //   this.instanceSubjects[compType].next(comps);
       // });
 
-      this.instanceSubject.next(state.change.elements);
+      this.instanceSubject.next(state.change);
     });
 
     this.socketService.initSocket().then(() => {
@@ -88,10 +88,14 @@ export class ModelService {
     this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removedInstance: Instance) => {
       this.storeService.removeFromState(removedInstance);
     });
+    // TODO: after interface changes in ir we will receive a tuple of instances which are now linked
+    this.socketService.subscribeForEvent<>(EventTypeEnum.LinkAddedEvent).subscribe(() => {});
+
+    this.socketService.subscribeForEvent<>(EventTypeEnum.LinkStateChangedEvent).subscribe(() => {});
   }
 
   public getObservableForInstances() {
-    return new Observable<Array<Instance>>((observer) => {
+    return new Observable<Change>((observer) => {
       this.instanceSubject.subscribe(observer);
       observer.next(this.instanceSubject.value);
 
