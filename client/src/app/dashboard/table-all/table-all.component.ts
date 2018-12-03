@@ -66,15 +66,15 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('delete state', instance.state);
-            if (result === 'Confirm' && instance.state === 'Running') {
+            console.log('delete state', instance.instanceState);
+            if (result === 'Confirm' && instance.instanceState === 'Running') {
                 console.log('alert working');
                 alert('Please Stop the Instance before you try to delete');
                 console.log('data', this.dataSource.data);
 
             } else {
-                this.apiService.deleteInstance(id).subscribe((result: number) => {
-                    console.log('result', result);
+                this.apiService.deleteInstance(id).subscribe((deleteResult: number) => {
+                    console.log('result', deleteResult);
                 }, err => {
                     console.log('error delete Instance');
                 });
@@ -110,7 +110,7 @@ export class TableAllComponent implements OnInit {
                     host: result.host,
                     portNumber: result.portNumber,
                     name: dialogResult.name,
-                    state: result.state,
+                    instanceState: result.instanceState,
                     componentType: instance.componentType
                 });
                 this.table.renderRows();
