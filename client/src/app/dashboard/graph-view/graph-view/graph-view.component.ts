@@ -47,6 +47,14 @@ export class GraphViewComponent implements OnInit {
       }
     });
 
+    this.graphViewService.getElementRemoveObservable().subscribe((ids: Array<string>) => {
+      if (ids) {
+        for (let i = 0; i < ids.length; i++) {
+          this.cy.remove(this.cy.getElementById(ids[i]));
+        }
+      }
+    });
+
   }
 
 }
