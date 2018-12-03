@@ -110,7 +110,7 @@ export class TableAllComponent implements OnInit {
                     host: result.host,
                     portNumber: result.portNumber,
                     name: dialogResult.name,
-                    instanceState: result.instanceState,
+                    state: result.state,
                     componentType: instance.componentType
                 });
                 this.table.renderRows();
