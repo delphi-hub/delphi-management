@@ -37,6 +37,7 @@ import { Instance } from '../model/instance';
 import { SysInfo } from '../model/sysInfo';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -189,7 +190,7 @@ export class ApiService {
     );
   }
 
-  public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
+ public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
       throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
     }
@@ -226,7 +227,7 @@ export class ApiService {
   public postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
-    if (idInstance === null || idInstance == undefined) {
+    if (idInstance === null || idInstance === undefined) {
       throw new Error('Required ID Instance parameter');
     } else {
       queryParam = queryParam.set('InstanceID', <any>('a' + idInstance));

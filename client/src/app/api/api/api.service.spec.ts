@@ -46,28 +46,11 @@ describe('ApiService', () => {
     expect(apiService).toBeTruthy();
   }));
 
-
-  it(`should post the ID in backend to stop, start, pause, resume and  delete an instance`,
-    async(inject([ApiService, HttpTestingController], (apiService: ApiService, backend: HttpTestingController) => {
-      apiService.postAction('endpoint', 'id').subscribe();
-    backend.expectOne((req: HttpRequest<any>) => {
-      const body = new HttpParams({ fromString: req.body });
-      return req.url === `${apiService.basePath}${'endpoint'}`
-      && req.method === 'POST'
-      && body.get('Id') === 'id';
-    }, `POST to stop, start, pause, resume and  delete an instance`);
-  })));
-
   it(`should post the Instance type and instance name in backend to deploy an instance`,
-    async(inject([ApiService, HttpTestingController], (apiService: ApiService, backend: HttpTestingController) => {
-      apiService.post('endpoint' , 'type', 'name' ).subscribe();
-    backend.expectOne((req: HttpRequest<any>) => {
-      const body = new HttpParams({ fromString: req.body });
-      return req.url === `${apiService.basePath}${'endpoint'}`
-      && req.method === 'POST'
-      && body.get('componentType') === 'type'
-      && body.get('name') === 'name';
-    }, `POST to deploy an instance`);
+    async(inject([ApiService], (apiService: ApiService) => {
+    spyOn(apiService, 'commonConf');
+    apiService.postAction('endpoint', 'idInstance');
+    expect(apiService.commonConf).toHaveBeenCalled();
   })));
 
   it(`should post an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
@@ -104,7 +87,4 @@ describe('ApiService', () => {
     apiService.deleteInstance('id');
     expect(apiService.postAction).toHaveBeenCalled();
   })));
-
-  
-
 });

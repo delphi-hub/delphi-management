@@ -67,7 +67,7 @@ export class TableAllComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('delete state', instance.state);
-            if (result === 'Confirm' && instance.state == 'Running') {
+            if (result === 'Confirm' && instance.state === 'Running') {
                 console.log('alert working');
                 alert('Please Stop the Instance before you try to delete');
                 console.log('data', this.dataSource.data);
