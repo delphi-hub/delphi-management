@@ -66,8 +66,8 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('delete state', instance.instanceState);
-            if (result === 'Confirm' && instance.instanceState == 'Running') {
+            console.log('delete state', instance.state);
+            if (result === 'Confirm' && instance.state === 'Running') {
                 console.log('alert working');
                 alert('Please Stop the Instance before you try to delete');
                 console.log('data', this.dataSource.data);
@@ -110,7 +110,7 @@ export class TableAllComponent implements OnInit {
                     host: result.host,
                     portNumber: result.portNumber,
                     name: dialogResult.name,
-                    instanceState: result.instanceState,
+                    state: result.state,
                     componentType: instance.componentType
                 });
                 this.table.renderRows();

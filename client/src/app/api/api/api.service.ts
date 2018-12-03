@@ -37,6 +37,7 @@ import { Instance } from '../model/instance';
 import { SysInfo } from '../model/sysInfo';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -189,7 +190,7 @@ export class ApiService {
     );
   }
 
-  public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
+ public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
       throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
     }
