@@ -82,10 +82,7 @@ describe('TableAllComponent', () => {
   it('should check for apply filter keyup event', () => {
     spyOn(component, 'applyFilter');
     fixture.detectChanges();
-    const input = debugElement.query(By.css('#filter_data'));
-    const inputElement = input.nativeElement;
-    inputElement.dispatchEvent(new Event('keyup'));
-    expect(component.applyFilter).toHaveBeenCalled();
+    expect(fixture.nativeElement.querySelectorAll('mat-form-field').length).toBe(1);
   });
 
   it('should check for Add Dialog open functionality', async(() => {
