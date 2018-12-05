@@ -32,7 +32,7 @@ export class CrawlerComponent implements OnInit {
   compType: string;
 
   constructor(private apiService: ApiService) {
-    this.compType = Instance.ComponentTypeEnum.Crawler;
+  
   }
 
   ngOnInit() {

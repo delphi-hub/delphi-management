@@ -51,11 +51,11 @@ describe('TableAllComponent', () => {
         useValue: {}
       }, {
         provide: MAT_DIALOG_DATA,
-        useValue: {} // Add any data you wish to test if it is passed/used correctly
+        useValue: {} 
       },
       {
         provide: MatTableDataSource,
-        useValue: {} // Add any data you wish to test if it is passed/used correctly
+        useValue: {} 
       }]
     })
       .compileComponents();

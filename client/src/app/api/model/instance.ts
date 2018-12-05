@@ -34,23 +34,13 @@ export interface Instance {
   /**
    * Component Type
    */
-  componentType?: Instance.ComponentTypeEnum;
+  componentType?: ComponentType;
   dockerId?: string;
   /**
    * State of the instance
    */
   instanceState?: StateEnum;
   labels?: Array<string>;
-}
-
-export namespace Instance {
-  export type ComponentTypeEnum = 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement';
-  export const ComponentTypeEnum = {
-    Crawler: 'Crawler' as ComponentTypeEnum,
-    WebApi: 'WebApi' as ComponentTypeEnum,
-    WebApp: 'WebApp' as ComponentTypeEnum,
-    DelphiManagement: 'DelphiManagement' as ComponentTypeEnum
-  };
 }
 
 export type StateEnum = 'Running' | 'Failed' | 'Stopped' | 'Paused' | 'NotReachable';

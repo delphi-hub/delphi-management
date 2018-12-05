@@ -31,7 +31,7 @@ import { ApiService } from '../../api/api/api.service';
     styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
-    @Input() type: Instance.ComponentTypeEnum;
+    @Input() type: Instance['componentType'];
 
     @Input() set dataArray(dataArray: Instance[]) {
         if (this.dataSource != null) {
@@ -58,7 +58,11 @@ export class TableAllComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
     }
 
-    // Function to Delete the data from datasource
+    /**
+   * Function for deleting an insatnce. Cannot delete an instance if its running. 
+   * Prompts to Stop the instance before deleting.   
+   * @param InstanceID
+   */
     openDeleteDialog(i: number, instance: Instance, id: string) {
         const dialogRef = this.dialog.open(DeleteDialogComponent, {
             width: '250px',
@@ -94,7 +98,11 @@ export class TableAllComponent implements OnInit {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    // Function to add the data into dataSource
+   /**
+   * Adding an instance using mat-dialog component 
+   * @param componentType
+   * @param componentName
+   */
     openAddDialog() {
         const instance: Instance = {};
         instance.componentType = this.type;
@@ -107,7 +115,7 @@ export class TableAllComponent implements OnInit {
             this.apiService.postInstance(instance.componentType, dialogResult.name).subscribe((result: Instance) => {
                 this.dataSource.data.push({
                     id: result.id,
-                    host: result.host,
+                    host: '',
                     portNumber: result.portNumber,
                     name: dialogResult.name,
                     instanceState: result.instanceState,
@@ -121,7 +129,10 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-    // Function to 'start' the instance
+   /**
+   * Function used to control the state of the instance. Case1: 'start' an instance  
+   * @param InstanceID
+   */
     public startInstance(id: string): void {
 
         this.apiService.startInstance(id).subscribe((result: number) => {
@@ -131,7 +142,10 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-    // Function to 'stop' the instance
+    /**
+   * Function used to control the state of the instance. Case2: 'stop' an instance  
+   * @param InstanceID
+   */
     public stopInstance(id: string): void {
 
         this.apiService.stopInstance(id).subscribe((result: number) => {
@@ -141,7 +155,10 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-    // Function to 'pause' the instance
+    /**
+   * Function used to control the state of the instance. Case3: 'Pause' an instance 
+   * @param InstanceID
+   */
     public pauseInstance(id: string): void {
 
         this.apiService.pauseInstance(id).subscribe((result: number) => {
@@ -151,7 +168,10 @@ export class TableAllComponent implements OnInit {
         });
     }
 
-    // Function to 'resume' the instance
+    /**
+   * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused  
+   * @param InstanceID
+   */
     public resumeInstance(id: string): void {
 
         this.apiService.resumeInstance(id).subscribe((result: number) => {

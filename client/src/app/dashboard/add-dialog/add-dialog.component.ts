@@ -15,10 +15,8 @@ export class AddDialogComponent implements OnInit {
 
   formControl = new FormControl('', [
     Validators.required
-    // Validators.email,
   ]);
   ngOnInit() {
-    // console.log('data.type', this.data);
   }
 
   getErrorMessage() {

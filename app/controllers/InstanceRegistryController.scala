@@ -94,7 +94,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }(myExecutionContext)
   }
 
-  //This function is for all the  POST methods to the Scala web server
+  /**
+  * This function is for handling all(start, stop, play, pause, resume) POST request.
+  * To control the instance State
+  * @param componentId
+  */
 
 
   def handleRequest(action: String): Action[AnyContent] = Action.async { request =>
@@ -122,7 +126,12 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
-  //This function is for adding an instance to the Scala web server
+  /**
+  * This function is for handling an POST request for adding an instance to the Scala web server
+  *
+  * @param componentType
+  * @param name
+  */
   def postInstance(): Action[AnyContent] = Action.async { request =>
     var compType = ""
     var name = ""
