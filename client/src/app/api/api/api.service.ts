@@ -238,7 +238,7 @@ export class ApiService {
 
 
   // This method is a common configuration to set the headers and query params
-  private commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
+  public commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
