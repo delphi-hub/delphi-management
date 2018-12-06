@@ -28,13 +28,13 @@ export const ComponentTypeEnum = {
 
 export interface Instance {
   id?: number;
-  host?: string;
-  portNumber?: number;
-  name?: string;
+  host: string;
+  portNumber: number;
+  name: string;
   /**
    * Component Type
    */
-  componentType?: ComponentType;
+  componentType: ComponentType;
   dockerId?: string;
   /**
    * State of the instance

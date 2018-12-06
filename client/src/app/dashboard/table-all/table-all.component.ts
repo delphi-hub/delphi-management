@@ -104,22 +104,20 @@ export class TableAllComponent implements OnInit {
    * @param componentName
    */
     openAddDialog() {
-        const instance: Instance = {};
-        instance.componentType = this.type;
         const dialogRef = this.dialog.open(AddDialogComponent, {
             width: '300px',
 
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            this.apiService.postInstance(instance.componentType, dialogResult.name).subscribe((result: Instance) => {
+            this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
                 this.dataSource.data.push({
                     id: result.id,
                     host: '',
                     portNumber: result.portNumber,
                     name: dialogResult.name,
                     instanceState: result.instanceState,
-                    componentType: instance.componentType
+                    componentType: this.type
                 });
                 this.table.renderRows();
             }, err => {

@@ -2,6 +2,7 @@
 # Application
 GET     /                           controllers.FrontendController.index
 
++nocsrf
 ->      /api                        controllers.ApiRouter
 GET     /ws                         controllers.InstanceRegistryController.socket
 
@@ -9,4 +10,3 @@ GET     /ws                         controllers.InstanceRegistryController.socke
 # Serve static assets under public directory
 GET     /*file                      controllers.FrontendController.assetOrDefault(file)
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-

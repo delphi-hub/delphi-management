@@ -43,7 +43,7 @@ import { SysInfo } from '../model/sysInfo';
 })
 export class ApiService {
 
-  public basePath = '';
+  protected basePath = '';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 
@@ -238,7 +238,7 @@ export class ApiService {
 
 
   // This method is a common configuration to set the headers and query params
-  commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
+  private commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
