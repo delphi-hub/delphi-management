@@ -23,6 +23,9 @@ import { StatusCardComponent } from '../status-card/status-card.component';
 import { DashboardCardComponent } from '../dashboard-card/dashboard-card.component';
 import { RouterModule } from '@angular/router';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
+import {DatatableNotificationComponent} from '../datatable-notification/datatable-notification.component';
+import {MatIconModule, MatPaginatorModule, MatSortModule} from '@angular/material';
+import { MatTableModule } from '@angular/material';
 
 describe('DashboardOverviewComponent', () => {
   let component: DashboardOverviewComponent;
@@ -30,8 +33,10 @@ describe('DashboardOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent ],
-      imports: [RouterModule, HttpClientModule, RouterTestingModule]
+      declarations: [ DashboardOverviewComponent, DashboardCardComponent,
+        StatusCardComponent, DatatableNotificationComponent ],
+      imports: [RouterModule, HttpClientModule, RouterTestingModule,
+        MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule]
     })
     .compileComponents();
   }));

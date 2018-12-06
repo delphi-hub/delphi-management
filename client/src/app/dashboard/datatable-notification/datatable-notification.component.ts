@@ -1,12 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatSort} from '@angular/material';
+import {MatPaginator, MatSort} from '@angular/material';
 import {DatatableNotificationDataSource} from './datatable-notification-datasource';
-
 
 @Component({
   selector: 'app-datatable-notification',
   templateUrl: './datatable-notification.component.html',
-  styleUrls: ['./datatable-notification.component.css']
+  styleUrls: ['./datatable-notification.component.css'],
 })
 export class DatatableNotificationComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -20,10 +19,6 @@ export class DatatableNotificationComponent implements OnInit {
     this.dataSource = new DatatableNotificationDataSource(this.paginator, this.sort);
   }
 
-  constructor(public dialog: MatDialog) {}
-
-  // TODO dialog for display details
-  openDialog(){}
 }
 
 
