@@ -101,18 +101,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   */
 
 
-  def handleRequest(action: String): Action[AnyContent] = Action.async { request =>
-    var instanceID = ""
-    request.body.asJson.map { json =>
-      for (jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ) {
-        val obj = jsonValue.as[JsObject]
-        if ((obj \ "param").asOpt[String].get.equals("InstanceID")) {
-          instanceID = (obj \ "value").asOpt[String].get.substring(1)
-        }
-      }
-    }
-
+  def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
     ws.url(instanceRegistryUri + action)
       .addQueryStringParameters("Id" -> instanceID)
       .post("")
@@ -132,23 +121,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   * @param componentType
   * @param name
   */
-  def postInstance(): Action[AnyContent] = Action.async { request =>
-    var compType = ""
-    var name = ""
-
-    request.body.asJson.map { json =>
-      for (jsonValue <- (json \ "params" \ "updates").as[JsValue].as[Seq[JsValue]]
-      ) {
-        val obj = jsonValue.as[JsObject]
-        if ((obj \ "param").asOpt[String].get.equals("componentType")) {
-          compType = (obj \ "value").asOpt[String].get
-        } else if ((obj \ "param").asOpt[String].get.equals("name")) {
-          name = (obj \ "value").asOpt[String].get
-        }
-      }
-
-    }
-
+  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async { request =>
     ws.url(instanceRegistryUri + "/deploy")
       .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
       .post("")
