@@ -22,6 +22,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTa
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { ApiService } from '../../api/api/api.service';
+import { HttpEvent } from '@angular/common/http';
 
 
 
@@ -77,7 +78,7 @@ export class TableAllComponent implements OnInit {
                 console.log('data', this.dataSource.data);
 
             } else {
-                this.apiService.deleteInstance(id).subscribe((deleteResult: number) => {
+                this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
                     console.log('result', deleteResult);
                 }, err => {
                     console.log('error delete Instance');
@@ -133,7 +134,7 @@ export class TableAllComponent implements OnInit {
    */
     public startInstance(id: string): void {
 
-        this.apiService.startInstance(id).subscribe((result: number) => {
+        this.apiService.startInstance(id).subscribe((result: HttpEvent<number>) => {
             console.log('result', result);
         }, err => {
             console.log('error start Instance', err);
@@ -146,7 +147,7 @@ export class TableAllComponent implements OnInit {
    */
     public stopInstance(id: string): void {
 
-        this.apiService.stopInstance(id).subscribe((result: number) => {
+        this.apiService.stopInstance(id).subscribe((result: HttpEvent<number>) => {
             console.log('result', result);
         }, err => {
             console.log('error stop Instance', err);
@@ -159,7 +160,7 @@ export class TableAllComponent implements OnInit {
    */
     public pauseInstance(id: string): void {
 
-        this.apiService.pauseInstance(id).subscribe((result: number) => {
+        this.apiService.pauseInstance(id).subscribe((result: HttpEvent<number>) => {
             console.log('result', result);
         }, err => {
             console.log('error pause instance', err);
@@ -172,7 +173,7 @@ export class TableAllComponent implements OnInit {
    */
     public resumeInstance(id: string): void {
 
-        this.apiService.resumeInstance(id).subscribe((result: number) => {
+        this.apiService.resumeInstance(id).subscribe((result: HttpEvent<number>) => {
             console.log('result', result);
         }, err => {
             console.log('error pause instance', err);
