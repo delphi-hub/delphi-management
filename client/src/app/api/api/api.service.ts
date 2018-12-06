@@ -191,7 +191,7 @@ export class ApiService {
     );
   }
 
- public post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
+  private post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined && name === null || name === undefined) {
       throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
     }
@@ -225,7 +225,7 @@ export class ApiService {
   }
 
 
-  public postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false):
+  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false):
     Observable<HttpEvent<number>> {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
@@ -239,8 +239,7 @@ export class ApiService {
   }
 
 
-  // This method is a common configuration to set the headers and query params
-  public commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false):
+  private commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false):
   Observable<HttpEvent<number>> {
     let headers = this.defaultHeaders;
 
