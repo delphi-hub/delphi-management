@@ -16,14 +16,12 @@
  * limitations under the License.
  */
 
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, async,fakeAsync, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ApiService } from './api.service';
-import {HttpClientModule, HttpRequest, HttpParams, HttpClient} from '@angular/common/http';
-
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ApiService', () => {
-
 
   let service, http;
 
@@ -33,7 +31,7 @@ describe('ApiService', () => {
       providers: [ApiService],
     });
 
-   service = TestBed.get(ApiService);
+    service = TestBed.get(ApiService);
     http = TestBed.get(HttpTestingController);
   });
 
@@ -42,49 +40,38 @@ describe('ApiService', () => {
     backend.verify();
   }));
 
-  it('should be created', inject([ApiService], (apiService: ApiService) => {
+  it('should be created an instance', inject([ApiService], (apiService: ApiService) => {
     expect(apiService).toBeTruthy();
   }));
 
-  it(`should post the Instance type and instance name in backend to deploy an instance`,
+  it(`should create an instance`,
     async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'commonConf');
-    apiService.postAction('endpoint', 'idInstance');
-    expect(apiService.commonConf).toHaveBeenCalled();
-  })));
+      expect(apiService.postInstance('', '')).not.toBeNull();
+    })));
 
-  it(`should post an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'post');
-    apiService.postInstance('id', 'name');
-    expect(apiService.post).toHaveBeenCalled();
-  })));
-  it(`should start an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'postAction');
-    apiService.startInstance('id');
-    expect(apiService.postAction).toHaveBeenCalled();
-  })));
+  it(`should start an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.startInstance('', '')).not.toBeNull();
+    })));
 
-  it(`should stop an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'postAction');
-    apiService.stopInstance('id');
-    expect(apiService.postAction).toHaveBeenCalled();
-  })));
+  it(`should stop an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.stopInstance('', '')).not.toBeNull();
+    })));
 
-  it(`should pause an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'postAction');
-    apiService.pauseInstance('id');
-    expect(apiService.postAction).toHaveBeenCalled();
-  })));
+  it(`should pause an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.pauseInstance('')).not.toBeNull();
+    })));
 
-  it(`should resume an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'postAction');
-    apiService.resumeInstance('id');
-    expect(apiService.postAction).toHaveBeenCalled();
-  })));
+  it(`should resume an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.resumeInstance('')).not.toBeNull();
+    })));
 
-  it(`should delete an instance calling postAction`, async(inject([ApiService], (apiService: ApiService) => {
-    spyOn(apiService, 'postAction');
-    apiService.deleteInstance('id');
-    expect(apiService.postAction).toHaveBeenCalled();
-  })));
+  it(`should delete an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.deleteInstance('')).not.toBeNull();
+    })));
+
 });
