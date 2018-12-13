@@ -20,7 +20,7 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatTableModule, MatInputModule} from '@angular/material';
+import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatIconModule} from '@angular/material/icon';
@@ -38,7 +38,7 @@ describe('WebappComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ WebappComponent, TableAllComponent],
       imports: [HttpClientTestingModule,  HttpClientModule, BrowserAnimationsModule,
-         MatTableModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule]
+         MatTableModule, MatInputModule, MatPaginatorModule, MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule]
     })
     .compileComponents();
   }));

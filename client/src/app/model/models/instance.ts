@@ -44,7 +44,7 @@ export interface Instance {
   /**
    * State of the instance
    */
-  state?: StateEnum;
+  instanceState?: StateEnum;
   labels?: Array<string>;
 }
 
@@ -63,5 +63,3 @@ export function objIsInstance(obj: any): obj is Instance {
             obj.name !== undefined && typeof obj.name === 'string' &&
             obj.componentType !== undefined && obj.linksFrom !== undefined && obj.linksTo !== undefined);
 }
-
-

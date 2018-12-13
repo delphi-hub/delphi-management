@@ -2,6 +2,7 @@
 # Application
 GET     /                           controllers.FrontendController.index
 
++nocsrf
 ->      /api                        controllers.ApiRouter
 GET     /ws                         controllers.InstanceRegistryController.socket
 

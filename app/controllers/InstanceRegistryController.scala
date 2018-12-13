@@ -21,14 +21,15 @@ package controllers
 import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
-
-import scala.concurrent.ExecutionContext
 import play.api.libs.concurrent.CustomExecutionContext
+import play.api.libs.json._
 import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import play.api.mvc._
+
+import scala.concurrent.ExecutionContext
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -36,6 +37,7 @@ trait MyExecutionContext extends ExecutionContext
 /**
   * Custom execution context. Used to prevent overflowing of the thread pool,
   * which should be used to handle client connections.
+  *
   * @param system
   */
 class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
@@ -43,6 +45,7 @@ class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
 
 /**
   * Controller used to manage the requests regarding the instance registry.
+  *
   * @param myExecutionContext
   * @param controllerComponents
   * @param ws
@@ -100,6 +103,47 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         new Status(response.status)
       }
     }(myExecutionContext)
+  }
+
+  /**
+  * This function is for handling all(start, stop, play, pause, resume) POST request.
+  * To control the instance State
+  * @param componentId
+  */
+
+
+  def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
+    ws.url(instanceRegistryUri + action)
+      .addQueryStringParameters("Id" -> instanceID)
+      .post("")
+      .map { response =>
+        response.status match {
+          case 202 =>
+            Ok(response.body)
+          case x =>
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
+
+  /**
+  * This function is for handling an POST request for adding an instance to the Scala web server
+  *
+  * @param componentType
+  * @param name
+  */
+  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async { request =>
+    ws.url(instanceRegistryUri + "/deploy")
+      .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
+      .post("")
+      .map { response =>
+        response.status match {
+          case 202 =>
+            Ok(response.body)
+          case x =>
+            new Status(x)
+        }
+      }(myExecutionContext)
   }
 
 }

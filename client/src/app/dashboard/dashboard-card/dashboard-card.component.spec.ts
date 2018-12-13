@@ -21,7 +21,7 @@ import { async, TestBed, inject } from '@angular/core/testing';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MatTableModule, MatInputModule} from '@angular/material';
+import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatIconModule} from '@angular/material/icon';
@@ -45,8 +45,10 @@ describe('component: DashboardCardComponent', () => {
       providers: [ApiService],
       imports: [RouterTestingModule.withRoutes([
         { path: 'dashboard/crawler', component: CrawlerComponent}
-      ]), HttpClientTestingModule, HttpClientModule, MatTableModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatIconModule],
-      declarations: [ DashboardCardComponent, CrawlerComponent, DashboardComponent, TableAllComponent, HeaderComponent]
+      ]), HttpClientTestingModule, HttpClientModule, MatTableModule, MatInputModule, MatPaginatorModule,
+        MatFormFieldModule, MatCheckboxModule, MatIconModule],
+      declarations: [ DashboardCardComponent, CrawlerComponent, DashboardComponent, TableAllComponent,
+         HeaderComponent]
     });
   });
 

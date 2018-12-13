@@ -21,6 +21,7 @@ import {EventType, EventTypeEnum} from '../../model/models/socketMessage';
 import {ComponentType, ComponentTypeEnum} from '../../model/models/instance';
 import {ApiService} from '../../api/api/api.service';
 import {SocketService} from '../../api/api/socket.service';
+import { HttpEvent } from '@angular/common/http';
 
 
 @Component({
@@ -81,7 +82,7 @@ export class DashboardCardComponent implements OnInit {
    * If there is no server connection the value is set to a default error message.
    */
   private setInstanceNumber() {
-    this.irService.getNumberOfInstances(this.componentType).subscribe((amount: number) => {
+    this.irService.getNumberOfInstances(this.componentType).subscribe((amount: HttpEvent<number>) => {
       this.numberOfInstances = '' + amount;
     }, () => {
       this.numberOfInstances = 'No server connection';

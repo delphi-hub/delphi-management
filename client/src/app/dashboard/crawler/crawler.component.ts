@@ -28,17 +28,19 @@ import {ApiService} from '../../api/api/api.service';
 export class CrawlerComponent implements OnInit {
 
   // this array is inserted into the table all component in the html code
-  table_data: Instance[];
+  tableData: Instance[];
+  compType: string;
 
   constructor(private apiService: ApiService) {
+  
   }
 
   ngOnInit() {
 
-    this.table_data = [];
+  this.tableData = [];
 
     this.apiService.getInstances(ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
-      this.table_data = result;
+      this.tableData = result;
     }, err => {
       console.log('error receiving data for crawler', err);
     });
