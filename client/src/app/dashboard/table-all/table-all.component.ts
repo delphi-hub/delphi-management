@@ -21,6 +21,7 @@ import { Instance} from '../../api/model/instance';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ApiService } from '../../api/api/api.service';
 import { HttpEvent } from '@angular/common/http';
 
@@ -29,7 +30,14 @@ import { HttpEvent } from '@angular/common/http';
 @Component({
     selector: 'app-table-all',
     templateUrl: './table-all.component.html',
-    styleUrls: ['./table-all.component.css']
+    styleUrls: ['./table-all.component.css'],
+    animations: [
+        trigger('detailExpand', [
+          state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+          state('expanded', style({ height: '*' })),
+          transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+      ]
 })
 export class TableAllComponent implements OnInit {
     @Input() type: Instance['componentType'];
@@ -45,6 +53,7 @@ export class TableAllComponent implements OnInit {
 
 
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
+    columnsToDisplay: string[] = ['dockerId', 'labels'];
     dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
     dialogResult: string;
     @ViewChild(MatTable) table: MatTable<Instance>;
@@ -60,8 +69,8 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function for deleting an insatnce. Cannot delete an instance if its running. 
-   * Prompts to Stop the instance before deleting.   
+   * Function for deleting an insatnce. Cannot delete an instance if its running.
+   * Prompts to Stop the instance before deleting.
    * @param InstanceID
    */
     openDeleteDialog(i: number, instance: Instance, id: string) {
@@ -100,7 +109,7 @@ export class TableAllComponent implements OnInit {
     }
 
    /**
-   * Adding an instance using mat-dialog component 
+   * Adding an instance using mat-dialog component
    * @param componentType
    * @param componentName
    */
@@ -129,7 +138,7 @@ export class TableAllComponent implements OnInit {
     }
 
    /**
-   * Function used to control the state of the instance. Case1: 'start' an instance  
+   * Function used to control the state of the instance. Case1: 'start' an instance
    * @param InstanceID
    */
     public startInstance(id: string): void {
@@ -142,7 +151,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function used to control the state of the instance. Case2: 'stop' an instance  
+   * Function used to control the state of the instance. Case2: 'stop' an instance
    * @param InstanceID
    */
     public stopInstance(id: string): void {
@@ -155,7 +164,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function used to control the state of the instance. Case3: 'Pause' an instance 
+   * Function used to control the state of the instance. Case3: 'Pause' an instance
    * @param InstanceID
    */
     public pauseInstance(id: string): void {
@@ -168,7 +177,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused  
+   * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused
    * @param InstanceID
    */
     public resumeInstance(id: string): void {
@@ -178,6 +187,21 @@ export class TableAllComponent implements OnInit {
         }, err => {
             console.log('error pause instance', err);
         });
+    }
+
+    onRowClicked(row: Instance) {
+        let filteredList;
+        const NoId = 'Not available';
+        if ( row.dockerId !== undefined && row.labels.length !== 0) {
+            filteredList = [{dockerId: row.dockerId, labels : row.labels}];
+        } else if (row.dockerId === undefined && row.labels.length !== 0) {
+            filteredList = [{dockerId: NoId, labels : row.labels}];
+        } else if (row.dockerId !== undefined && row.labels.length === 0) {
+            filteredList = [{dockerId: row.dockerId, labels : NoId}];
+        } else {
+            filteredList = [{dockerId: NoId, labels : NoId }];
+        }
+        return filteredList;
     }
 
 }
