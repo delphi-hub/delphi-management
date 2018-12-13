@@ -16,14 +16,26 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable, Optional} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Configuration} from '../configuration';
-import {BASE_PATH, INSTANCES, NUMBER_OF_INSTANCES, SYS_INFO} from '../variables';
-import {CustomHttpUrlEncodingCodec} from '../encoder';
-import {Instance} from '../model/instance';
-import {SysInfo} from '../model/sysInfo';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Configuration } from '../configuration';
+import {
+  BASE_PATH,
+  INSTANCES,
+  NUMBER_OF_INSTANCES,
+  SYS_INFO,
+  NEW_INSTANCE,
+  START_INSTANCE,
+  STOP_INSTANCE,
+  PAUSE_INSTANCE,
+  RESUME_INSTANCE,
+  DELETE_INSTANCE
+} from '../variables';
+import { CustomHttpUrlEncodingCodec } from '../encoder';
+import { Instance } from '../model/instance';
+import { SysInfo } from '../model/sysInfo';
+
 
 
 @Injectable({
@@ -36,8 +48,8 @@ export class ApiService {
   public configuration = new Configuration();
 
   constructor(protected httpClient: HttpClient,
-              @Optional()@Inject(BASE_PATH) basePath: string,
-              @Optional() configuration: Configuration) {
+    @Optional() @Inject(BASE_PATH) basePath: string,
+    @Optional() configuration: Configuration) {
     if (basePath) {
       this.basePath = basePath;
     }
@@ -59,8 +71,8 @@ export class ApiService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
     return this.httpClient.get<SysInfo>(`${this.basePath}${SYS_INFO}`,
-      {headers: headers, observe: 'body', reportProgress: reportProgress});
-    }
+      { headers: headers, observe: 'body', reportProgress: reportProgress });
+  }
 
   /**
    * Find number of running instances
@@ -69,10 +81,12 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<number> {
+  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false):
+   Observable<HttpEvent<number>> {
     return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
+
   /**
    * Find number of running instances
    * How many instances per type are running
@@ -80,16 +94,77 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<Array<Instance>> {
+  public getInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false): Observable<Array<Instance>> {
     return this.get(INSTANCES, componentType);
   }
 
-  private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false ): any {
+  /**
+   * Create an Instance
+   * @param componentType
+   * @param InstanceName
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
+    return this.post(NEW_INSTANCE, componentType, name);
+  }
+
+  /**
+   * Start an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+    return this.postAction(START_INSTANCE, instanceId);
+  }
+
+  /**
+   * Stop an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+    return this.postAction(STOP_INSTANCE, instanceId);
+  }
+
+  /**
+   * Pause an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+    return this.postAction(PAUSE_INSTANCE, instanceId);
+  }
+
+  /**
+   * resume an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public resumeInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+    return this.postAction(RESUME_INSTANCE, instanceId);
+  }
+
+  /**
+   * Delete an Instance
+   * @param InstanceId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteInstance(instanceId: string): Observable<HttpEvent<number>> {
+    return this.postAction(DELETE_INSTANCE, instanceId);
+  }
+
+  private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (componentType === null || componentType === undefined) {
       throw new Error('Required parameter componentType was null or undefined when calling getInstanceNumber.');
     }
 
-    let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+    let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
     if (componentType !== undefined) {
       queryParameters = queryParameters.set('componentType', <any>componentType);
     }
@@ -106,6 +181,79 @@ export class ApiService {
     }
 
     return this.httpClient.get<Instance | number>(`${this.basePath}${endpoint}`,
+      {
+        params: queryParameters,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
+  }
+
+  private post(endpoint: string, componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): any {
+    if (componentType === null || componentType === undefined && name === null || name === undefined) {
+      throw new Error('Required parameter componentType and Instance Name was null or undefined when calling getInstanceNumber.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+    if (componentType !== undefined && name !== undefined) {
+      queryParameters = queryParameters.set('componentType', <any>componentType);
+      queryParameters = queryParameters.set('name', <any>name);
+    }
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<Instance>(`${this.basePath}${endpoint}`, {},
+      {
+        params: queryParameters,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress
+      }
+    );
+  }
+
+
+  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false):
+    Observable<HttpEvent<number>> {
+    let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+
+    if (idInstance === null || idInstance === undefined) {
+      throw new Error('Required ID Instance parameter');
+    } else {
+      queryParam = queryParam.set('instanceID', <any>('a' + idInstance));
+    }
+
+    return this.commonConf(endpoint, queryParam, observe, reportProgress);
+  }
+
+
+  private commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false):
+  Observable<HttpEvent<number>> {
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<number>(`${this.basePath}${endpoint}`, {},
       {
         params: queryParameters,
         withCredentials: this.configuration.withCredentials,
