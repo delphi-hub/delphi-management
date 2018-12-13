@@ -89,9 +89,9 @@ export class ModelService {
       this.storeService.removeFromState(removedInstance);
     });
     // TODO: after interface changes in ir we will receive a tuple of instances which are now linked
-    this.socketService.subscribeForEvent<>(EventTypeEnum.LinkAddedEvent).subscribe(() => {});
+   // this.socketService.subscribeForEvent<>(EventTypeEnum.LinkAddedEvent).subscribe(() => {});
 
-    this.socketService.subscribeForEvent<>(EventTypeEnum.LinkStateChangedEvent).subscribe(() => {});
+    // this.socketService.subscribeForEvent<>(EventTypeEnum.LinkStateChangedEvent).subscribe(() => {});
   }
 
   public getObservableForInstances() {
