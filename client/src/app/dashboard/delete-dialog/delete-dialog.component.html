@@ -16,10 +16,11 @@
   ~ limitations under the License.
   -->
 
-<h2> Web Application Details</h2>
-<div class="container">
-	
-  	<div class="row">
-    	<app-table-all  type="WebApp" [dataArray] = "tableData"> </app-table-all> 
-   </div>
+<div>
+    <h2 mat-dialog-title>Delete Instance</h2>
+    <mat-dialog-content>Are you sure you want to delete "{{data.name}}" instance?</mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" [mat-dialog-close]="1" (click)="onCloseConfirm()">Confirm</button>
+        <button mat-raised-button color="primary" (click)="onCloseCancle()">Cancle</button>
+    </mat-dialog-actions>
 </div>

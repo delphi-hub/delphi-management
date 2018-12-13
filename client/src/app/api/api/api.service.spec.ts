@@ -16,20 +16,62 @@
  * limitations under the License.
  */
 
-import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed, async,fakeAsync, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ApiService } from './api.service';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ApiService', () => {
+
+  let service, http;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, HttpClientModule],
-      providers: [ApiService]
+      providers: [ApiService],
     });
+
+    service = TestBed.get(ApiService);
+    http = TestBed.get(HttpTestingController);
   });
 
-  it('should be created', inject([ApiService], (service: ApiService) => {
-    expect(service).toBeTruthy();
+
+  afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+    backend.verify();
   }));
+
+  it('should be created an instance', inject([ApiService], (apiService: ApiService) => {
+    expect(apiService).toBeTruthy();
+  }));
+
+  it(`should create an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.postInstance('', '')).not.toBeNull();
+    })));
+
+  it(`should start an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.startInstance('', '')).not.toBeNull();
+    })));
+
+  it(`should stop an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.stopInstance('', '')).not.toBeNull();
+    })));
+
+  it(`should pause an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.pauseInstance('')).not.toBeNull();
+    })));
+
+  it(`should resume an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.resumeInstance('')).not.toBeNull();
+    })));
+
+  it(`should delete an instance`,
+    async(inject([ApiService], (apiService: ApiService) => {
+      expect(apiService.deleteInstance('')).not.toBeNull();
+    })));
+
 });

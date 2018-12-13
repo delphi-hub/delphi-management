@@ -39,7 +39,7 @@ export interface Instance {
   /**
    * State of the instance
    */
-  state?: StateEnum;
+  instanceState?: StateEnum;
   labels?: Array<string>;
 }
 

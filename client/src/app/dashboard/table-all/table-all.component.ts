@@ -16,53 +16,171 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
-import {Instance} from '../../api/model/instance';
-import { SelectionModel} from '@angular/cdk/collections';
-import { MatDialog, MatTableDataSource} from '@angular/material';
+import { Component, OnInit, Input, ViewChild, ɵstringify } from '@angular/core';
+import { Instance} from '../../api/model/instance';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { AddDialogComponent } from '../add-dialog/add-dialog.component';
+import { ApiService } from '../../api/api/api.service';
+import { HttpEvent } from '@angular/common/http';
+
 
 
 @Component({
-  selector: 'app-table-all',
-  templateUrl: './table-all.component.html',
-  styleUrls: ['./table-all.component.css']
+    selector: 'app-table-all',
+    templateUrl: './table-all.component.html',
+    styleUrls: ['./table-all.component.css']
 })
 export class TableAllComponent implements OnInit {
+    @Input() type: Instance['componentType'];
 
-  @Input() set data_array(data_array: Instance[]) {
-    if (this.dataSource != null) {
-      this.dataSource = new MatTableDataSource<Instance>(data_array);
-    } else {
-      this.dataSource.data = data_array;
+    @Input() set dataArray(dataArray: Instance[]) {
+        if (this.dataSource != null) {
+            this.dataSource = new MatTableDataSource<Instance>(dataArray);
+        } else {
+            this.dataSource.data = dataArray;
+        }
     }
-  }
-  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'select'];
-  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.data_array);
-  selection = new SelectionModel<Instance>(true, []);
-  dialogResult: any;
+    @Input() compType: string;
 
-  constructor(public dialog: MatDialog) {
 
-  }
+    displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
+    dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
+    dialogResult: string;
+    @ViewChild(MatTable) table: MatTable<Instance>;
 
-  ngOnInit() {
- }
+    constructor(public dialog: MatDialog, private apiService: ApiService) {
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+    }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.data_array.length;
-    return numSelected === numRows;
-  }
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.data_array.forEach((row) => {this.selection.select(row); });
-  }
+    ngOnInit() {
+        this.dataSource.paginator = this.paginator;
+    }
+
+    /**
+   * Function for deleting an insatnce. Cannot delete an instance if its running. 
+   * Prompts to Stop the instance before deleting.   
+   * @param InstanceID
+   */
+    openDeleteDialog(i: number, instance: Instance, id: string) {
+        const dialogRef = this.dialog.open(DeleteDialogComponent, {
+            width: '250px',
+            data: { name: instance.name }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('delete state', instance.instanceState);
+            if (result === 'Confirm' && instance.instanceState === 'Running') {
+                console.log('alert working');
+                alert('Please Stop the Instance before you try to delete');
+                console.log('data', this.dataSource.data);
+
+            } else {
+                this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
+                    console.log('result', deleteResult);
+                }, err => {
+                    console.log('error delete Instance');
+                });
+                this.removeAt(i);
+
+            }
+            this.dialogResult = result;
+        });
+    }
+
+    removeAt(index: number) {
+        this.dataSource.data.splice(index, 1);
+        this.table.renderRows();
+    }
+
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+   /**
+   * Adding an instance using mat-dialog component 
+   * @param componentType
+   * @param componentName
+   */
+    openAddDialog() {
+        const dialogRef = this.dialog.open(AddDialogComponent, {
+            width: '300px',
+
+        });
+
+        dialogRef.afterClosed().subscribe(dialogResult => {
+            this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
+                this.dataSource.data.push({
+                    id: result.id,
+                    host: '',
+                    portNumber: result.portNumber,
+                    name: dialogResult.name,
+                    instanceState: result.instanceState,
+                    componentType: this.type
+                });
+                this.table.renderRows();
+            }, err => {
+
+                console.log('error receiving data for crawler');
+            });
+        });
+    }
+
+   /**
+   * Function used to control the state of the instance. Case1: 'start' an instance  
+   * @param InstanceID
+   */
+    public startInstance(id: string): void {
+
+        this.apiService.startInstance(id).subscribe((result: HttpEvent<number>) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error start Instance', err);
+        });
+    }
+
+    /**
+   * Function used to control the state of the instance. Case2: 'stop' an instance  
+   * @param InstanceID
+   */
+    public stopInstance(id: string): void {
+
+        this.apiService.stopInstance(id).subscribe((result: HttpEvent<number>) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error stop Instance', err);
+        });
+    }
+
+    /**
+   * Function used to control the state of the instance. Case3: 'Pause' an instance 
+   * @param InstanceID
+   */
+    public pauseInstance(id: string): void {
+
+        this.apiService.pauseInstance(id).subscribe((result: HttpEvent<number>) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error pause instance', err);
+        });
+    }
+
+    /**
+   * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused  
+   * @param InstanceID
+   */
+    public resumeInstance(id: string): void {
+
+        this.apiService.resumeInstance(id).subscribe((result: HttpEvent<number>) => {
+            console.log('result', result);
+        }, err => {
+            console.log('error pause instance', err);
+        });
+    }
+
 }
+
 
 
