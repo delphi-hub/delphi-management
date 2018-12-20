@@ -99,7 +99,7 @@
               <mat-row  *matRowDef="let row; let element; columns: displayedColumns;"
                   class="example-element-row"
                    [class.example-expanded-row]="expandedElement === element"
-                  (click)="expandedElement = element; data = onRowClicked(row)">
+                  (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
                   </mat-row>
                                     
                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"class="example-detail-row"></tr>
