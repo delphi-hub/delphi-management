@@ -19,15 +19,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule} from '@angular/material';
-import { MatIconModule} from '@angular/material/icon';
-import { MatCheckboxModule} from '@angular/material/checkbox';
-import { MatDialogModule} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule} from '@angular/material/form-field';
-import { MatInputModule} from '@angular/material/input';
-import { MatTooltipModule} from '@angular/material/tooltip';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { DashboardComponent } from './dashboard.component';
@@ -45,25 +38,17 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import {ApiModule} from '../api/api.module';
 import {GraphViewModule} from './graph-view/graph-view.module';
 import {ModelModule} from '../model/model.module';
+import { MaterialModule } from '../material-module/material.module';
 
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    MatDialogModule,
+    MaterialModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTooltipModule,
     DashboardRoutingModule,
     DashboardRoutingModule,
     ApiModule,
