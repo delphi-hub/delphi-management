@@ -93,8 +93,6 @@ export class StoreService {
     }
   }
 
-
-
   public addInstanceToState(instance: Instance) {
     const newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
     // maybe calculate diff before

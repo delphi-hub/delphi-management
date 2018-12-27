@@ -21,8 +21,9 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatDialog, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
-import { ApiService } from '../../api/api/api.service';
 import { HttpEvent } from '@angular/common/http';
+import { ModelService } from 'src/app/model/model.service';
+import { ApiService } from 'src/app/api/api/api.service';
 
 
 @Component({
@@ -48,8 +49,7 @@ export class TableAllComponent implements OnInit {
     dialogResult: string;
     @ViewChild(MatTable) table: MatTable<Instance>;
 
-    constructor(public dialog: MatDialog, private apiService: ApiService) {
-
+    constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
 
     @ViewChild(MatPaginator) paginator: MatPaginator;

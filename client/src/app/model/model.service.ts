@@ -7,27 +7,31 @@ import {EventTypeEnum} from './models/socketMessage';
 import {StateUpdate, Change, StoreService, Actions} from './store.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 
-
+export interface InstanceChange extends Change {
+  allInstances?: { [id: number]: Instance };
+}
 @Injectable({
   providedIn: 'root'
 })
 export class ModelService {
 
-  private readonly instanceSubject: BehaviorSubject<Change>;
+  private readonly instanceSubject: BehaviorSubject<InstanceChange>;
   private readonly instanceIdSubjects: {[compType: string]: BehaviorSubject<Array<number>>};
   private readonly instanceSubjects: {[compType: string]: BehaviorSubject<Array<Instance>>};
 
   constructor(private socketService: SocketService, private apiService: ApiService, private storeService: StoreService) {
-    this.instanceSubject = new BehaviorSubject<Change>({type: Actions.NONE});
+    this.instanceSubject = new BehaviorSubject<InstanceChange>({type: Actions.NONE});
 
     this.instanceIdSubjects = {
       'Crawler': new BehaviorSubject<Array<number>>([]),
-      'WebApp': new BehaviorSubject<Array<number>>([]), 'WebApi': new BehaviorSubject<Array<number>>([])
+      'WebApp': new BehaviorSubject<Array<number>>([]),
+      'WebApi': new BehaviorSubject<Array<number>>([])
     };
 
     this.instanceSubjects = {
       'Crawler': new BehaviorSubject<Array<Instance>>([]),
-      'WebApp': new BehaviorSubject<Array<Instance>>([]), 'WebApi': new BehaviorSubject<Array<Instance>>([])
+      'WebApp': new BehaviorSubject<Array<Instance>>([]),
+      'WebApi': new BehaviorSubject<Array<Instance>>([])
     };
 
     this.storeService.getStoreObservable().subscribe((state: StateUpdate) => {
@@ -42,7 +46,7 @@ export class ModelService {
       //     return;
       //   }
       // });
-      //
+
       // changedCompTypes.forEach((compType) => {
       //   this.instanceIdSubjects[compType].next(state.state.instancesByType[compType]);
       //   const comps: Array<Instance> = [];
@@ -52,7 +56,7 @@ export class ModelService {
       //   this.instanceSubjects[compType].next(comps);
       // });
 
-      this.instanceSubject.next(state.change);
+      this.instanceSubject.next({...state.change, allInstances: state.state.instances});
     });
 
     this.socketService.initSocket().then(() => {
@@ -95,7 +99,7 @@ export class ModelService {
   }
 
   public getObservableForInstances() {
-    return new Observable<Change>((observer) => {
+    return new Observable<InstanceChange>((observer) => {
       this.instanceSubject.subscribe(observer);
       observer.next(this.instanceSubject.value);
 
