@@ -18,7 +18,8 @@
 
 import {Component, OnInit} from '@angular/core';
 import { Instance, ComponentType} from '../../model/models/instance';
-import { ModelService } from 'src/app/model/model.service';
+import { ModelService, InstanceChange } from 'src/app/model/model.service';
+
 
 @Component({
   selector: 'app-crawler',
@@ -36,8 +37,8 @@ export class CrawlerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.modelService.getObservableForComps(this.compType).subscribe((instances: Array<Instance>) => {
-      this.tableData = instances;
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.tableData = this.modelService.getComponentsByType(this.compType);
     });
   }
 

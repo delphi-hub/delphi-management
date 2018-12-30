@@ -32,8 +32,11 @@ export class StoreService {
 
   private static addNewInstanceToState(state: State, instance: Instance) {
     state.instances[instance.id] = instance;
-    console.log('dding new instance to state', state, instance);
-    state.instancesByType[instance.componentType].push(instance.id);
+    const instancesByType = state.instancesByType[instance.componentType];
+    // TODO: check if state actually is updated if variable is used
+    if (!instancesByType.includes(instance.id)) {
+      instancesByType.push(instance.id);
+    }
     return state;
   }
 

@@ -58,14 +58,12 @@ export class DashboardCardComponent implements OnInit {
    }
 
   ngOnInit() {
-
-    this.modelService.getObservableForCompIds(this.componentType).subscribe((compIds) => {
-      this.numberOfInstances = '' + compIds.length;
-    }, (error) => {
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.numberOfInstances = '' + this.modelService.getComponentsByType(this.componentType).length;
+    }, (error: Error) => {
       console.log(error);
       this.numberOfInstances = 'No server connection';
     });
-
   }
 
 

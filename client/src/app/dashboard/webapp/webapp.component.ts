@@ -34,12 +34,8 @@ export class WebappComponent implements OnInit {
 
   ngOnInit() {
     this.tableData = [];
-
-    this.modelService.getObservableForComps(ComponentTypeEnum.WebApp).subscribe((result: Array<Instance>) => {
-      this.tableData = result;
-
-    }, err => {
-      console.log('error during get instances for web app', err);
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
     });
   }
 

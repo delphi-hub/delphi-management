@@ -154,9 +154,6 @@ export class ApiService {
   }
 
   private get<T>(endpoint: string, componentType?: string) {
-    if (componentType === null || componentType === undefined) {
-      throw new Error('Required parameter componentType was null or undefined when calling getInstanceNumber.');
-    }
 
     let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
     if (componentType !== undefined) {

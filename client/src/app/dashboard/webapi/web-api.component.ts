@@ -18,7 +18,7 @@
 
 import {Component, OnInit} from '@angular/core';
 import {ComponentTypeEnum, Instance} from '../../model/models/instance';
-import {ApiService} from '../../api/api/api.service';
+import { ModelService } from 'src/app/model/model.service';
 
 
 @Component({
@@ -31,15 +31,13 @@ export class WebApiComponent implements OnInit {
   // this array is inserted into the table all component in the html code
   tableData: Instance[];
 
-  constructor(private apiService: ApiService) { }
+  constructor(private modelService: ModelService) { }
 
   ngOnInit() {
     this.tableData = [];
 
-    this.apiService.getInstances(ComponentTypeEnum.WebApi).subscribe((result: Array<Instance>) => {
-      this.tableData = result;
-    }, (err) => {
-      console.log('error during get instances for Web Api', err);
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
     });
   }
 
