@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SocketService} from '../api/api/socket.service';
 import {ApiService} from '../api/api/api.service';
-import {ComponentType, Instance, ComponentTypeEnum} from './models/instance';
+import {ComponentType, Instance } from './models/instance';
 
 import {EventTypeEnum} from './models/socketMessage';
 import {StateUpdate, Change, StoreService, Actions} from './store.service';
@@ -16,31 +16,11 @@ export interface InstanceChange extends Change {
 export class ModelService {
 
   private readonly instanceSubject: BehaviorSubject<InstanceChange>;
-  private readonly instanceSubjects: {[compType: string]: BehaviorSubject<Array<number>>};
 
   constructor(private socketService: SocketService, private apiService: ApiService, private storeService: StoreService) {
     this.instanceSubject = new BehaviorSubject<InstanceChange>({type: Actions.NONE});
 
-    this.instanceSubjects = {
-      'Crawler': new BehaviorSubject<Array<number>>([]),
-      'WebApp': new BehaviorSubject<Array<number>>([]),
-      'WebApi': new BehaviorSubject<Array<number>>([])
-    };
-
     this.storeService.getStoreObservable().subscribe((state: StateUpdate) => {
-      // if (state.change.elements) {
-
-      //   const types: Array<ComponentType> = state.change.elements.reduce((accumulator, currentValue) => {
-      //     const compType = currentValue.componentType;
-      //     if (!accumulator.includes(compType)) {
-      //       accumulator.push(compType);
-      //     }
-      //     return accumulator;
-      //   }, []);
-      //   types.forEach((type) => {
-      //     this.instanceSubjects[type].next(state.state.instancesByType[type]);
-      //   });
-      // }
       this.instanceSubject.next({...state.change, allInstances: state.state.instances});
     });
 
@@ -101,18 +81,5 @@ export class ModelService {
       return state.instances[id];
     });
   }
-
-  // public getObservableForComps(compType: ComponentType) {
-  //   return new Observable<Array<number>>((observer) => {
-  //     const compSubject = this.instanceSubjects[compType];
-  //     compSubject.subscribe(observer);
-  //     observer.next(compSubject.value);
-
-  //     return () => {
-  //       // TODO: see console log
-  //       console.log('observer completed, implement unsubscribe logic !');
-  //     };
-  //   });
-  // }
 
 }

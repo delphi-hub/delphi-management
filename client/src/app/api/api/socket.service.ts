@@ -37,9 +37,6 @@ interface ObserverMap {
   [key: string]: Subject<ReturnType>;
 }
 type ReturnType = Instance | InstanceLink | number | DockerOperationError;
-@Injectable({
-  providedIn: 'root'
-})
 
 /**
  * The SocketService is used to create a socket connection to the web server.
@@ -48,9 +45,12 @@ type ReturnType = Instance | InstanceLink | number | DockerOperationError;
  * initSocket() has to be called in order to initiate the socket connection (if called
  * multiple times the same connection is returned).
  */
+@Injectable({
+  providedIn: 'root'
+})
 export class SocketService {
 
-  readonly wsUri;
+  readonly wsUri: string;
   private socket: WebSocket;
   /**
    * This map is used to manage the observers interested in the defined events.

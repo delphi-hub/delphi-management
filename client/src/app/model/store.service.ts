@@ -23,6 +23,11 @@ export interface Change {
 
 export const EMPTY_STATE = {instances: {}, instancesByType: {'Crawler': [], 'WebApi': [], 'WebApp': [], 'ElasticSearch': []}};
 
+/**
+ * This service is used to manage the shared state used in the whole application.
+ * Changes to the managed state can be made through the methods corresponding to the
+ * actions described in the Actions enum.
+ */
 @Injectable({
   providedIn: 'root'
 })
