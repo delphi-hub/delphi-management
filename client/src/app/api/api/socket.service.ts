@@ -138,12 +138,12 @@ export class SocketService {
    * @param e
    */
   private socketOnMessage(e: MessageEvent) {
-    console.log('received socket message', e);
     try {
       const msg: RegistryEvent = JSON.parse(e.data);
       if (objectIsMessage(msg)) {
-        console.log('received socket message is message', msg);
-
+        if (msg.eventType !== EventTypeEnum.Heartbeat) {
+          console.log('received socket message is message', msg);
+        }
         const {event, toSend} = this.getEventAndPayload(msg);
 
         const relevantSubject = this.observers[event];
