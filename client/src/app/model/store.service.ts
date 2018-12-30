@@ -35,6 +35,10 @@ export class StoreService {
 
   private readonly stateUpdateSubject: BehaviorSubject<StateUpdate>;
 
+  /**
+   * Adds the given @param instance to the @param state.
+   * Any previous entry for the given instance is overwritten by this method.
+   */
   private static addNewInstanceToState(state: State, instance: Instance) {
     state.instances[instance.id] = instance;
     const instancesByType = state.instancesByType[instance.componentType];
@@ -45,6 +49,10 @@ export class StoreService {
     return state;
   }
 
+  /**
+   * Removes the given @param instance from the @param state
+   * and @returns the new state
+   */
   private static removeInstanceFromState(state: State, instance: Instance) {
     delete state.instances[instance.id];
     state.instancesByType[instance.componentType] = state.instancesByType[instance.componentType].filter(e => e !== instance.id);
@@ -52,6 +60,11 @@ export class StoreService {
     return state;
   }
 
+  /**
+   * This method iterates the given @param instances and compares them
+   * to the @param currentState. If the instances would result in the same
+   * state the method @returns false.
+   */
   private static stateHasChanged(currentState: State, instances: Array<Instance>) {
     const currentInstances = Object.values(currentState.instances);
     if (currentInstances.length === instances.length) {
@@ -77,6 +90,9 @@ export class StoreService {
     this.stateUpdateSubject = new BehaviorSubject<StateUpdate>({state: EMPTY_STATE, change: {type: Actions.NONE}});
   }
 
+  /**
+   * Retruns an observable which notifies the subscriber about any changes to the state.
+   */
   public getStoreObservable(): Observable<StateUpdate> {
     return new Observable ((observer) => {
       this.stateUpdateSubject.subscribe(observer);
@@ -85,11 +101,20 @@ export class StoreService {
 
   }
 
+  /**
+   * Returns the current state.
+   */
   public getState() {
     return this.stateUpdateSubject.value.state;
   }
 
+  /**
+   * Adds the given @param instances to the state.
+   * If @param calculateDiff is true the state is only updated after a diff is calculated
+   * in order to permit unecessary state changes.
+   */
   public addInstancesToState(instances: Array<Instance>, calculateDiff= false) {
+
     const newState: State = instances.reduce((accumulator: State, currentValue: Instance) => {
       return StoreService.addNewInstanceToState(accumulator, currentValue);
     }, EMPTY_STATE);
@@ -101,18 +126,28 @@ export class StoreService {
     }
   }
 
+  /**
+   * Adds the given @param instance to the state.
+   */
   public addInstanceToState(instance: Instance) {
     const newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
     // maybe calculate diff before
     this.stateUpdateSubject.next({state: newState, change: {type: Actions.ADD, elements: [instance]}});
   }
 
+  /**
+   * Updates the given @param instance in the state.
+   * The update is performed by overwriting the previously stored instance.
+   */
   public changeInstanceState(instance: Instance) {
     const newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
     // maybe calculate diff before
     this.stateUpdateSubject.next({state: newState, change: {type: Actions.CHANGE, elements: [instance]}});
   }
 
+  /**
+   * Removes the given @param instance from the state.
+   */
   public removeFromState(instance: Instance) {
     const newState = StoreService.removeInstanceFromState(this.stateUpdateSubject.value.state, instance);
     // maybe calculate diff before
