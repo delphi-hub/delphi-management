@@ -43,7 +43,7 @@ export class ModelService {
 
       setInterval(() => {
         this.updateAllInstances(true);
-      }, updateCycle);
+      }, this.updateCycle);
     });
   }
 
