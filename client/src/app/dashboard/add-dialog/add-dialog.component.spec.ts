@@ -40,12 +40,6 @@ describe('AddDialogComponent', () => {
     fixture.detectChanges();
   });
 
-
-  it(`should create Add dialog Component`, async(inject([HttpTestingController, ApiService],
-    (httpClient: HttpTestingController, apiService: ApiService) => {
-      expect(apiService).toBeTruthy();
-    })));
-
     it('should check for confirm button inside the Add dialog', () => {
       component.onConfirmAddInstance();
       expect(mockDialogRef.close).toHaveBeenCalled();

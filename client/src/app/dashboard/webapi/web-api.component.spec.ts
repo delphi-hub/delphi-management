@@ -22,8 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { WebApiComponent } from './web-api.component';
-import { ApiService } from '../../api/api/api.service';
 import { MaterialModule } from 'src/app/material-module/material.module';
+import { ModelService } from 'src/app/model/model.service';
 
 
 describe('WebApiComponent', () => {
@@ -43,8 +43,8 @@ describe('WebApiComponent', () => {
     fixture.detectChanges();
   });
 
-  it(`should create`, async(inject([HttpTestingController, ApiService],
-    (apiService: ApiService) => {
-      expect(apiService).toBeTruthy();
+  it(`should create`, async(inject([HttpTestingController, ModelService],
+    (modelService: ModelService) => {
+      expect(modelService).toBeTruthy();
   })));
 });
