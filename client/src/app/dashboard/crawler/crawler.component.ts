@@ -32,7 +32,6 @@ export class CrawlerComponent implements OnInit {
   compType: string;
 
   constructor(private apiService: ApiService) {
-  
   }
 
   ngOnInit() {
@@ -42,7 +41,7 @@ export class CrawlerComponent implements OnInit {
     this.apiService.getInstances(ComponentTypeEnum.Crawler).subscribe((result: Array<Instance>) => {
       this.tableData = result;
     }, err => {
-      console.log('error receiving data for crawler');
+      console.log('error receiving data for crawler', err);
     });
   }
 

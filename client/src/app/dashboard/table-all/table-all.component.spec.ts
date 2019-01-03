@@ -18,44 +18,37 @@
 
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { MatTableModule, MatInputModule, MatPaginatorModule } from '@angular/material';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
-import { MatDialogModule } from '@angular/material/dialog';
 import { TableAllComponent } from './table-all.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
-import { DebugElement } from '@angular/core';
 import { ApiService } from '../../api/api/api.service';
+import { MaterialModule } from 'src/app/material-module/material.module';
 
 
 describe('TableAllComponent', () => {
   let component: TableAllComponent;
   let fixture: ComponentFixture<TableAllComponent>;
-  let debugElement: DebugElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TableAllComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule,
-        MatTableModule, MatInputModule, MatPaginatorModule,
-        MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule],
+        MaterialModule],
       providers: [{
         provide: MatDialogRef,
         useValue: {}
       }, {
         provide: MAT_DIALOG_DATA,
-        useValue: {} 
+        useValue: {}
       },
       {
         provide: MatTableDataSource,
-        useValue: {} 
+        useValue: {}
       }]
     })
       .compileComponents();
@@ -70,12 +63,11 @@ describe('TableAllComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TableAllComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
   it(`should create`, async(inject([HttpTestingController, ApiService],
-    (httpClient: HttpTestingController, apiService: ApiService) => {
+    (apiService: ApiService) => {
       expect(apiService).toBeTruthy();
     })));
 

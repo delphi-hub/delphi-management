@@ -20,37 +20,31 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/material';
-import { MatFormFieldModule} from '@angular/material/form-field';
-import { MatCheckboxModule} from '@angular/material/checkbox';
-import { MatIconModule} from '@angular/material/icon';
-import { MatDialogModule} from '@angular/material/dialog';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { WebApiComponent } from './web-api.component';
 import { ApiService } from '../../api/api/api.service';
+import { MaterialModule } from 'src/app/material-module/material.module';
 
 
 describe('WebApiComponent', () => {
-  let component: WebApiComponent;
   let fixture: ComponentFixture<WebApiComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ WebApiComponent, TableAllComponent ],
       imports: [HttpClientTestingModule,  HttpClientModule, BrowserAnimationsModule,
-        MatTableModule, MatInputModule, MatPaginatorModule, MatFormFieldModule, MatCheckboxModule, MatIconModule, MatDialogModule]
+        MaterialModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(WebApiComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it(`should create`, async(inject([HttpTestingController, ApiService],
-    (httpClient: HttpTestingController, apiService: ApiService) => {
+    (apiService: ApiService) => {
       expect(apiService).toBeTruthy();
   })));
 });

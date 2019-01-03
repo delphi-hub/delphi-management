@@ -16,14 +16,12 @@
  * limitations under the License.
  */
 
-import { TestBed, async,fakeAsync, inject } from '@angular/core/testing';
+import { TestBed, async, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ApiService } from './api.service';
 import { HttpClientModule } from '@angular/common/http';
 
 describe('ApiService', () => {
-
-  let service, http;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,8 +29,6 @@ describe('ApiService', () => {
       providers: [ApiService],
     });
 
-    service = TestBed.get(ApiService);
-    http = TestBed.get(HttpTestingController);
   });
 
 

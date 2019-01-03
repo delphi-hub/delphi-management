@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input, ViewChild, ɵstringify } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Instance} from '../../api/model/instance';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';

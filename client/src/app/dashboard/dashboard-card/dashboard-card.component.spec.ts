@@ -15,8 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import { async, TestBed, inject } from '@angular/core/testing';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -36,8 +34,6 @@ import { ApiService } from 'src/app/api/api/api.service';
 
 
 describe('component: DashboardCardComponent', () => {
-  let location;
-  let router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,13 +49,11 @@ describe('component: DashboardCardComponent', () => {
   });
 
   beforeEach(inject([Router, Location], (_router: Router, _location: Location) => {
-    location = _location;
-    router = _router;
   }));
 
 
   it(`should create`, async(inject([HttpTestingController, ApiService],
-    (httpClient: HttpTestingController, apiService: ApiService) => {
+    (apiService: ApiService) => {
       expect(apiService).toBeTruthy();
   })));
 });
