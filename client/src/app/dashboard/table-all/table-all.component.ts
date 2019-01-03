@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input, ViewChild, ɵstringify } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Instance} from '../../api/model/instance';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { ApiService } from '../../api/api/api.service';
@@ -60,8 +60,8 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function for deleting an insatnce. Cannot delete an instance if its running. 
-   * Prompts to Stop the instance before deleting.   
+   * Function for deleting an insatnce. Cannot delete an instance if its running.
+   * Prompts to Stop the instance before deleting.
    * @param InstanceID
    */
     openDeleteDialog(i: number, instance: Instance, id: string) {
@@ -100,7 +100,7 @@ export class TableAllComponent implements OnInit {
     }
 
    /**
-   * Adding an instance using mat-dialog component 
+   * Adding an instance using mat-dialog component
    * @param componentType
    * @param componentName
    */
@@ -129,7 +129,7 @@ export class TableAllComponent implements OnInit {
     }
 
    /**
-   * Function used to control the state of the instance. Case1: 'start' an instance  
+   * Function used to control the state of the instance. Case1: 'start' an instance
    * @param InstanceID
    */
     public startInstance(id: string): void {
@@ -142,7 +142,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function used to control the state of the instance. Case2: 'stop' an instance  
+   * Function used to control the state of the instance. Case2: 'stop' an instance
    * @param InstanceID
    */
     public stopInstance(id: string): void {
@@ -155,7 +155,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function used to control the state of the instance. Case3: 'Pause' an instance 
+   * Function used to control the state of the instance. Case3: 'Pause' an instance
    * @param InstanceID
    */
     public pauseInstance(id: string): void {
@@ -168,7 +168,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused  
+   * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused
    * @param InstanceID
    */
     public resumeInstance(id: string): void {
