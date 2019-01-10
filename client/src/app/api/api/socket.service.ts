@@ -22,10 +22,7 @@ import {
   DockerOperationError,
   EventType,
   EventTypeEnum,
-  NumbersChanged,
   objectIsMessage,
-  payloadIsDockerOperationError,
-  payloadIsInstanceLink,
   payloadIsNumbersChanged,
   RegistryEvent
 } from '../../model/models/socketMessage';
@@ -138,24 +135,33 @@ export class SocketService {
    * @param e
    */
   private socketOnMessage(e: MessageEvent) {
-    try {
-      const msg: RegistryEvent = JSON.parse(e.data);
-      if (objectIsMessage(msg)) {
-        if (msg.eventType !== EventTypeEnum.Heartbeat) {
-          console.log('received socket message is message', msg);
-        }
-        const {event, toSend} = this.getEventAndPayload(msg);
 
-        const relevantSubject = this.observers[event];
-        if (relevantSubject) {
-          relevantSubject.next(toSend);
-        }
+    const msg = this.parseSocketMsg(e);
+    if (msg !== null) {
+      const {event, toSend} = this.getEventAndPayload(msg);
+
+      const relevantSubject = this.observers[event];
+      if (relevantSubject) {
+        relevantSubject.next(toSend);
       }
-    } catch (err) {
-        if (e.data !== EventTypeEnum.Heartbeat) {
-          console.log('received message is no json', e.data, err);
-        }
+    }
+  }
 
+  /**
+   * Parses the given message event @param e to a RegistryEvent.
+   * If the given message is no RegistryEvent for any reason
+   * (e.g. invalid json, or incorrectly structured json) the method
+   * @returns null.
+   */
+  private parseSocketMsg(e: MessageEvent): RegistryEvent {
+    try {
+      const msg = JSON.parse(e.data);
+      return objectIsMessage(msg) ? msg : null;
+    } catch (err) {
+      if (e.data !== EventTypeEnum.Heartbeat) {
+        console.log('received message is no json', e.data, err);
+      }
+      return null;
     }
   }
 
@@ -187,11 +193,14 @@ export class SocketService {
             event = EventTypeEnum.InstanceNumbersCrawler;
             break;
         }
-      } } else {
-        if (objIsInstance(payload.instance)) {
-          toSend = payload.instance;
-          event = msg.eventType;
-        }
+      }
+    } else if (msg.eventType === EventTypeEnum.LinkStateChangedEvent || msg.eventType === EventTypeEnum.LinkAddedEvent) {
+
+    } else {
+          if (objIsInstance(payload.instance)) {
+            toSend = payload.instance;
+            event = msg.eventType;
+          }
       }
 
     return {event, toSend};
