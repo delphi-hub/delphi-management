@@ -139,10 +139,13 @@ export class StoreService {
    * Updates the given @param instance in the state.
    * The update is performed by overwriting the previously stored instance.
    */
-  public changeInstanceState(instance: Instance) {
-    const newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
+  public changeInstancesState(instances: Array<Instance>) {
+    let newState: State;
+    for (const instance of instances) {
+       newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
+    }
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.CHANGE, elements: [instance]}});
+    this.stateUpdateSubject.next({state: newState, change: {type: Actions.CHANGE, elements: instances}});
   }
 
   /**

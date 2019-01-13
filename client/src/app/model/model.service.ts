@@ -80,13 +80,16 @@ export class ModelService {
       this.storeService.removeFromState(removedInstance);
     });
     // TODO: after interface changes in ir we will receive a tuple of instances which are now linked
-    this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkAddedEvent).subscribe((data) => {
+    this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkAddedEvent).subscribe((data: InstanceLinkPayload) => {
       console.log('received link added', data);
+      this.storeService.changeInstancesState([data.instanceFrom, data.instanceTo]);
     });
 
-    this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkStateChangedEvent).subscribe((data) => {
-      console.log('received link state changed', data);
-    });
+    this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkStateChangedEvent).
+      subscribe((data: InstanceLinkPayload) => {
+        console.log('received link state changed', data);
+        this.storeService.changeInstancesState([data.instanceFrom, data.instanceTo]);
+      });
   }
 
   /**

@@ -26,7 +26,7 @@ import {
   RegistryEvent
 } from '../../model/models/socketMessage';
 import {ComponentTypeEnum, Instance, objIsInstance} from '../../model/models/instance';
-import {InstanceLink, objIsLink, InstanceLinkPayload} from '../../model/models/instanceLink';
+import {objIsLink, InstanceLinkPayload} from '../../model/models/instanceLink';
 
 
 interface ObserverMap {
