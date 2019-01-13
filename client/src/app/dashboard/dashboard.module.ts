@@ -38,7 +38,6 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import {ApiModule} from '../api/api.module';
 import {ModelModule} from '../model/model.module';
 import { MaterialModule } from '../material-module/material.module';
-import { GraphViewModule } from './graph-view/graph-view.module';
 
 
 @NgModule({
@@ -52,8 +51,7 @@ import { GraphViewModule } from './graph-view/graph-view.module';
     DashboardRoutingModule,
     DashboardRoutingModule,
     ApiModule,
-    ModelModule,
-    GraphViewModule
+    ModelModule
   ],
   declarations: [
     DashboardCardComponent,
