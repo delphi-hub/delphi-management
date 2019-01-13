@@ -26,6 +26,7 @@ export class GraphViewService {
     this.elementRemover = new BehaviorSubject<Array<string>>([]);
 
     this.modelService.getObservableForInstances().subscribe((change: Change) => {
+      console.log('received notification in graph view service', change);
       if (change.elements !== undefined) {
         switch (change.type) {
           case Actions.ADD:
@@ -44,7 +45,7 @@ export class GraphViewService {
   }
 
   private addElements(instances: Array<Instance>) {
-    console.log('received new instance', instances);
+    console.log('received new instance in graph view service', instances);
     const newElements: NodeEdgeMap = instances.reduce(
       ( accumulator: NodeEdgeMap, value: Instance) => {
 
