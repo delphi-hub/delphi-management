@@ -6,6 +6,7 @@ import {ComponentType, Instance } from './models/instance';
 import {EventTypeEnum} from './models/socketMessage';
 import {StateUpdate, Change, StoreService, Actions} from './store.service';
 import {BehaviorSubject, Observable} from 'rxjs';
+import { InstanceLinkPayload } from './models/instanceLink';
 
 export interface InstanceChange extends Change {
   allInstances?: { [id: number]: Instance };
@@ -79,9 +80,13 @@ export class ModelService {
       this.storeService.removeFromState(removedInstance);
     });
     // TODO: after interface changes in ir we will receive a tuple of instances which are now linked
-   // this.socketService.subscribeForEvent<>(EventTypeEnum.LinkAddedEvent).subscribe(() => {});
+    this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkAddedEvent).subscribe((data) => {
+      console.log('received link added', data);
+    });
 
-    // this.socketService.subscribeForEvent<>(EventTypeEnum.LinkStateChangedEvent).subscribe(() => {});
+    this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkStateChangedEvent).subscribe((data) => {
+      console.log('received link state changed', data);
+    });
   }
 
   /**

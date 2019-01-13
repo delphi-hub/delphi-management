@@ -22,21 +22,17 @@ import {
   DockerOperationError,
   EventType,
   EventTypeEnum,
-  NumbersChanged,
   objectIsMessage,
-  payloadIsDockerOperationError,
-  payloadIsInstanceLink,
-  payloadIsNumbersChanged,
   RegistryEvent
 } from '../../model/models/socketMessage';
 import {ComponentTypeEnum, Instance, objIsInstance} from '../../model/models/instance';
-import {InstanceLink} from '../../model/models/instanceLink';
+import {InstanceLink, objIsLink, InstanceLinkPayload} from '../../model/models/instanceLink';
 
 
 interface ObserverMap {
   [key: string]: Subject<ReturnType>;
 }
-type ReturnType = Instance | InstanceLink | number | DockerOperationError;
+type ReturnType = Instance | InstanceLinkPayload | number | DockerOperationError;
 
 /**
  * The SocketService is used to create a socket connection to the web server.
@@ -138,24 +134,34 @@ export class SocketService {
    * @param e
    */
   private socketOnMessage(e: MessageEvent) {
-    try {
-      const msg: RegistryEvent = JSON.parse(e.data);
-      if (objectIsMessage(msg)) {
-        if (msg.eventType !== EventTypeEnum.Heartbeat) {
-          console.log('received socket message is message', msg);
-        }
-        const {event, toSend} = this.getEventAndPayload(msg);
 
+    const msg = this.parseSocketMsg(e);
+    if (msg !== null) {
+      const {event, toSend} = this.getEventAndPayload(msg);
+      if (event !== null && toSend !== null) {
         const relevantSubject = this.observers[event];
         if (relevantSubject) {
           relevantSubject.next(toSend);
         }
       }
-    } catch (err) {
-        if (e.data !== EventTypeEnum.Heartbeat) {
-          console.log('received message is no json', e.data, err);
-        }
+    }
+  }
 
+  /**
+   * Parses the given message event @param e to a RegistryEvent.
+   * If the given message is no RegistryEvent for any reason
+   * (e.g. invalid json, or incorrectly structured json) the method
+   * @returns null.
+   */
+  private parseSocketMsg(e: MessageEvent): RegistryEvent {
+    try {
+      const msg = JSON.parse(e.data);
+      return objectIsMessage(msg) ? msg : null;
+    } catch (err) {
+      if (e.data !== EventTypeEnum.Heartbeat) {
+        console.log('received message is no json', e.data, err);
+      }
+      return null;
     }
   }
 
@@ -167,32 +173,62 @@ export class SocketService {
    * @param msg
    */
   private getEventAndPayload(msg: RegistryEvent) {
-    let toSend: ReturnType;
-    let event: EventType;
-
+    const event: EventType = msg.eventType;
+    let result: {event: EventType, toSend: ReturnType};
     const payload: any = msg.payload;
 
-    if (msg.eventType === EventTypeEnum.NumbersChangedEvent) {
+    if (event === EventTypeEnum.NumbersChangedEvent) {
+      result = this.getNumbersChangedPayload(payload);
+    } else if (event === EventTypeEnum.LinkStateChangedEvent || event === EventTypeEnum.LinkAddedEvent) {
+      result = {event, toSend: this.getLinkStatePayload(payload)};
+    } else {
+      result = {event, toSend: this.getInstanceFromPayload(payload)};
+    }
 
-      if (payloadIsNumbersChanged(payload)) {
-        toSend = payload.newNumber;
-        switch (payload.componentType) {
-          case ComponentTypeEnum.WebApp:
-            event = EventTypeEnum.InstanceNumbersWebApp;
-            break;
-          case ComponentTypeEnum.WebApi:
-            event = EventTypeEnum.InstanceNumbersWebApi;
-            break;
-          case ComponentTypeEnum.Crawler:
-            event = EventTypeEnum.InstanceNumbersCrawler;
-            break;
-        }
-      } } else {
-        if (objIsInstance(payload.instance)) {
-          toSend = payload.instance;
-          event = msg.eventType;
-        }
+    return result;
+  }
+
+  /**
+   * Parses the given @param payload to an InstanceLinkPayload object. If the given payload is no
+   * InstanceLinkPayload this method @eturns null;
+   */
+  private getLinkStatePayload(payload: any): InstanceLinkPayload {
+    if (payload.instanceFrom !== undefined && payload.instanceTo !== undefined && payload.link !== undefined) {
+      if (objIsInstance(payload.instanceFrom) && objIsInstance(payload.instanceTo) && objIsLink(payload.link)) {
+        return payload;
       }
+    }
+    return null;
+  }
+
+  private getInstanceFromPayload(payload: any): ReturnType {
+    if (objIsInstance(payload.instance)) {
+      return payload.instance;
+    }
+    return null;
+  }
+
+  /**
+   * In the instance registry only one numbers changed event exists. To handle this
+   * event more easily it is split into three different event types for crawler, webapi,
+   * and webapp on the client.
+   * This method parses the given @param payload and returns an object containing the event
+   * and the parsed payload.
+   */
+  private getNumbersChangedPayload(payload: any) {
+    const toSend: ReturnType = payload.newNumber;
+    let event: EventType = null;
+    switch (payload.componentType) {
+      case ComponentTypeEnum.WebApp:
+        event = EventTypeEnum.InstanceNumbersWebApp;
+        break;
+      case ComponentTypeEnum.WebApi:
+        event = EventTypeEnum.InstanceNumbersWebApi;
+        break;
+      case ComponentTypeEnum.Crawler:
+        event = EventTypeEnum.InstanceNumbersCrawler;
+        break;
+    }
 
     return {event, toSend};
   }

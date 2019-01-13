@@ -81,5 +81,5 @@ export function payloadIsInstanceLink(payload: any): payload is InstanceLink {
 
 
 export function objectIsMessage(obj: any): obj is RegistryEvent {
-  return obj.eventType !== undefined && obj.payload !== undefined;
+  return obj !== null && obj.eventType !== undefined && obj.payload !== undefined;
 }
