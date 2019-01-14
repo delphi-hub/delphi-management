@@ -16,18 +16,17 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { async, TestBed, inject } from '@angular/core/testing';
 import { Location } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard.component';
-import {HttpClientModule} from '@angular/common/http';
 
 
 describe('component: DashboardComponent', () => {
 
-  let location, router;
+  let location: Location, router: Router;
 
 
   beforeEach(() => {
