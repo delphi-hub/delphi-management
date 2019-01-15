@@ -17,13 +17,9 @@
  */
 
 import {Component, Input, OnInit} from '@angular/core';
-import {EventType, EventTypeEnum} from '../../api/model/socketMessage';
-import {ComponentType, ComponentTypeEnum} from '../../api/model/instance';
-import {ApiService} from '../../api/api/api.service';
-import {SocketService} from '../../api/api/socket.service';
-import { HttpEvent } from '@angular/common/http';
-
-
+import {EventType, EventTypeEnum} from '../../model/models/socketMessage';
+import {ComponentType, ComponentTypeEnum} from '../../model/models/instance';
+import { ModelService } from 'src/app/model/model.service';
 
 
 @Component({
@@ -57,38 +53,18 @@ export class DashboardCardComponent implements OnInit {
   numberOfInstances: string;
   numberOfFailedInstances: string;
 
-  constructor(private irService: ApiService, private socketService: SocketService) {
+  constructor(private modelService: ModelService) {
     this.numberOfFailedInstances = 'No server connection';
    }
 
   ngOnInit() {
-    // this has to be called onInit and not in the constructor, due
-    // to the component lifecycle. Input's are not initialized in
-    // the constructor.
-    this.setInstanceNumber();
-    this.socketService.initSocket().then(() => {
-
-      const eventType: EventType = DashboardCardComponent.compTypeEventMap[this.componentType];
-
-      this.socketService.subscribeForEvent<number>(eventType).subscribe((data: number) => {
-        console.log('data callback in card component', data);
-
-        this.numberOfInstances = '' + data;
-      });
-    });
-
-  }
-
-  /**
-   * Uses the instance service to query the number of instances in the current system.
-   * If there is no server connection the value is set to a default error message.
-   */
-  private setInstanceNumber() {
-    this.irService.getNumberOfInstances(this.componentType).subscribe((amount: HttpEvent<number>) => {
-      this.numberOfInstances = '' + amount;
-    }, () => {
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.numberOfInstances = '' + this.modelService.getComponentsByType(this.componentType).length;
+    }, (error: Error) => {
+      console.log(error);
       this.numberOfInstances = 'No server connection';
     });
   }
+
 
 }

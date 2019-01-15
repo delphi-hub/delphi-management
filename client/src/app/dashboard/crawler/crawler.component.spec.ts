@@ -27,11 +27,10 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatDialogModule} from '@angular/material/dialog';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { CrawlerComponent } from './crawler.component';
-import { ApiService } from 'src/app/api/api/api.service';
+import { ModelService } from 'src/app/model/model.service';
 
 
 describe('CrawlerComponent', () => {
-  let component: CrawlerComponent;
   let fixture: ComponentFixture<CrawlerComponent>;
 
   beforeEach(async(() => {
@@ -45,12 +44,11 @@ describe('CrawlerComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CrawlerComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it(`should create`, async(inject([HttpTestingController, ApiService],
-    (httpClient: HttpTestingController, apiService: ApiService) => {
-      expect(apiService).toBeTruthy();
+  it(`should create`, async(inject([HttpTestingController, ModelService],
+    (modelService: ModelService) => {
+      expect(modelService).toBeTruthy();
   })));
 });

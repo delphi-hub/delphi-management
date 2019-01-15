@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import {ComponentTypeEnum} from '../../api/model/instance';
+import {Component, OnInit} from '@angular/core';
+import {ComponentTypeEnum} from '../../model/models/instance';
 
 
 @Component({

@@ -16,6 +16,10 @@
  * limitations under the License.
  */
 
+
+import {CustomHttpUrlEncodingCodec} from '../encoder';
+import {Instance} from '../../model/models/instance';
+import {SysInfo} from '../../model/models/sysInfo';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -30,11 +34,9 @@ import {
   STOP_INSTANCE,
   PAUSE_INSTANCE,
   RESUME_INSTANCE,
-  DELETE_INSTANCE
+  DELETE_INSTANCE,
+  INSTANCE_NETWORK
 } from '../variables';
-import { CustomHttpUrlEncodingCodec } from '../encoder';
-import { Instance } from '../model/instance';
-import { SysInfo } from '../model/sysInfo';
 
 
 
@@ -59,19 +61,12 @@ export class ApiService {
     }
   }
 
-  public getSysInfo(reportProgress: boolean = false): Observable<SysInfo> {
-    let headers = this.defaultHeaders;
+  public getSysInfo(): Observable<SysInfo> {
+    return this.get<SysInfo>(SYS_INFO);
+  }
 
-    // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
-    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-    return this.httpClient.get<SysInfo>(`${this.basePath}${SYS_INFO}`,
-      { headers: headers, observe: 'body', reportProgress: reportProgress });
+  public getInstanceNetwork(): Observable<Array<Instance>> {
+    return this.get<Array<Instance>>(INSTANCE_NETWORK);
   }
 
   /**
@@ -81,8 +76,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false):
-   Observable<HttpEvent<number>> {
+  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<number> {
     return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
@@ -159,14 +153,11 @@ export class ApiService {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
 
-  private get(endpoint: string, componentType: string, observe: any = 'body', reportProgress: boolean = false): any {
-    if (componentType === null || componentType === undefined) {
-      throw new Error('Required parameter componentType was null or undefined when calling getInstanceNumber.');
-    }
+  private get<T>(endpoint: string, componentType?: string) {
 
     let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
     if (componentType !== undefined) {
-      queryParameters = queryParameters.set('componentType', <any>componentType);
+      queryParameters = queryParameters.set('componentType', componentType);
     }
 
     let headers = this.defaultHeaders;
@@ -180,13 +171,11 @@ export class ApiService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
-    return this.httpClient.get<Instance | number>(`${this.basePath}${endpoint}`,
+    return this.httpClient.get<T>(`${this.basePath}${endpoint}`,
       {
         params: queryParameters,
         withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress
+        headers: headers
       }
     );
   }

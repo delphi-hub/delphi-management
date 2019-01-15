@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 
+import {Instance} from '../../model/models/instance';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Instance} from '../../api/model/instance';
 import { MatDialog, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
-import { ApiService } from '../../api/api/api.service';
 import { HttpEvent } from '@angular/common/http';
-
+import { ModelService } from 'src/app/model/model.service';
+import { ApiService } from 'src/app/api/api/api.service';
 
 
 @Component({
@@ -49,8 +49,7 @@ export class TableAllComponent implements OnInit {
     dialogResult: string;
     @ViewChild(MatTable) table: MatTable<Instance>;
 
-    constructor(public dialog: MatDialog, private apiService: ApiService) {
-
+    constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -78,14 +77,15 @@ export class TableAllComponent implements OnInit {
                 console.log('data', this.dataSource.data);
 
             } else {
-                this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
-                    console.log('result', deleteResult);
-                }, err => {
-                    console.log('error delete Instance');
-                });
-                this.removeAt(i);
-
-            }
+                if (result !== 'Cancle') {
+                    this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
+                        console.log('result', deleteResult);
+                    }, err => {
+                        console.log('error delete Instance');
+                    });
+                    this.removeAt(i);
+                }
+             }
             this.dialogResult = result;
         });
     }
@@ -112,14 +112,7 @@ export class TableAllComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(dialogResult => {
             this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
-                this.dataSource.data.push({
-                    id: result.id,
-                    host: '',
-                    portNumber: result.portNumber,
-                    name: dialogResult.name,
-                    instanceState: result.instanceState,
-                    componentType: this.type
-                });
+                this.dataSource.data.push(result);
                 this.table.renderRows();
             }, err => {
 

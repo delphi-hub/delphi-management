@@ -17,11 +17,14 @@
  */
 
 
-export type ComponentType= 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement';
+import {InstanceLink} from './instanceLink';
+
+export type ComponentType= 'Crawler' | 'WebApi' | 'WebApp' | 'DelphiManagement' | 'ElasticSearch';
 export const ComponentTypeEnum = {
   Crawler: 'Crawler' as ComponentType,
   WebApi: 'WebApi' as ComponentType,
   WebApp: 'WebApp' as ComponentType,
+  ElasticSearch: 'ElasticSearch' as ComponentType,
   DelphiManagement: 'DelphiManagement' as ComponentType
 };
 
@@ -31,6 +34,8 @@ export interface Instance {
   host: string;
   portNumber: number;
   name: string;
+  linksTo: Array<InstanceLink>;
+  linksFrom: Array<InstanceLink>;
   /**
    * Component Type
    */
@@ -53,10 +58,8 @@ export const StateEnum = {
 };
 
 export function objIsInstance(obj: any): obj is Instance {
-  return (obj.host !== undefined && typeof obj.host === 'string' &&
-          obj.portNumber !== undefined && typeof obj.portNumber === 'number' &&
-          obj.name !== undefined && typeof obj.name === 'string' &&
-          obj.componentType !== undefined && obj.componentType in ComponentTypeEnum);
+    return (obj.host !== undefined && typeof obj.host === 'string' &&
+            obj.portNumber !== undefined && typeof obj.portNumber === 'number' &&
+            obj.name !== undefined && typeof obj.name === 'string' &&
+            obj.componentType !== undefined && obj.linksFrom !== undefined && obj.linksTo !== undefined);
 }
-
-

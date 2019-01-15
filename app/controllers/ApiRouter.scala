@@ -36,6 +36,7 @@ class ApiRouter @Inject()(irController: InstanceRegistryController, sysControlle
     case GET(p"/numberOfInstances" ? q"componentType=$componentType") => irController.numberOfInstances(componentType)
     case GET(p"/instances" ? q"componentType=$componentType") => irController.instances(componentType)
     case GET(p"/systemInfo") => sysController.getInfo()
+    case GET(p"/network") => irController.getNetwork()
     case POST(p"/postInstance" ? q"componentType=$componentType"& q"name=$name") => irController.postInstance(componentType, name)
     case POST(p"/startInstance" ? q"instanceID=$instanceID") => irController.handleRequest(action="/start", instanceID)
     case POST(p"/stopInstance" ? q"instanceID=$instanceID") => irController.handleRequest(action="/stop", instanceID)

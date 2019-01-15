@@ -17,10 +17,6 @@
  */
 
 
-
-
-
-
 import {ComponentType, ComponentTypeEnum, Instance} from './instance';
 import {InstanceLink, LinkStateEnum} from './instanceLink';
 
@@ -34,7 +30,14 @@ export interface RegistryEvent {
 
 
   export type EventType = 'NumbersChangedEvent' | 'InstanceAddedEvent' | 'InstanceRemovedEvent' | 'StateChangedEvent' |
-    'InstanceNumbersCrawler'| 'InstanceNumbersWebApi' | 'InstanceNumbersWebApp' | 'InstanceDetails' | 'Heartbeat';
+    'InstanceNumbersCrawler'
+    | 'InstanceNumbersWebApi'
+    | 'InstanceNumbersWebApp'
+    | 'InstanceDetails'
+    | 'Heartbeat'
+    | 'LinkAddedEvent'
+    | 'LinkStateChangedEvent';
+
   export const EventTypeEnum = {
     NumbersChangedEvent: 'NumbersChangedEvent' as EventType,
     InstanceAddedEvent: 'InstanceAddedEvent' as EventType,
@@ -44,6 +47,8 @@ export interface RegistryEvent {
     InstanceNumbersWebApi: 'InstanceNumbersWebApi' as EventType,
     InstanceNumbersWebApp: 'InstanceNumbersWebApp' as EventType,
     InstanceDetails: 'InstanceDetails' as EventType,
+    LinkAddedEvent: 'LinkAddedEvent' as EventType,
+    LinkStateChangedEvent: 'LinkStateChangedEvent' as EventType,
     Heartbeat: 'Heartbeat' as EventType
   };
 
@@ -76,5 +81,5 @@ export function payloadIsInstanceLink(payload: any): payload is InstanceLink {
 
 
 export function objectIsMessage(obj: any): obj is RegistryEvent {
-  return obj.eventType !== undefined && obj.payload !== undefined;
+  return obj !== null && obj.eventType !== undefined && obj.payload !== undefined;
 }

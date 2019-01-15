@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import {SysInfo} from '../../api/model/sysInfo';
+import {Component, OnInit} from '@angular/core';
+import {SysInfo} from '../../model/models/sysInfo';
 import {ApiService} from '../../api/api/api.service';
 
 @Component({

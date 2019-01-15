@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { ApiService} from '../../api/api/api.service';
+
 
 @Component({
   selector: 'app-add-dialog',
@@ -10,7 +10,7 @@ import { ApiService} from '../../api/api/api.service';
 })
 export class AddDialogComponent implements OnInit {
 
-  constructor(public thisDialogRef: MatDialogRef<AddDialogComponent>, private apiService: ApiService) { }
+  constructor(public thisDialogRef: MatDialogRef<AddDialogComponent>) { }
   name: String;
 
   formControl = new FormControl('', [

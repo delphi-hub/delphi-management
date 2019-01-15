@@ -64,8 +64,8 @@
                  <button mat-icon-button (click)= resumeInstance(element.id) matTooltip="Resume">
                    <mat-icon aria-label="play_circle_outline">play_circle_outline</mat-icon>
                  </button>
-                  <button id="deleteButton" mat-icon-button matTooltip="Delete">
-                      <mat-icon aria-label="delete" id="deleteButton" (click)="openDeleteDialog(i,row, element.id)">delete</mat-icon>
+                  <button id="deleteButton" (click)="openDeleteDialog(i,row, element.id)" mat-icon-button matTooltip="Delete">
+                      <mat-icon aria-label="delete" id="deleteButton" >delete</mat-icon>
                   </button>
                 </mat-cell>
             </ng-container>
