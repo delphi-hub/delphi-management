@@ -51,23 +51,29 @@
 
           <ng-container matColumnDef="action">
               <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
-               <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element; let i=index; let row;" >
-                  <button  mat-icon-button (click)= startInstance(element.id) matTooltip="Start">
-                      <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
-                  </button>
-                 <button  mat-icon-button (click)= stopInstance(element.id) matTooltip="Stop">
-                   <mat-icon aria-label="stop">stop</mat-icon>
-                 </button>
-                  <button mat-icon-button (click)= pauseInstance(element.id) matTooltip="Pause">
-                      <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
-                  </button>
-                 <button mat-icon-button (click)= resumeInstance(element.id) matTooltip="Resume">
-                   <mat-icon aria-label="play_circle_outline">play_circle_outline</mat-icon>
-                 </button>
-                  <button id="deleteButton" (click)="openDeleteDialog(i,row, element.id)" mat-icon-button matTooltip="Delete">
-                      <mat-icon aria-label="delete" id="deleteButton" >delete</mat-icon>
-                  </button>
-                </mat-cell>
+                    <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element; let i=index; let row;" >
+                            <div *ngIf="!element.dockerId; else actions">
+                                Instance not hosted with docker.
+                            </div>
+                            <ng-template #actions>
+                                <button  mat-icon-button (click)= startInstance(element.id) matTooltip="Start">
+                                    <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
+                                </button>
+                                <button  mat-icon-button (click)= stopInstance(element.id) matTooltip="Stop">
+                                <mat-icon aria-label="stop">stop</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)= pauseInstance(element.id) matTooltip="Pause">
+                                    <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)= resumeInstance(element.id) matTooltip="Resume">
+                                <mat-icon aria-label="play_circle_outline">play_circle_outline</mat-icon>
+                                </button>
+                                <button id="deleteButton" (click)="openDeleteDialog(i,row, element.id)" mat-icon-button matTooltip="Delete">
+                                    <mat-icon aria-label="delete" id="deleteButton" >delete</mat-icon>
+                                </button>
+                            </ng-template>
+                    </mat-cell>
+
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
