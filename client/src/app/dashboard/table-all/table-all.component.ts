@@ -77,13 +77,15 @@ export class TableAllComponent implements OnInit {
                 console.log('data', this.dataSource.data);
 
             } else {
-                this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
-                    console.log('result', deleteResult);
-                }, err => {
-                    console.log('error delete Instance');
-                });
-                this.removeAt(i);
-            }
+                if (result !== 'Cancle') {
+                    this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
+                        console.log('result', deleteResult);
+                    }, err => {
+                        console.log('error delete Instance');
+                    });
+                    this.removeAt(i);
+                }
+             }
             this.dialogResult = result;
         });
     }
