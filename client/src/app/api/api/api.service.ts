@@ -221,7 +221,7 @@ export class ApiService {
     if (idInstance === null || idInstance === undefined) {
       throw new Error('Required ID Instance parameter');
     } else {
-      queryParam = queryParam.set('instanceID', <any>('a' + idInstance));
+      queryParam = queryParam.set('instanceID', <any>idInstance);
     }
 
     return this.commonConf(endpoint, queryParam, observe, reportProgress);
