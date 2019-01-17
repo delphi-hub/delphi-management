@@ -141,7 +141,7 @@ export class TableAllComponent implements OnInit {
     public stopInstance(id: string): void {
 
         this.apiService.stopInstance(id).subscribe((result: HttpEvent<number>) => {
-            console.log('result', result);
+
         }, err => {
             console.log('error stop Instance', err);
         });
@@ -154,7 +154,6 @@ export class TableAllComponent implements OnInit {
     public pauseInstance(id: string): void {
 
         this.apiService.pauseInstance(id).subscribe((result: HttpEvent<number>) => {
-            console.log('result', result);
         }, err => {
             console.log('error pause instance', err);
         });
@@ -167,7 +166,7 @@ export class TableAllComponent implements OnInit {
     public resumeInstance(id: string): void {
 
         this.apiService.resumeInstance(id).subscribe((result: HttpEvent<number>) => {
-            console.log('result', result);
+
         }, err => {
             console.log('error pause instance', err);
         });

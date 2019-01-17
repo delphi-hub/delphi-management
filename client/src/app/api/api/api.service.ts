@@ -109,7 +109,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+  public startInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postAction(START_INSTANCE, instanceId);
   }
 
@@ -119,7 +119,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+  public stopInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postAction(STOP_INSTANCE, instanceId);
   }
 
@@ -129,7 +129,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false)  {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
 
@@ -139,7 +139,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public resumeInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false): Observable<HttpEvent<number>> {
+  public resumeInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postAction(RESUME_INSTANCE, instanceId);
   }
 
@@ -149,7 +149,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteInstance(instanceId: string): Observable<HttpEvent<number>> {
+  public deleteInstance(instanceId: string) {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
 
@@ -214,8 +214,7 @@ export class ApiService {
   }
 
 
-  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false):
-    Observable<HttpEvent<number>> {
+  private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false) {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
     if (idInstance === null || idInstance === undefined) {
@@ -228,8 +227,7 @@ export class ApiService {
   }
 
 
-  private commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false):
-  Observable<HttpEvent<number>> {
+  private commonConf(endpoint: string, queryParameters: HttpParams, observe: any = 'body', reportProgress: boolean = false) {
     let headers = this.defaultHeaders;
 
     // to determine the Accept header
