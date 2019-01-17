@@ -44,7 +44,6 @@ describe('StatusCardComponent', () => {
     };
     TestBed.configureTestingModule({
       declarations: [ StatusCardComponent ],
-      imports: [],
       providers: [{provide: ApiService, useValue: apiServiceStub}]
     })
     .compileComponents();
@@ -57,7 +56,7 @@ describe('StatusCardComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
   });
 
   it('should have the dummy data stored', () => {
