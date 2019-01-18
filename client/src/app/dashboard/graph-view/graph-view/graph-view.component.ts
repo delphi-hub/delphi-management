@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as cytoscape from 'cytoscape';
 import {GraphViewService, ElementUpdate} from '../graph-view.service';
 import { Actions } from 'src/app/model/store.service';
+import { LinkStateEnum } from 'src/app/model/models/instanceLink';
 
 @Component({
   selector: 'app-graph-view',
@@ -52,12 +53,10 @@ export class GraphViewComponent implements OnInit {
           'width': '70%',
           'height': '70%',
           'background-opacity': 0,
-
           'background-fit': 'contain',
           'background-clip': 'none',
         }
-      }
-      ]
+      }]
     });
 
     this.graphViewService.getElementObservable().subscribe((update: ElementUpdate) => {
@@ -69,6 +68,14 @@ export class GraphViewComponent implements OnInit {
             this.updateElements(update.elements);
           }
         }
+        this.cy.edges().style('line-color', function (ele: any) {
+          const status = ele.data('status');
+          switch (status) {
+            case LinkStateEnum.Assigned: return 'green';
+            case LinkStateEnum.Failed: return 'red';
+            case LinkStateEnum.Outdated: return 'grey';
+          }
+        });
         const layout = this.cy.layout(this.layout);
         layout.run();
       }
@@ -81,7 +88,6 @@ export class GraphViewComponent implements OnInit {
         }
       }
     });
-
   }
 
   private updateElements(elements: Array<cytoscape.ElementDefinition>) {
