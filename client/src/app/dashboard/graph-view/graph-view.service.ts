@@ -62,7 +62,8 @@ export class GraphViewService {
           data: {
             id: '' + value.id,
             name: value.name,
-            image: TYPE_TO_IMG[value.componentType]
+            image: TYPE_TO_IMG[value.componentType],
+            status: value.instanceState
           }
         });
 
@@ -76,9 +77,23 @@ export class GraphViewService {
     return newElements.nodes.concat(newElements.edges);
   }
 
+//   this.state.cy.nodes().style("background-color", function (ele: any) {
+//     let type = ele.data().type;
+//     let collapsed = ele.data().collapsed;
+//     if (type == 4 && collapsed != undefined && collapsed != 0) {
+//         return "yellow";
+//     }
+//     else {
+//         if (type != resetType)
+//             return ele.style().backgroundColor;
+//         else
+//             return 'white'
+//     }
+// });
+
   private mapLinksToEdges(links: Array<InstanceLink>): Array<cytoscape.ElementDefinition> {
     const edges: Array<cytoscape.ElementDefinition> = links.map((edgeVal) => {
-      return {data: {id: edgeVal.idFrom + '_' + edgeVal.idTo, source: edgeVal.idFrom, target: edgeVal.idTo}};
+      return {data: {id: edgeVal.idFrom + '_' + edgeVal.idTo, source: edgeVal.idFrom, target: edgeVal.idTo, status: edgeVal.linkState}};
     });
     return edges;
   }
