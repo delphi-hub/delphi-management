@@ -14,10 +14,33 @@ export interface ElementUpdate {
   type: Actions;
   elements: Array<cytoscape.ElementDefinition>;
 }
-const TYPE_TO_IMG = {'Crawler': '../../../assets/images/crawler.png',
- 'WebApp': '../../../assets/images/webapp.png',
- 'WebApi': '../../../assets/images/webapi.png',
- 'ElasticSearch': '../../../assets/images/Elasticsearch.png'};
+// 'Running' | 'Failed' | 'Stopped' | 'Paused' | 'NotReachable';
+const TYPE_TO_IMG = {
+  'Crawler': {
+      'Running': '../../../assets/images/crawler.png',
+      'Failed' : '../../../assets/images/crawler.png',
+      'Stopped' : '../../../assets/images/crawler.png',
+      'Paused' : '../../../assets/images/crawler.png',
+      'NotReachable' : '../../../assets/images/crawler.png' },
+  'WebApp': {
+    'Running': '../../../assets/images/webapp.png',
+    'Failed' : '../../../assets/images/webapp.png',
+    'Stopped' : '../../../assets/images/webapp.png',
+    'Paused' : '../../../assets/images/webapp.png',
+    'NotReachable' : '../../../assets/images/webapp.png' },
+    'WebApi': {
+      'Running': '../../../assets/images/webapi.png',
+      'Failed' : '../../../assets/images/webapi.png',
+      'Stopped' : '../../../assets/images/webapi.png',
+      'Paused' : '../../../assets/images/webapi.png',
+      'NotReachable' : '../../../assets/images/webapi.png' },
+    'ElasticSearch': {
+      'Running': '../../../assets/images/Elasticsearch.png',
+      'Failed' : '../../../assets/images/Elasticsearch.png',
+      'Stopped' : '../../../assets/images/Elasticsearch.png',
+      'Paused' : '../../../assets/images/Elasticsearch.png',
+      'NotReachable' : '../../../assets/images/Elasticsearch.png' },
+};
 @Injectable({
   providedIn: 'root'
 })
@@ -62,7 +85,7 @@ export class GraphViewService {
           data: {
             id: '' + value.id,
             name: value.name,
-            image: TYPE_TO_IMG[value.componentType],
+            image: TYPE_TO_IMG[value.componentType][value.instanceState],
             status: value.instanceState
           }
         });
@@ -76,20 +99,6 @@ export class GraphViewService {
     );
     return newElements.nodes.concat(newElements.edges);
   }
-
-//   this.state.cy.nodes().style("background-color", function (ele: any) {
-//     let type = ele.data().type;
-//     let collapsed = ele.data().collapsed;
-//     if (type == 4 && collapsed != undefined && collapsed != 0) {
-//         return "yellow";
-//     }
-//     else {
-//         if (type != resetType)
-//             return ele.style().backgroundColor;
-//         else
-//             return 'white'
-//     }
-// });
 
   private mapLinksToEdges(links: Array<InstanceLink>): Array<cytoscape.ElementDefinition> {
     const edges: Array<cytoscape.ElementDefinition> = links.map((edgeVal) => {
