@@ -111,13 +111,19 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
-                this.dataSource.data.push(result);
-                this.table.renderRows();
-            }, err => {
+            if (dialogResult === 'CancleAdd') {
+                dialogRef.close();
+            }
+            else {
+                console.log("dialogResult", dialogResult);
+                this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
+                    this.dataSource.data.push(result);
+                    this.table.renderRows();
+                }, err => {
 
-                console.log('error receiving data for crawler');
-            });
+                    console.log('error receiving data for crawler');
+                });
+            }
         });
     }
 
