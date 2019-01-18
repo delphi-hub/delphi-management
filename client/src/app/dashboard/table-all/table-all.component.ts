@@ -109,7 +109,7 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            if (dialogResult === 'Add') {
+            if (dialogResult.status === 'Add') {
                 this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
                     this.dataSource.data.push(result);
                 }, (err: any) => {
