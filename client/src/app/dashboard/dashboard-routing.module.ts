@@ -26,6 +26,7 @@ import {UserManagementComponent} from './user-management/user-management.compone
 import {WebApiComponent} from './webapi/web-api.component';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {HelpComponent} from '../help/help.component';
+import { GraphViewComponent } from './graph-view/graph-view/graph-view.component';
 
 
 const dashboardRoutes: Routes = [
@@ -60,6 +61,10 @@ const dashboardRoutes: Routes = [
       {
         path: 'help',
         component: HelpComponent
+      },
+      {
+        path: 'graphView',
+        component: GraphViewComponent
       }
     ]
   }];

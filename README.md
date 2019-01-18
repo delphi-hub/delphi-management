@@ -20,12 +20,15 @@ It takes commands from authenticated administrators over the web interface and i
 
 ## How can I use it?
 To build the angular app for deployment make sure to have npm and the angular cli installed 
+
 ```
 cd client && npm install && ng build --prod && cd ..
+```
 
 For OS X users you need to expose the TCP port manually. The docker FAQ suggest it in this way:
+
 ```
-docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 127.0.0.1:1234:1234 bobrik/socat TCP-LISTEN:1234,fork UNIX-CONNECT:/var/run/docker.sock
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 127.0.0.1:9095:9095 bobrik/socat TCP-LISTEN:9095,fork UNIX-CONNECT:/var/run/docker.sock
 ```
 
 For any deployed instance you need an administrator account to interact with the application.
