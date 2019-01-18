@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as cytoscape from 'cytoscape';
-import {GraphViewService} from '../graph-view.service';
+import {GraphViewService, ElementUpdate} from '../graph-view.service';
+import { Actions } from 'src/app/model/store.service';
 
 @Component({
   selector: 'app-graph-view',
@@ -41,9 +42,15 @@ export class GraphViewComponent implements OnInit {
       ]
     });
 
-    this.graphViewService.getElementObservable().subscribe((newElements: Array<cytoscape.ElementDefinition>) => {
-      if (newElements) {
-        this.cy.add(newElements);
+    this.graphViewService.getElementObservable().subscribe((update: ElementUpdate) => {
+      if (update.elements) {
+        if (update.type === Actions.ADD) {
+          this.cy.add(update.elements);
+        } else {
+          if (update.type === Actions.CHANGE) {
+            this.updateElements(update.elements);
+          }
+        }
       }
     });
 
@@ -55,6 +62,21 @@ export class GraphViewComponent implements OnInit {
       }
     });
 
+  }
+
+  private updateElements(elements: Array<cytoscape.ElementDefinition>) {
+    console.log('trying to update elements', elements);
+    for (const element of elements) {
+      console.log('element', element);
+      // if element with id is not in cytoscape just add it
+      const cyElement = this.cy.getElementById(element.data.id);
+      console.log('cyElement', cyElement);
+      if (cyElement.length === 0) {
+        this.cy.add(element);
+      } else { // else get the element and udpate it's data field
+        cyElement.data(element.data);
+      }
+    }
   }
 
 }
