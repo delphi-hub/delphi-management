@@ -15,7 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div *ngIf="dataSource.data.length == 0; else tableBlock">
+  <div *ngIf="dataSource.data.length == 0; else tableBlock">
     There are currently no instances running.
 </div>
 <ng-template #tableBlock>
