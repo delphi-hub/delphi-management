@@ -18,7 +18,7 @@
 
 import {Instance} from '../../model/models/instance';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatDialog, MatTable, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { HttpEvent } from '@angular/common/http';
@@ -47,7 +47,6 @@ export class TableAllComponent implements OnInit {
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
     dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
     dialogResult: string;
-    @ViewChild(MatTable) table: MatTable<Instance>;
 
     constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
@@ -81,7 +80,7 @@ export class TableAllComponent implements OnInit {
                     this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
                         console.log('result', deleteResult);
                     }, err => {
-                        console.log('error delete Instance');
+                        console.log('error delete Instance', err);
                     });
                     this.removeAt(i);
                 }
@@ -92,7 +91,6 @@ export class TableAllComponent implements OnInit {
 
     removeAt(index: number) {
         this.dataSource.data.splice(index, 1);
-        this.table.renderRows();
     }
 
     applyFilter(filterValue: string) {
@@ -113,10 +111,8 @@ export class TableAllComponent implements OnInit {
         dialogRef.afterClosed().subscribe(dialogResult => {
             this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
                 this.dataSource.data.push(result);
-                this.table.renderRows();
-            }, err => {
-
-                console.log('error receiving data for crawler');
+            }, (err: any) => {
+                console.log('error receiving data for crawler', err);
             });
         });
     }
@@ -127,8 +123,7 @@ export class TableAllComponent implements OnInit {
    */
     public startInstance(id: string): void {
 
-        this.apiService.startInstance(id).subscribe((result: HttpEvent<number>) => {
-            console.log('result', result);
+        this.apiService.startInstance(id).subscribe(() => {
         }, err => {
             console.log('error start Instance', err);
         });
@@ -140,8 +135,7 @@ export class TableAllComponent implements OnInit {
    */
     public stopInstance(id: string): void {
 
-        this.apiService.stopInstance(id).subscribe((result: HttpEvent<number>) => {
-
+        this.apiService.stopInstance(id).subscribe(() => {
         }, err => {
             console.log('error stop Instance', err);
         });
@@ -153,7 +147,7 @@ export class TableAllComponent implements OnInit {
    */
     public pauseInstance(id: string): void {
 
-        this.apiService.pauseInstance(id).subscribe((result: HttpEvent<number>) => {
+        this.apiService.pauseInstance(id).subscribe(() => {
         }, err => {
             console.log('error pause instance', err);
         });
@@ -165,8 +159,7 @@ export class TableAllComponent implements OnInit {
    */
     public resumeInstance(id: string): void {
 
-        this.apiService.resumeInstance(id).subscribe((result: HttpEvent<number>) => {
-
+        this.apiService.resumeInstance(id).subscribe(() => {
         }, err => {
             console.log('error pause instance', err);
         });
