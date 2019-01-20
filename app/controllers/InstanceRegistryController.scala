@@ -117,12 +117,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       .addQueryStringParameters("Id" -> instanceID)
       .post("")
       .map { response =>
-        response.status match {
-          case 202 =>
-            Ok(response.body)
-          case x =>
-            new Status(x)
-        }
+        new Status(response.status)
       }(myExecutionContext)
   }
 

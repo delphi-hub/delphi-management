@@ -19,6 +19,7 @@
 import {TestBed} from '@angular/core/testing';
 
 import {SocketService} from './socket.service';
+import { doesNotReject } from 'assert';
 
 describe('SocketService', () => {
   let socketService: SocketService;
@@ -49,14 +50,4 @@ describe('SocketService', () => {
     expect(socketService).toBeTruthy();
   });
 
-
-  it('should return correct data on subscribe', () => {
-    console.log('new test');
-    socketService = TestBed.get(SocketService);
-    console.log('socket service', socketService);
-    // need to check the result based on some mock object to simulate the connection to the webserver
-    socketService.initSocket().then(() => {
-      console.log('fake socket open');
-    });
-  });
 });
