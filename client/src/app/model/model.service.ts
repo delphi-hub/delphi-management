@@ -85,6 +85,11 @@ export class ModelService {
       this.storeService.changeInstancesState([data.instanceFrom, data.instanceTo]);
     });
 
+
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.StateChangedEvent).subscribe((data: Instance) => {
+      this.storeService.changeInstancesState([data]);
+    });
+
     this.socketService.subscribeForEvent<InstanceLinkPayload>(EventTypeEnum.LinkStateChangedEvent).
       subscribe((data: InstanceLinkPayload) => {
         console.log('received link state changed', data);
