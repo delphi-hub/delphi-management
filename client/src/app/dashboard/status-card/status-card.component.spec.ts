@@ -17,19 +17,34 @@
  */
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { StatusCardComponent } from './status-card.component';
+import { ApiService } from 'src/app/api/api/api.service';
+import { Observable } from 'rxjs';
+import { SysInfo } from 'src/app/model/models/sysInfo';
 
 
 describe('StatusCardComponent', () => {
   let component: StatusCardComponent;
   let fixture: ComponentFixture<StatusCardComponent>;
-
+  const JAVA_VERSION = '1.0';
+  const HOST_NAME = 'My Host Name';
+  const PLATFORM_NAME = 'My Platform Name';
+  const SCALA_VERSION = '2.0';
   beforeEach(async(() => {
+    let apiServiceStub: Partial<ApiService>;
+    apiServiceStub = {
+      getSysInfo: () => new Observable<SysInfo>((observer) => {
+        observer.next({
+          javaVersion: JAVA_VERSION,
+          hostName: HOST_NAME,
+          platformName: PLATFORM_NAME,
+          scalaVersion: SCALA_VERSION
+        });
+      })
+    };
     TestBed.configureTestingModule({
       declarations: [ StatusCardComponent ],
-      imports: [HttpClientTestingModule, HttpClientModule]
+      providers: [{provide: ApiService, useValue: apiServiceStub}]
     })
     .compileComponents();
   }));
@@ -41,6 +56,13 @@ describe('StatusCardComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
+  });
+
+  it('should have the dummy data stored', () => {
+    expect(component.sysInfo.hostName).toBe(HOST_NAME);
+    expect(component.sysInfo.javaVersion).toBe(JAVA_VERSION);
+    expect(component.sysInfo.platformName).toBe(PLATFORM_NAME);
+    expect(component.sysInfo.scalaVersion).toBe(SCALA_VERSION);
   });
 });

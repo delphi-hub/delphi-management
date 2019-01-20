@@ -23,7 +23,7 @@
         <mat-form-field>
             <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         </mat-form-field>
-        <table class="mat-elevation-z8 mat-table" mat-table [dataSource]="dataSource">
+        <mat-table class="mat-elevation-z8 mat-table" [dataSource]="dataSource">
             <ng-container matColumnDef="ID">
                 <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
@@ -78,7 +78,7 @@
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </table>
+        </mat-table>
     </div>
 </ng-template>
 
