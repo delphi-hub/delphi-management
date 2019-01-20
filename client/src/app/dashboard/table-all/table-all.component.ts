@@ -111,9 +111,8 @@ export class TableAllComponent implements OnInit {
         dialogRef.afterClosed().subscribe(dialogResult => {
             if (dialogResult === 'CancleAdd') {
                 dialogRef.close();
-            }
-            else {
-                console.log("dialogResult", dialogResult);
+            } else {
+                console.log('dialogResult', dialogResult);
                 this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
                     this.dataSource.data.push(result);
                 }, err => {
