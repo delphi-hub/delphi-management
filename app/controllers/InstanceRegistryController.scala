@@ -62,7 +62,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
-  
+
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
     ws.url(instanceRegistryUri + "/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -133,9 +133,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       .post("")
       .map { response =>
         response.status match {
+          // scalastyle:off magic.number
           case 202 =>
+          // scalastyle:on magic.number
             Ok(response.body)
-          case x =>
+          case x: Any =>
             new Status(x)
         }
       }(myExecutionContext)
