@@ -46,8 +46,8 @@ table {
 }
 
 .mat_cell{
-	border-bottom-width:0px !important;
-	border-bottom-style:none !important;
+	border-bottom-width:0px;
+	border-bottom-style:none;
 }
 
 .button-row button,
