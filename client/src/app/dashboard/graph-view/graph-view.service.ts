@@ -17,29 +17,29 @@ export interface ElementUpdate {
 // 'Running' | 'Failed' | 'Stopped' | 'Paused' | 'NotReachable';
 const TYPE_TO_IMG = {
   'Crawler': {
-      'Running': '../../../assets/images/crawler.png',
-      'Failed' : '../../../assets/images/crawler.png',
-      'Stopped' : '../../../assets/images/crawler.png',
-      'Paused' : '../../../assets/images/crawler.png',
-      'NotReachable' : '../../../assets/images/crawler.png' },
+      'Running': '../../../assets/images/crawler-running.png',
+      'Failed' : '../../../assets/images/crawler-failed.png',
+      'Stopped' : '../../../assets/images/crawler-stopped.png',
+      'Paused' : '../../../assets/images/crawler-paused.png',
+      'NotReachable' : '../../../assets/images/crawler-failed.png' },
   'WebApp': {
-    'Running': '../../../assets/images/webapp.png',
-    'Failed' : '../../../assets/images/webapp.png',
-    'Stopped' : '../../../assets/images/webapp.png',
-    'Paused' : '../../../assets/images/webapp.png',
-    'NotReachable' : '../../../assets/images/webapp.png' },
+    'Running': '../../../assets/images/webapp-running.png',
+    'Failed' : '../../../assets/images/webapp-failed.png',
+    'Stopped' : '../../../assets/images/webapp-stopped.png',
+    'Paused' : '../../../assets/images/webapp-paused.png',
+    'NotReachable' : '../../../assets/images/webapp-failed.png' },
     'WebApi': {
-      'Running': '../../../assets/images/webapi.png',
-      'Failed' : '../../../assets/images/webapi.png',
-      'Stopped' : '../../../assets/images/webapi.png',
-      'Paused' : '../../../assets/images/webapi.png',
-      'NotReachable' : '../../../assets/images/webapi.png' },
+      'Running': '../../../assets/images/webapi-running.png',
+      'Failed' : '../../../assets/images/webapi-failed.png',
+      'Stopped' : '../../../assets/images/webapi-stopped.png',
+      'Paused' : '../../../assets/images/webapi-paused.png',
+      'NotReachable' : '../../../assets/images/webapi-failed.png' },
     'ElasticSearch': {
-      'Running': '../../../assets/images/Elasticsearch.png',
-      'Failed' : '../../../assets/images/Elasticsearch.png',
-      'Stopped' : '../../../assets/images/Elasticsearch.png',
-      'Paused' : '../../../assets/images/Elasticsearch.png',
-      'NotReachable' : '../../../assets/images/Elasticsearch.png' },
+      'Running': '../../../assets/images/elasticsearch-running.png',
+      'Failed' : '../../../assets/images/elasticsearch-failed.png',
+      'Stopped' : '../../../assets/images/elasticsearch-stopped.png',
+      'Paused' : '../../../assets/images/elasticsearch-paused.png',
+      'NotReachable' : '../../../assets/images/elasticsearch-failed.png' },
 };
 @Injectable({
   providedIn: 'root'

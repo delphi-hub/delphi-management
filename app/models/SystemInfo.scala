@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+// scalastyle:off
 package models
 
 case class SystemInfo(hostName: String, javaVersion: String, platformName: String, scalaVersion: String)
