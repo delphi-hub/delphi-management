@@ -74,6 +74,7 @@ export class GraphViewComponent implements OnInit {
             case LinkStateEnum.Assigned: return 'green';
             case LinkStateEnum.Failed: return 'red';
             case LinkStateEnum.Outdated: return 'grey';
+            default: return 'orange';
           }
         });
         const layout = this.cy.layout(this.layout);
