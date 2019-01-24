@@ -51,3 +51,5 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "25.1-jre",
   "org.apache.commons" % "commons-compress" % "1.16"
 )
+
+libraryDependencies += "com.pauldijou" %% "jwt-core" % "1.0.0"
