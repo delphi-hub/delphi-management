@@ -35,7 +35,7 @@ table {
 }
 
 .customWidthClass{
-   width: 320px;
+   width: 300px;
 }
 
 .mat-elevation-z8 {
@@ -78,3 +78,6 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-bottom-width: 0;
 }
 
+.customOutline {
+  outline: none;
+}

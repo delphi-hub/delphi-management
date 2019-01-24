@@ -53,7 +53,7 @@
                 <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                 <mat-cell *matCellDef="let element; let row" class="example-element-row" [class.example-expanded-row]="expandedElement === element"
                     (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
-                     <button mat-button>
+                     <button mat-button [ngClass] = "'customOutline'">
                         View Details
                     </button>
                 </mat-cell>
