@@ -57,7 +57,7 @@ export class TableAllComponent implements OnInit {
     dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
     data = new MatTableDataSource<Instance>();
     dialogResult: string;
-    expandedElement: number;
+    expandedElement: Instance;
 
     constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
@@ -185,17 +185,18 @@ export class TableAllComponent implements OnInit {
      /**
    * Function used to expand table row and show details of Docker and Labels
    */
-  onRowClicked(row: Instance) {
-    let filteredList;
-    const NoId = 'Not available';
+  onRowClicked(row: Instance): Array<{dockerId: string, labels: string[]}> {
+    let filteredList: Array<{dockerId: string, labels: string[]}>;
+    const NoId = 'Id not available';
+    const NoIdLabels = ['Labels not available'];
     if (row.dockerId !== undefined && row.labels.length !== 0) {
         filteredList = [{ dockerId: row.dockerId, labels: row.labels }];
     } else if (row.dockerId === undefined && row.labels.length !== 0) {
         filteredList = [{ dockerId: NoId, labels: row.labels }];
     } else if (row.dockerId !== undefined && row.labels.length === 0) {
-        filteredList = [{ dockerId: row.dockerId, labels: NoId }];
+        filteredList = [{ dockerId: row.dockerId, labels: NoIdLabels }];
     } else {
-        filteredList = [{ dockerId: NoId, labels: NoId }];
+        filteredList = [{ dockerId: NoId, labels: NoIdLabels }];
     }
     return filteredList;
 }
