@@ -1,3 +1,4 @@
+// scalastyle:off
 package models
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
