@@ -39,6 +39,7 @@ import {ApiModule} from '../api/api.module';
 import {ModelModule} from '../model/model.module';
 import { MaterialModule } from '../material-module/material.module';
 import { GraphViewModule } from './graph-view/graph-view.module';
+import { InforCenterComponent } from './infor-center/infor-center.component';
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import { GraphViewModule } from './graph-view/graph-view.module';
     UserProfileComponent,
     UserManagementComponent,
     DeleteDialogComponent,
-    AddDialogComponent
+    AddDialogComponent,
+    InforCenterComponent
   ],
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent

@@ -16,3 +16,14 @@
  * limitations under the License.
  */
 
+ .alignHeading{
+     text-align: center;
+ }
+
+ .mat-36 {
+    font-size: 36px ;
+    height: 36px ;
+    width: 36px ;
+    }
+
+

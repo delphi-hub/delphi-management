@@ -17,21 +17,40 @@
   -->
 
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-11 col-sm-11">
+            <h2 class="alignHeading">System Overview</h2>
+        </div>
+        <div class="col-md-1 col-sm-1">
+            <button mat-icon-button matTooltip="Graph View" routerLink="/dashboard/graphView" routerLinkActive="active">
+                <mat-icon [ngClass]="'mat-36'" aria-label="table_chart">table_chart</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Table View" routerLink="/dashboard/graphView" routerLinkActive="active">
+                <mat-icon [ngClass]="'mat-36'" aria-label="list">list</mat-icon>
+            </button>
+        </div>
+    </div>
   <div class="row">
-    <div class="col-md-3 col-sm-4">
-      <app-dashboard-card route="crawler" componentType={{crawler}} title="Crawler" img="../assets/images/crawler.png"></app-dashboard-card>
-    </div>
-    <div class="col-md-3 col-sm-4">
-      <app-dashboard-card route="webApi" componentType={{webApi}} title="Web API" img="../assets/images/webapi.png"></app-dashboard-card>
-    </div>
-    <div class="col-md-3 col-sm-4">
-      <app-dashboard-card route="webapp" componentType={{webApp}} title="Web APP" img="../assets/images/webapp.png"></app-dashboard-card>
-    </div>
-      <div class="col-md-1 col-sm-4">
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <app-statuscard></app-statuscard>
-    </div>
+      <div class="col-md-2 col-sm-2">
+          <app-dashboard-card route="crawler" componentType={{crawler}} title="Crawler" img="../assets/images/crawler.png"></app-dashboard-card>
+      </div>
+      <div class="col-md-2 col-sm-2">
+          <app-dashboard-card title="Eastic Search"></app-dashboard-card>
+      </div>
+      <div class="col-md-2 col-sm-2">
+          <app-dashboard-card route="webApi" componentType={{webApi}} title="Web API" img="../assets/images/webapi.png"></app-dashboard-card>
+      </div>
+      <div class="col-md-2 col-sm-2">
+          <app-dashboard-card route="webapp" componentType={{webApp}} title="Web APP" img="../assets/images/webapp.png"></app-dashboard-card>
+      </div>
+      <div class="col-md-4 col-sm-4">
+          <app-infor-center></app-infor-center>
+      </div>
   </div>
-  <button type="button" class="btn btn-primary" routerLink="/dashboard/graphView" routerLinkActive="active">Go To Graph View</button>
+  <div class="row">
+      <div class="col-md-9 col-sm-10"></div>
+      <div class="col-md-3 col-sm-2">
+        <app-statuscard></app-statuscard>
+      </div>
+  </div>
 </div>
