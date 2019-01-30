@@ -24,7 +24,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
-
+import { environment } from 'src/environments/environment';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService } from './InMemoryDataService';
 
 @NgModule({
   declarations: [
@@ -36,10 +38,15 @@ import { HelpComponent } from './help/help.component';
     DashboardModule,
     AppRoutingModule,
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    environment.production ?
+    [] : HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService)
   ],
   providers: [],
   bootstrap: [AppComponent]
 
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+  console.log('prod', environment.production); }
+}
