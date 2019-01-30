@@ -40,6 +40,7 @@ import {ModelModule} from '../model/model.module';
 import { MaterialModule } from '../material-module/material.module';
 import { GraphViewModule } from './graph-view/graph-view.module';
 import { InforCenterComponent } from './infor-center/infor-center.component';
+import { InstanceDetailsComponent } from './instance-details/instance-details.component';
 
 
 @NgModule({
@@ -70,7 +71,8 @@ import { InforCenterComponent } from './infor-center/infor-center.component';
     UserManagementComponent,
     DeleteDialogComponent,
     AddDialogComponent,
-    InforCenterComponent
+    InforCenterComponent,
+    InstanceDetailsComponent
   ],
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent
