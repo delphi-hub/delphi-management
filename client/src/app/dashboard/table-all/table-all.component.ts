@@ -57,10 +57,7 @@ export class TableAllComponent implements OnInit {
     dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
     data = new MatTableDataSource<Instance>();
     dialogResult: string;
-<<<<<<< HEAD
-=======
     expandedElement: Instance;
->>>>>>> develop
 
     constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
