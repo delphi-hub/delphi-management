@@ -27,6 +27,8 @@ import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
+import akka.http.scaladsl.model.headers.RawHeader
+import de.upb.cs.swt.delphi.crawler.authorization.AuthProvider
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
@@ -139,6 +141,15 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
             new Status(x)
         }
       }(myExecutionContext)
+  }
+  def authentication(userName: String, password: String ): Action[AnyContent] = Unit {
+    request => ws.url(instanceRegistryUri + "/authenticate").withHeaders(RawHeader("Authorization",s"Bearer ${AuthProvider.generateJwt(useGenericName = true),userName,password}"))
+        .post("")
+        .map { response => new Status(response.status)
+       // map { response.status match {
+     // case 202 =>
+   // ok(response.body)}
+    }
   }
 
 }
