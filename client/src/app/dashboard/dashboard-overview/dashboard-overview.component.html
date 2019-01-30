@@ -20,6 +20,8 @@
     <div class="row">
         <div class="col-md-11 col-sm-11">
             <h2 class="alignHeading">System Overview</h2>
+            <button type="button" class="btn btn-primary"  routerLink="/dashboard/instanceDetails" routerLinkActive="active">Go To Details
+            </button>
         </div>
         <div class="col-md-1 col-sm-1">
             <button mat-icon-button matTooltip="Graph View" routerLink="/dashboard/graphView" routerLinkActive="active">
@@ -27,7 +29,7 @@
             </button>
             <button mat-icon-button matTooltip="Table View" routerLink="/dashboard/graphView" routerLinkActive="active">
                 <mat-icon [ngClass]="'mat-36'" aria-label="list">list</mat-icon>
-            </button>
+            </button>            
         </div>
     </div>
     <div class="row">
