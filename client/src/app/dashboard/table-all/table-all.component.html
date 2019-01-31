@@ -23,7 +23,7 @@
         <mat-form-field>
             <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         </mat-form-field>
-        <mat-table class="mat-elevation-z8 mat-table" [dataSource]="dataSource">
+        <table class="mat-elevation-z8 mat-table" mat-table multiTemplateDataRows [dataSource]="dataSource">
             <ng-container matColumnDef="ID">
                 <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
@@ -49,36 +49,68 @@
                 <mat-cell *matCellDef="let element"> {{element.instanceState}} </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="Details">
+                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                <mat-cell *matCellDef="let element; let row" class="example-element-row" [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
+                     <button mat-button [ngClass] = "'customOutline'">
+                        View Details
+                    </button>
+                </mat-cell>
+            </ng-container>
+
           <ng-container matColumnDef="action">
               <mat-header-cell [ngClass]="'customWidthClass'"  *matHeaderCellDef> Action </mat-header-cell>
-                    <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element; let i=index; let row;" >
+                    <mat-cell [ngClass]="'customWidthClass customWidthClassNew'" *matCellDef="let element; let i=index; let row;" >
                             <div *ngIf="!element.dockerId; else actions">
                                 Instance not hosted with docker.
                             </div>
                             <ng-template #actions>
-                                <button  mat-icon-button (click)= startInstance(element.id) matTooltip="Start">
+                                <button [disabled]="!(element.instanceState==='Stopped')"  mat-icon-button (click)= startInstance(element.id) matTooltip="Start">
                                     <mat-icon aria-label="play_circle_filled_white">play_circle_filled_white</mat-icon>
                                 </button>
-                                <button  mat-icon-button (click)= stopInstance(element.id) matTooltip="Stop">
+                                <button [disabled]="!(element.instanceState==='Running')"  mat-icon-button (click)= stopInstance(element.id) matTooltip="Stop">
                                 <mat-icon aria-label="stop">stop</mat-icon>
                                 </button>
-                                <button mat-icon-button (click)= pauseInstance(element.id) matTooltip="Pause">
+                                <button [disabled]="!(element.instanceState==='Running')" mat-icon-button (click)= pauseInstance(element.id) matTooltip="Pause">
                                     <mat-icon aria-label="pause_circle_outline">pause_circle_outline</mat-icon>
                                 </button>
-                                <button mat-icon-button (click)= resumeInstance(element.id) matTooltip="Resume">
+                                <button [disabled]="!(element.instanceState==='Paused')" mat-icon-button (click)= resumeInstance(element.id) matTooltip="Resume">
                                 <mat-icon aria-label="play_circle_outline">play_circle_outline</mat-icon>
                                 </button>
-                                <button id="deleteButton" (click)="openDeleteDialog(i,row, element.id)" mat-icon-button matTooltip="Delete">
+                                <button [disabled]="!(element.instanceState==='Stopped')" id="deleteButton" (click)="openDeleteDialog(i,row, element.id)" mat-icon-button matTooltip="Delete">
                                     <mat-icon aria-label="delete" id="deleteButton" >delete</mat-icon>
                                 </button>
                             </ng-template>
                     </mat-cell>
 
             </ng-container>
+            
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <table mat-table [dataSource]="data" class="mat-elevation-z8">
+                            <ng-container matColumnDef="dockerId">
+                                <th mat-header-cell *matHeaderCellDef> DockerID </th>
+                                <td mat-cell *matCellDef="let element"> {{element.dockerId}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="labels">
+                                <th mat-header-cell *matHeaderCellDef> Labels </th>
+                                <td mat-cell *matCellDef="let element"> {{element.labels}} </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                        </table>
+
+                    </div>
+                </td>
+            </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+        </table>
     </div>
 </ng-template>
 

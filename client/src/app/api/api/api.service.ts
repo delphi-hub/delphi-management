@@ -21,7 +21,7 @@ import {CustomHttpUrlEncodingCodec} from '../encoder';
 import {Instance} from '../../model/models/instance';
 import {SysInfo} from '../../model/models/sysInfo';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Configuration } from '../configuration';
 import {
