@@ -202,6 +202,3 @@ export class TableAllComponent implements OnInit {
 }
 
 }
-
-
-
