@@ -29,9 +29,11 @@ import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import akka.http.scaladsl.model.headers.RawHeader
 import de.upb.cs.swt.delphi.crawler.authorization.AuthProvider
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.{HttpMethods, HttpRequest, StatusCodes}
 import play.api.mvc._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Await, ExecutionContext}
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -64,7 +66,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
-  
+
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
     ws.url(instanceRegistryUri + "/instances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -94,7 +96,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }(myExecutionContext)
   }
 
-  def numberOfInstances(componentType: String) : Action[AnyContent] = Action.async {
+  def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/numberOfInstances").addQueryStringParameters("ComponentType" -> componentType).get().map { response =>
@@ -108,10 +110,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   }
 
   /**
-  * This function is for handling all(start, stop, play, pause, resume) POST request.
-  * To control the instance State
-  * @param componentId
-  */
+    * This function is for handling all(start, stop, play, pause, resume) POST request.
+    * To control the instance State
+    *
+    * @param componentId
+    */
 
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
@@ -124,11 +127,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   }
 
   /**
-  * This function is for handling an POST request for adding an instance to the Scala web server
-  *
-  * @param componentType
-  * @param name
-  */
+    * This function is for handling an POST request for adding an instance to the Scala web server
+    *
+    * @param componentType
+    * @param name
+    */
   def postInstance(compType: String, name: String): Action[AnyContent] = Action.async { request =>
     ws.url(instanceRegistryUri + "/deploy")
       .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
@@ -142,14 +145,19 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
-  def authentication(userName: String, password: String ): Action[AnyContent] = Unit {
-    request => ws.url(instanceRegistryUri + "/authenticate").withHeaders(RawHeader("Authorization",s"Bearer ${AuthProvider.generateJwt(useGenericName = true),userName,password}"))
-        .post("")
-        .map { response => new Status(response.status)
-       // map { response.status match {
-     // case 202 =>
-   // ok(response.body)}
-    }
-  }
 
+  def authentication(userName: String, password: String) = Action.async { request =>
+    ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt(useGenericName = true)}"))
+      // .addQueryStringParameters("Username" -> userName, "Password" -> Password)
+      .post("")
+      .map { response =>
+        if (response.status == 200) {
+          Ok
+        } else {
+          new Status(response.status)
+        }
+      }
+  }
 }
+
+
