@@ -1,48 +1,49 @@
 <div class="container-fluid">
-    <div class="row">
-        <h4>Title</h4></div>
-    <div class="row rowAlign">
-        <div class="col-md-3 col-sm-12 detailsFormat">
-            <mat-grid-list cols="2" rowHeight="5:1">
-                <div [ngClass]="'alignTitle'" >
-                    <h4>Instance Details</h4>
-                </div>
-            <mat-grid-tile>
-              <p>Name:</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p><b>Demo</b></p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>Host:</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p><b>1800</b></p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>Port Number:</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p><b>123.45.67.89</b></p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>DockerId:</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p><b>12345678901234</b></p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>Labels:</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p><b>Not available</b></p>
-            </mat-grid-tile>
-          </mat-grid-list>
+  <div class="row">
+    <h4 [ngClass]="'titleAlign'">Title</h4>
+  </div>
+  <div class="row rowAlign">
+    <div class="col-md-3 col-sm-12 detailsFormat">
+      <mat-grid-list cols="2" rowHeight="5:1">
+        <div [ngClass]="'alignTitle'">
+          <h4>Instance Details</h4>
+        </div>
+        <mat-grid-tile>
+          <p>Name:</p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p><b>Demo</b></p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p>Host:</p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p><b>1800</b></p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p>Port Number:</p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p><b>123.45.67.89</b></p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p>DockerId:</p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p><b>12345678901234</b></p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p>Labels:</p>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <p><b>Not available</b></p>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
     <div class="col-md-6 col-sm-12">
-        <h4>Operations</h4>
-        <div [ngClass]="'bgOperation'">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      <h4>Operations</h4>
+      <div [ngClass]="'bgOperation'">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
           when an unknown printer took a galley of type and scrambled it to make a type specimen book.
           It has survived not only five centuries, but also the leap into electronic typesetting,
@@ -60,6 +61,26 @@
     </div>
   </div>
   <div class="row">
+
+    <div class="col-md-10 col-sm-12">
+      <h4 [ngClass]="'detailAlign'">Notofications</h4>
+      <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="type">
+          <mat-header-cell class="column" *matHeaderCellDef> Type </mat-header-cell>
+          <mat-cell class="column" *matCellDef="let element"> {{element.type}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="time">
+          <mat-header-cell class="column" *matHeaderCellDef> Time </mat-header-cell>
+          <mat-cell class="column" *matCellDef="let element"> {{element.time}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <mat-header-cell class="column" *matHeaderCellDef> Description </mat-header-cell>
+          <mat-cell class="column" *matCellDef="let element"> {{element.description}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
 
   </div>
 </div>
