@@ -27,7 +27,7 @@ import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
-import akka.http.scaladsl.model.headers.RawHeader
+import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials, RawHeader}
 import de.upb.cs.swt.delphi.crawler.authorization.AuthProvider
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpMethods, HttpRequest, StatusCodes}
@@ -146,14 +146,33 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
-  def authentication(userName: String, password: String) = Action.async { request =>
+   def authentication()(implicit configuration: Configuration) = Action.async {
+
+    /*val username = configuration.get[String]("play.http.user")
+        val password = configuration.get[String]("play.http.pass")
+        request => ws.url(instanceRegistryUri + "authenticate").withHttpHeaders("Authorization",Authorization(BasicHttpCredentials(username,password)))
+        */
+     ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.basicAuthJwt()}"))
+            .post("")
+          .map { response =>
+            if (response.status == 200)
+            {
+              Ok(jwtauthentication())
+            } else
+            {
+              new Status(response.status)
+            }
+          }
+  }
+  def jwtauthentication() = Action.async { request =>
     ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt(useGenericName = true)}"))
-      // .addQueryStringParameters("Username" -> userName, "Password" -> Password)
       .post("")
       .map { response =>
-        if (response.status == 200) {
+        if (response.status == 200)
+        {
           Ok
-        } else {
+        } else
+        {
           new Status(response.status)
         }
       }
