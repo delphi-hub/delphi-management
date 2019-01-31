@@ -84,6 +84,7 @@ export class GraphViewService {
           group: 'nodes',
           data: {
             id: '' + value.id,
+            type: value.componentType,
             name: value.name,
             image: TYPE_TO_IMG[value.componentType][value.instanceState],
             status: value.instanceState
