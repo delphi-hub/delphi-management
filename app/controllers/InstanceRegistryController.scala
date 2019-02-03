@@ -148,22 +148,23 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
    def authentication()(implicit configuration: Configuration) = Action.async {
 
-    /*val username = configuration.get[String]("play.http.user")
-        val password = configuration.get[String]("play.http.pass")
-        request => ws.url(instanceRegistryUri + "authenticate").withHttpHeaders("Authorization",Authorization(BasicHttpCredentials(username,password)))
-        */
-     ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.basicAuthJwt()}"))
+     val username = configuration.get[String]("play.http.user")
+     val password = configuration.get[String]("play.http.pass")
+     val authHeader= Authorization(BasicHttpCredentials(username, password))
+     ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Authorization", s"${authHeader}"),("Delphi-Authorization", s"${AuthProvider.generateJwt(useGenericName = true)}"))
+       //.withHttpHeaders(("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt(useGenericName = true)}"))
             .post("")
           .map { response =>
             if (response.status == 200)
             {
-              Ok(jwtauthentication())
+              Ok(println(response))
             } else
             {
               new Status(response.status)
             }
           }
   }
+  /*
   def jwtauthentication() = Action.async { request =>
     ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt(useGenericName = true)}"))
       .post("")
@@ -177,6 +178,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }
   }
+  */
 }
 
 
