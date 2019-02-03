@@ -23,29 +23,25 @@ import play.api.Configuration
 object AuthProvider  {
 
 
+  /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
+    *
+    *
+    * @param validFor
+    * @param useGenericName
+    * @return
+    */
+
+
   def generateJwt(validFor: Long = 1, useGenericName: Boolean = false) (implicit configuration: Configuration): String = {
-    val jwtSecretKey = configuration.get[String]("play.http.secret.Jwtkey")
+    val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
+
     val claim = JwtClaim()
       .issuedNow
       .expiresIn(validFor * 60)
       .startsNow
-      . + ("user_id", if (useGenericName) configuration.get[String]("instanceName"))
+      . + ("user_id", if (useGenericName) configuration.get[String]("play.http.instance"))
       . + ("user_type", "Component")
-
 
     Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
   }
-  def basicAuthJwt(validFor: Long =1)(implicit configuration: Configuration): String ={
-    val jwtSecretKey = configuration.get[String]("play.http.secret.Jwtkey")
-    val username = configuration.get[String]("play.http.user")
-    val password = configuration.get[String]("play.http.pass")
-    val claim = JwtClaim()
-      .issuedNow
-      .expiresIn(validFor * 300)
-      .startsNow
-      . + ("username", username)
-      . + ("password", password)
-    Jwt.encode(claim,jwtSecretKey,JwtAlgorithm.HS256)
-  }
-
 }

@@ -22,18 +22,14 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.json._
 import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
-import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials, RawHeader}
+import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import de.upb.cs.swt.delphi.crawler.authorization.AuthProvider
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpMethods, HttpRequest, StatusCodes}
 import play.api.mvc._
-
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.ExecutionContext
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -145,40 +141,28 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
-
-   def authentication()(implicit configuration: Configuration) = Action.async {
+  /**
+    * This function is to authenticate Delphi-Management at the Instance Registry
+    *
+    */
+   def authentication()(implicit configuration: Configuration): Action[AnyContent] = Action.async {
 
      val username = configuration.get[String]("play.http.user")
      val password = configuration.get[String]("play.http.pass")
      val authHeader= Authorization(BasicHttpCredentials(username, password))
-     ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Authorization", s"${authHeader}"),("Delphi-Authorization", s"${AuthProvider.generateJwt(useGenericName = true)}"))
-       //.withHttpHeaders(("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt(useGenericName = true)}"))
+     ws.url(instanceRegistryUri + "/authenticate")
+       .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"${AuthProvider.generateJwt(useGenericName = true)}"))
             .post("")
           .map { response =>
             if (response.status == 200)
             {
-              Ok(println(response))
+              Ok
             } else
             {
               new Status(response.status)
             }
           }
   }
-  /*
-  def jwtauthentication() = Action.async { request =>
-    ws.url(instanceRegistryUri + "/authenticate").withHttpHeaders(("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt(useGenericName = true)}"))
-      .post("")
-      .map { response =>
-        if (response.status == 200)
-        {
-          Ok
-        } else
-        {
-          new Status(response.status)
-        }
-      }
-  }
-  */
 }
 
 
