@@ -35,15 +35,15 @@ table {
 }
 
 .customWidthClass{
-   width:350px;
+   width: 235px;
 }
 
 .mat-elevation-z8 {
   box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); }
 
-.customWidthClass_new{
-	margin-left: 20px;
-}
+.customWidthClassNew{
+    padding-right: 75px;
+ }
 
 .mat_cell{
 	border-bottom-width:0px !important;
@@ -56,3 +56,30 @@ table {
   float:right;
   margin-top:15px;
 }
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: #f5f5f5;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.customOutline {
+  outline: none;
+}
+
+
