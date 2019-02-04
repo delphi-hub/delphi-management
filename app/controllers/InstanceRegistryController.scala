@@ -134,9 +134,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       .post("")
       .map { response =>
         response.status match {
+          // scalastyle:off magic.number
           case 202 =>
+          // scalastyle:on magic.number
             Ok(response.body)
-          case x =>
+          case x: Any =>
             new Status(x)
         }
       }(myExecutionContext)
