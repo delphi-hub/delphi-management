@@ -47,7 +47,7 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with E
           }
         }
       )
-      
+
     case SocketMessage(event, payload) =>
       Logger.debug("received socket message in client" + SocketMessage)
       if (!myEvents.contains(event)) {
