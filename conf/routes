@@ -1,12 +1,12 @@
-->          /webjars                webjars.Routes
+# ->          /webjars                webjars.Routes
 # Application
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.FrontendController.index
 
-# Authentication
-
-GET     /auth/signin                controllers.AuthController.signIn
-POST    /auth/authenticate          controllers.AuthController.authenticate
-GET     /auth/signout               controllers.AuthController.signOut
++nocsrf
+->      /api                        controllers.ApiRouter
+GET     /ws                         controllers.InstanceRegistryController.socket
 
 # Public assets
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+# Serve static assets under public directory
+GET     /*file                      controllers.FrontendController.assetOrDefault(file)
+#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
