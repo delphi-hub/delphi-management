@@ -150,8 +150,9 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
      val username = configuration.get[String]("play.http.user")
      val password = configuration.get[String]("play.http.pass")
      val authHeader= Authorization(BasicHttpCredentials(username, password))
+     //val JwtHeader =
      ws.url(instanceRegistryUri + "/authenticate")
-       .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"${AuthProvider.generateJwt(useGenericName = true)}"))
+       .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"${AuthProvider.generateJwt()(_)}"))
             .post("")
           .map { response =>
             if (response.status == 200)

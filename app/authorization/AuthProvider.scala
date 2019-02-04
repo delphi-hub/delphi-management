@@ -16,12 +16,12 @@
 package de.upb.cs.swt.delphi.crawler.authorization
 
 
+import javax.inject.Inject
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
 import play.api.Configuration
 
 
 object AuthProvider  {
-
 
   /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
     *
@@ -32,14 +32,13 @@ object AuthProvider  {
     */
 
 
-  def generateJwt(validFor: Long = 1, useGenericName: Boolean = false) (implicit configuration: Configuration): String = {
+  def generateJwt() (configuration: Configuration): String = {
     val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
-
     val claim = JwtClaim()
       .issuedNow
-      .expiresIn(validFor * 60)
+      .expiresIn(seconds=60)
       .startsNow
-      . + ("user_id", if (useGenericName) configuration.get[String]("play.http.instance"))
+      . + ("user_id", configuration.get[String]("play.http.instance"))
       . + ("user_type", "Component")
 
     Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
