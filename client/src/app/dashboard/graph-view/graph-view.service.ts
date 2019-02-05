@@ -21,25 +21,30 @@ const TYPE_TO_IMG = {
       'Failed' : '../../../assets/images/crawler-failed.png',
       'Stopped' : '../../../assets/images/crawler-stopped.png',
       'Paused' : '../../../assets/images/crawler-paused.png',
-      'NotReachable' : '../../../assets/images/crawler-failed.png' },
+      'NotReachable' : '../../../assets/images/crawler-failed.png',
+      'Unknown' : '../../../assets/images/crawler.png',
+     },
   'WebApp': {
     'Running': '../../../assets/images/webapp-running.png',
     'Failed' : '../../../assets/images/webapp-failed.png',
     'Stopped' : '../../../assets/images/webapp-stopped.png',
     'Paused' : '../../../assets/images/webapp-paused.png',
-    'NotReachable' : '../../../assets/images/webapp-failed.png' },
+    'NotReachable' : '../../../assets/images/webapp-failed.png',
+    'Unknown' : '../../../assets/images/webapp.png', },
     'WebApi': {
       'Running': '../../../assets/images/webapi-running.png',
       'Failed' : '../../../assets/images/webapi-failed.png',
       'Stopped' : '../../../assets/images/webapi-stopped.png',
       'Paused' : '../../../assets/images/webapi-paused.png',
-      'NotReachable' : '../../../assets/images/webapi-failed.png' },
+      'NotReachable' : '../../../assets/images/webapi-failed.png',
+      'Unknown' : '../../../assets/images/webapi.png', },
     'ElasticSearch': {
       'Running': '../../../assets/images/elasticsearch-running.png',
       'Failed' : '../../../assets/images/elasticsearch-failed.png',
       'Stopped' : '../../../assets/images/elasticsearch-stopped.png',
       'Paused' : '../../../assets/images/elasticsearch-paused.png',
-      'NotReachable' : '../../../assets/images/elasticsearch-failed.png' },
+      'NotReachable' : '../../../assets/images/elasticsearch-failed.png',
+      'Unknown' : '../../../assets/images/elasticsearch.png'} ,
 };
 @Injectable({
   providedIn: 'root'
@@ -79,14 +84,17 @@ export class GraphViewService {
   private createCytoscapeElements(instances: Array<Instance>): Array<cytoscape.ElementDefinition>  {
     const newElements = instances.reduce(
       ( accumulator: NodeEdgeMap, value: Instance) => {
-
+        let img = TYPE_TO_IMG[value.componentType][value.instanceState];
+        if (img === undefined) {
+          img = TYPE_TO_IMG[value.componentType]['Unknown'];
+        }
         accumulator.nodes.push({
           group: 'nodes',
           data: {
             id: '' + value.id,
             type: value.componentType,
             name: value.name,
-            image: TYPE_TO_IMG[value.componentType][value.instanceState],
+            image: img,
             status: value.instanceState
           }
         });
