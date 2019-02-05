@@ -47,7 +47,14 @@ export class GraphViewComponent implements OnInit {
 
     this.configureCytoscape();
     this.addEdgeDragListener();
+    this.addChangeListener();
+  }
 
+  /**
+   * Adds listeners to the graphViewService and describe how the
+   * view should be updated if it receives any changes / updates.
+   */
+  private addChangeListener() {
     this.graphViewService.getElementObservable().subscribe((update: ElementUpdate) => {
       if (update.elements) {
         if (update.type === Actions.ADD) {
@@ -57,7 +64,7 @@ export class GraphViewComponent implements OnInit {
             this.updateElements(update.elements);
           }
         }
-        this.cy.edges().style('line-color', function (ele: any) {
+        this.cy.edges().style('line-color', function (ele: cytoscape.EdgeSingular) {
           const status = ele.data('status');
           switch (status) {
             case LinkStateEnum.Assigned: return 'green';
@@ -80,6 +87,10 @@ export class GraphViewComponent implements OnInit {
     });
   }
 
+  /**
+   * Configures the components behavior when an edge is draged from one
+   * node to another.
+   */
   private addEdgeDragListener() {
     let removedElements: cytoscape.CollectionReturnValue;
 
@@ -101,7 +112,7 @@ export class GraphViewComponent implements OnInit {
         });
     });
 
-    (this.cy as any).on('ehstart', (event, sourceNode: cytoscape.NodeSingular) => {
+    (this.cy as any).on('ehstart', (event: any, sourceNode: cytoscape.NodeSingular) => {
       const type = sourceNode.data('type');
       let allElesToHide: cytoscape.CollectionReturnValue;
       switch (type) {
@@ -142,6 +153,9 @@ export class GraphViewComponent implements OnInit {
   }
 
 
+  /**
+   * Initializes cytoscape and registers the edge drag and drop extension.
+   */
   private configureCytoscape() {
     this.cy = cytoscape({
       container: this.cyDiv.nativeElement, // container to render in
