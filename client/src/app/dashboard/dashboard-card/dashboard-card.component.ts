@@ -18,8 +18,9 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {EventType, EventTypeEnum} from '../../model/models/socketMessage';
-import {ComponentType, ComponentTypeEnum} from '../../model/models/instance';
+import {ComponentType, ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
+import { ApiService } from 'src/app/api/api/api.service';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class DashboardCardComponent implements OnInit {
     [ComponentTypeEnum.WebApp]: EventTypeEnum.InstanceNumbersWebApp,
     [ComponentTypeEnum.WebApi]: EventTypeEnum.InstanceNumbersWebApi,
   };
+  fakeData: Instance[];
 
   @Input() img: string;
   @Input() route: string;
@@ -53,7 +55,7 @@ export class DashboardCardComponent implements OnInit {
   numberOfInstances: string;
   numberOfFailedInstances: string;
 
-  constructor(private modelService: ModelService) {
+  constructor(private modelService: ModelService, private apiService: ApiService) {
     this.numberOfFailedInstances = 'No server connection';
    }
 
@@ -63,6 +65,12 @@ export class DashboardCardComponent implements OnInit {
     }, (error: Error) => {
       console.log(error);
       this.numberOfInstances = 'No server connection';
+    });
+
+    this.apiService.getInstances(this.componentType , null , false).subscribe((dbData) => {
+      this.fakeData = dbData;
+       this.numberOfInstances = '' + dbData.length;
+       console.log('dbData', dbData.length);
     });
   }
 

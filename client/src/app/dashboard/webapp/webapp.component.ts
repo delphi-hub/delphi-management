@@ -19,6 +19,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
+import { ApiService } from 'src/app/api/api/api.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ import { ModelService } from 'src/app/model/model.service';
 export class WebappComponent implements OnInit {
   // this array is inserted into the table all component in the html code
   tableData: Instance[];
-  constructor(private modelService: ModelService) {
+  constructor(private modelService: ModelService, private apiService: ApiService) {
   }
 
   ngOnInit() {
@@ -37,6 +38,11 @@ export class WebappComponent implements OnInit {
     this.modelService.getObservableForInstances().subscribe(() => {
       this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
     });
+
+     this.apiService.getInstances(ComponentTypeEnum.WebApp, null , false).subscribe((dbData) => {
+       this.tableData = dbData;
+     });
+
   }
 
 }

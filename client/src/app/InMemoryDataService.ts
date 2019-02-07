@@ -10,7 +10,7 @@ export class InMemoryDataService implements InMemoryDbService {
       // number
     const instances: Array<Instance> = [];
 
-    for ( let i = 0; i < Faker.random.number({min: 0, max: 20}); i++) {
+    for ( let i = 0; i < Faker.random.number({min: 1, max: 20}); i++) {
         instances.push({
             id: Faker.random.number(),
             host: Faker.internet.ip(),
@@ -19,7 +19,7 @@ export class InMemoryDataService implements InMemoryDbService {
             linksTo: [],
             linksFrom: [],
             componentType: this.types[Faker.random.number({min: 0, max: 4})],
-            dockerId: Faker.random.alphaNumeric(),
+            dockerId: Faker.random.uuid(),
             instanceState: this.states[Faker.random.number({min: 0, max: 4})],
             labels: []
         });

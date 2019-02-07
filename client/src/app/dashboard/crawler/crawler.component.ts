@@ -19,6 +19,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Instance, ComponentType, ComponentTypeEnum} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
+import { ApiService } from 'src/app/api/api/api.service';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class CrawlerComponent implements OnInit {
   tableData: Instance[];
   compType: ComponentType;
 
-  constructor(private modelService: ModelService) {
+  constructor(private modelService: ModelService, private apiService: ApiService) {
     this.tableData = [];
   }
 
@@ -40,7 +41,10 @@ export class CrawlerComponent implements OnInit {
     this.modelService.getObservableForInstances().subscribe(() => {
       this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
     });
+
+     this.apiService.getInstances(ComponentTypeEnum.Crawler, null , false).subscribe((dbData) => {
+       this.tableData = dbData;
+     });
   }
 
 }
-
