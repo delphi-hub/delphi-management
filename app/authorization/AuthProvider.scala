@@ -13,12 +13,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package de.upb.cs.swt.delphi.crawler.authorization
+package authorization
 
 
-import javax.inject.Inject
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
-import play.api.Configuration
 
 
 object AuthProvider  {
@@ -27,19 +25,18 @@ object AuthProvider  {
     *
     *
     * @param validFor
-    * @param useGenericName
     * @return
     */
 
 
-  def generateJwt() (configuration: Configuration): String = {
-    val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
+  def generateJwt(validFor: Long = 1): String = {
+    val jwtSecretKey = "changeme"// configuration.get[String]("play.http.secret.JWTkey")
     val claim = JwtClaim()
       .issuedNow
-      .expiresIn(seconds=60)
+      .expiresIn(validFor*300)
       .startsNow
-      . + ("user_id", configuration.get[String]("play.http.instance"))
-      . + ("user_type", "Component")
+      . + ("user_id", "Management")// configuration.get[String]("play.http.instance"))
+      . + ("user_type", "Admin")
 
     Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
   }
