@@ -66,6 +66,9 @@ export class TableAllComponent implements OnInit {
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;
+        this.apiService.getInstances(this.type , null , false).subscribe((dbData) => {
+        this.dataArray = dbData;
+          });
     }
 
     /**
@@ -127,7 +130,6 @@ export class TableAllComponent implements OnInit {
                 this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
                     this.dataSource.data.push(result);
                 }, err => {
-
                     console.log('error receiving data for crawler');
                 });
             }

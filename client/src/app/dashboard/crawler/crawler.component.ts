@@ -42,9 +42,6 @@ export class CrawlerComponent implements OnInit {
       this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
     });
 
-     this.apiService.getInstances(ComponentTypeEnum.Crawler, null , false).subscribe((dbData) => {
-       this.tableData = dbData;
-     });
   }
 
 }

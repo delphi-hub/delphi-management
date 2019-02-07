@@ -41,9 +41,6 @@ export class WebApiComponent implements OnInit {
       this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
     });
 
-       this.apiService.getInstances(ComponentTypeEnum.WebApi, null , false).subscribe((dbData) => {
-       this.tableData = dbData;
-     });
   }
 
 }

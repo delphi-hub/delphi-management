@@ -39,10 +39,6 @@ export class WebappComponent implements OnInit {
       this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
     });
 
-     this.apiService.getInstances(ComponentTypeEnum.WebApp, null , false).subscribe((dbData) => {
-       this.tableData = dbData;
-     });
-
   }
 
 }
