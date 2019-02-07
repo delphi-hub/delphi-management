@@ -29,6 +29,7 @@ import {HelpComponent} from '../help/help.component';
 import { GraphViewComponent } from './graph-view/graph-view/graph-view.component';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
 import { TableAllComponent } from './table-all/table-all.component';
+import { TableOverviewComponent } from './table-overview/table-overview.component';
 
 
 const dashboardRoutes: Routes = [
@@ -53,8 +54,8 @@ const dashboardRoutes: Routes = [
         component: WebApiComponent
       },
       {
-        path: 'tableAll',
-        component: TableAllComponent
+        path: 'tableOverview',
+        component: TableOverviewComponent
       },
       {
         path: 'userManagement',

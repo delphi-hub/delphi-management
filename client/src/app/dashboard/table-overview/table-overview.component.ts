@@ -16,26 +16,38 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
 
-
 @Component({
-  selector: 'app-webapp',
-  templateUrl: './webapp.component.html',
-  styleUrls: ['./webapp.component.css']
+  selector: 'app-table-overview',
+  templateUrl: './table-overview.component.html',
+  styleUrls: ['./table-overview.component.css']
 })
-export class WebappComponent implements OnInit {
-  // this array is inserted into the table all component in the html code
-  tableData: Instance[];
-  constructor(private modelService: ModelService) {
-  }
+export class TableOverviewComponent implements OnInit {
+
+  webapiData: Instance[];
+  webappData: Instance[];
+  crawlerData: Instance[];
+
+  constructor(private modelService: ModelService) { }
 
   ngOnInit() {
-    this.tableData = [];
+    this.webapiData = [];
+    this.webappData = [];
+    this.crawlerData = [];
+
     this.modelService.getObservableForInstances().subscribe(() => {
-      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
+      this.webapiData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
+    });
+
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.webappData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
+    });
+
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.crawlerData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
     });
   }
 

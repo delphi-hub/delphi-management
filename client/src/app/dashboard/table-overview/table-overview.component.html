@@ -14,13 +14,19 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
-<h4> Web Application Details</h4>
 <div class="container">
-	
-  	<div class="row">
-    	<app-table-all  type="WebApp" [dataArray] = "tableData"> </app-table-all> 
-   </div>
+    <h4> WebApi Details</h4>
+    <div class="row">
+        <app-table-all type="WebApi" [dataArray]="webapiData"> </app-table-all>
+    </div>
+    <h4> Web Application Details </h4>
+    <div class="row">
+        <app-table-all type="WebApp" [dataArray]="webappData"> </app-table-all>
+    </div>
+    <h4> Crawler Details</h4>
+    <div class="row">
+        <app-table-all type="Crawler" [dataArray]="crawlerData"> </app-table-all>
+  </div>
 </div>
-

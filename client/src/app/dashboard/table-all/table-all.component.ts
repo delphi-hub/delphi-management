@@ -40,7 +40,7 @@ import { ApiService } from 'src/app/api/api/api.service';
     ]
 })
 export class TableAllComponent implements OnInit {
-    /*@Input() type: Instance['componentType'];
+    @Input() type: Instance['componentType'];
 
     @Input() set dataArray(dataArray: Instance[]) {
         if (this.dataSource != null) {
@@ -58,15 +58,14 @@ export class TableAllComponent implements OnInit {
     data = new MatTableDataSource<Instance>();
     dialogResult: string;
     expandedElement: Instance;
-    */
 
-    constructor(private apiService: ApiService, private modelService: ModelService) {
+    constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
 
-    //@ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     ngOnInit() {
-        //this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.paginator;
     }
 
     /**
@@ -74,7 +73,7 @@ export class TableAllComponent implements OnInit {
    * Prompts to Stop the instance before deleting.
    * @param InstanceID
    */
-    /*openDeleteDialog(i: number, instance: Instance, id: string) {
+    openDeleteDialog(i: number, instance: Instance, id: string) {
         const dialogRef = this.dialog.open(DeleteDialogComponent, {
             width: '250px',
             data: { name: instance.name }
@@ -88,7 +87,7 @@ export class TableAllComponent implements OnInit {
                 console.log('data', this.dataSource.data);
 
             } else {
-                if (result !== 'Cancle') {
+                if (result !== 'Cancel') {
                     this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
                         console.log('result', deleteResult);
                     }, err => {
@@ -99,29 +98,29 @@ export class TableAllComponent implements OnInit {
              }
             this.dialogResult = result;
         });
-    }*/
+    }
 
-    /*removeAt(index: number) {
+    removeAt(index: number) {
         this.dataSource.data.splice(index, 1);
     }
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
-    }*/
+    }
 
    /**
    * Adding an instance using mat-dialog component
    * @param componentType
    * @param componentName
    */
-   /* openAddDialog() {
+    openAddDialog() {
         const dialogRef = this.dialog.open(AddDialogComponent, {
             width: '300px',
 
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            if (dialogResult === 'CancleAdd') {
+            if (dialogResult === 'CancelAdd') {
                 dialogRef.close();
             } else {
                 console.log('dialogResult', dialogResult);
@@ -133,60 +132,60 @@ export class TableAllComponent implements OnInit {
                 });
             }
         });
-    }*/
+    }
 
    /**
    * Function used to control the state of the instance. Case1: 'start' an instance
    * @param InstanceID
    */
-    /*public startInstance(id: string): void {
+    public startInstance(id: string): void {
 
         this.apiService.startInstance(id).subscribe(() => {
         }, err => {
             console.log('error start Instance', err);
         });
-    }*/
+    }
 
     /**
    * Function used to control the state of the instance. Case2: 'stop' an instance
    * @param InstanceID
    */
-    /*public stopInstance(id: string): void {
+    public stopInstance(id: string): void {
 
         this.apiService.stopInstance(id).subscribe(() => {
         }, err => {
             console.log('error stop Instance', err);
         });
-    }*/
+    }
 
     /**
    * Function used to control the state of the instance. Case3: 'Pause' an instance
    * @param InstanceID
    */
-    /*public pauseInstance(id: string): void {
+    public pauseInstance(id: string): void {
 
         this.apiService.pauseInstance(id).subscribe(() => {
         }, err => {
             console.log('error pause instance', err);
         });
-    }*/
+    }
 
     /**
    * Function used to control the state of the instance. Case4: 'Resume' an instance if Paused
    * @param InstanceID
    */
-   /* public resumeInstance(id: string): void {
+    public resumeInstance(id: string): void {
 
         this.apiService.resumeInstance(id).subscribe(() => {
         }, err => {
             console.log('error pause instance', err);
         });
-    }*/
+    }
 
      /**
    * Function used to expand table row and show details of Docker and Labels
    */
-  /*onRowClicked(row: Instance): Array<{dockerId: string, labels: string[]}> {
+  onRowClicked(row: Instance): Array<{dockerId: string, labels: string[]}> {
     let filteredList: Array<{dockerId: string, labels: string[]}>;
     const NoId = 'Id not available';
     const NoIdLabels = ['Labels not available'];
@@ -200,6 +199,6 @@ export class TableAllComponent implements OnInit {
         filteredList = [{ dockerId: NoId, labels: NoIdLabels }];
     }
     return filteredList;
-}*/
+}
 
 }

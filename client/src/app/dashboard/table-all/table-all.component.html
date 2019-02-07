@@ -15,7 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-  <!--<div *ngIf="dataSource.data.length == 0; else tableBlock">
+  <div *ngIf="dataSource.data.length == 0; else tableBlock">
     There are currently no instances running.
 </div>
 <ng-template #tableBlock>
@@ -118,9 +118,4 @@
 
 <div class="button-row">
     <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
-</div>-->
-<div class="container">
-<app-web-api type="WebApi" [ngClass]="'tablepos'"></app-web-api>
-<app-webapp type="WebApp" [ngClass]="'tablepos'"></app-webapp>
-<app-crawler type="Crawler" [ngClass]="'tablepos'"></app-crawler>
 </div>

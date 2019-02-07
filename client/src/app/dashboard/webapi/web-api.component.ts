@@ -16,10 +16,9 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
-import { MatTableDataSource } from '@angular/material';
 
 
 @Component({
@@ -30,17 +29,15 @@ import { MatTableDataSource } from '@angular/material';
 
 export class WebApiComponent implements OnInit {
   // this array is inserted into the table all component in the html code
-  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
-  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>();
-  webapiData: Instance[];
+  tableData: Instance[];
 
   constructor(private modelService: ModelService) { }
 
   ngOnInit() {
-    this.webapiData = [];
+    this.tableData = [];
 
     this.modelService.getObservableForInstances().subscribe(() => {
-      this.webapiData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
+      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
     });
   }
 
