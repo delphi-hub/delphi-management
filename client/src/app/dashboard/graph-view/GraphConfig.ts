@@ -2,24 +2,26 @@ export class GraphConfig {
 
 
      public readonly layout = {
-        name: 'grid',
-        fit: true, // whether to fit the viewport to the graph
-        padding: 30, // padding used on fit
-        boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-        avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
-        avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
-        nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
-        spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
-        condense: false, // uses all available space on false, uses minimal space on true
-        rows: undefined, // force num of rows in the grid
-        cols: undefined, // force num of columns in the grid
-        position: function( node ) {}, // returns { row, col } for element
-        sort: undefined, // a sorting function to order the nodes; e.g. function(a, b){ return a.data('weight') - b.data('weight') }
-        animate: false, // whether to transition the node positions
-        animationDuration: 500, // duration of animation in ms if enabled
-        animationEasing: undefined, // easing of animation if enabled
-        ready: undefined, // callback on layoutready
-        stop: undefined, // callback on layoutstop
+      name: 'circle',
+
+      fit: true, // whether to fit the viewport to the graph
+      padding: 30, // the padding on fit
+      boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+      avoidOverlap: true, // prevents node overlap, may overflow boundingBox and radius if not enough space
+      nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+      spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+      radius: undefined, // the radius of the circle
+      startAngle: 3 / 2 * Math.PI, // where nodes start in radians
+      sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
+      clockwise: true, // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
+      sort: undefined, // a sorting function to order the nodes; e.g. function(a, b){ return a.data('weight') - b.data('weight') }
+      animate: false, // whether to transition the node positions
+      animationDuration: 500, // duration of animation in ms if enabled
+      animationEasing: undefined, // easing of animation if enabled
+      animateFilter: function ( node, i ) { return true; },
+      ready: undefined, // callback on layoutready
+      stop: undefined, // callback on layoutstop
+      transform: function (node, position ) { return position; }
     };
 
     public readonly cytoscapeConfig = {
@@ -28,7 +30,7 @@ export class GraphConfig {
         ],
         layout: this.layout,
         style: [{
-          selector: 'node',
+          selector: 'node[name][image]',
           style: {
             label: 'data(name)',
             'background-image': 'data(image)',
@@ -38,13 +40,31 @@ export class GraphConfig {
             'background-fit': 'contain',
             'background-clip': 'none',
           }
+        },      {
+          selector: '.eh-handle',
+          style: {
+            'background-image': '../../../assets/images/EdgeConnector.png',
+            'width': '60%',
+            'height': '60%',
+            'background-opacity': 0,
+            'border-width': 12, // makes the handle easier to hit
+            'background-fit': 'contain',
+            'background-clip': 'none',
+            'border-opacity': 0
+          }
+        },
+        {
+          selector: '.eh-hover',
+          style: {
+            'background-color': 'red'
+          }
         }]
     };
 
     public readonly edgeDragConfig = {
       preview: true, // whether to show added edges preview before releasing selection
       hoverDelay: 150, // time spent hovering over a target node before it is considered selected
-      handleNodes: 'node', // selector/filter function for whether edges can be made from a given node
+      handleNodes: 'node[type != "ElasticSearch"]', // selector/filter function for whether edges can be made from a given node
       snap: false, // when enabled, the edge can be drawn by just moving close to a target node (can be confusing on compound graphs)
       snapThreshold: 50, // the target node must be less than or equal to this many pixels away from the cursor/finger
       snapFrequency: 15, // the number of times per second (Hz) that snap checks done (lower is less expensive)

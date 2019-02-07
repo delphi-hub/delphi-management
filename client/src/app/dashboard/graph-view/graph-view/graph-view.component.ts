@@ -6,7 +6,7 @@ import { Actions } from 'src/app/model/store.service';
 import { LinkStateEnum } from 'src/app/model/models/instanceLink';
 import { MatDialog } from '@angular/material';
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
-import { ComponentTypeEnum, ComponentType, Instance } from 'src/app/model/models/instance';
+import { ComponentTypeEnum, ComponentType } from 'src/app/model/models/instance';
 import { GraphConfig } from '../GraphConfig';
 
 @Component({
@@ -83,13 +83,16 @@ export class GraphViewComponent implements OnInit {
     (this.cy as any).on('ehcomplete',
       (event: any, sourceNode: cytoscape.NodeSingular, targetNode: cytoscape.NodeSingular, addedEles: cytoscape.NodeSingular) => {
         console.log('position', sourceNode, targetNode, addedEles);
-        const edgesSource = sourceNode.edges();
+        const edgesSource = sourceNode.connectedEdges();
         console.log('edges', edgesSource);
-        const nodeToDisconnect = this.getNodeToDisconnect(edgesSource, sourceNode.data('type'));
+        const nodeToDisconnect = this.getNodeToDisconnect(edgesSource, sourceNode);
+        const nodeName = nodeToDisconnect.reduce((prevVal, ele) => {
+          return ele.data('name');
+        }, '');
         const dialogRef = this.dialog.open(ConnectDialogComponent, { data: {
-          nameOne: sourceNode.data.name,
-          nameTwo: 'two',
-          nameThree: targetNode.data.name}});
+          nameOne: sourceNode.data('name'),
+          nameTwo: nodeName,
+          nameThree: targetNode.data('name')}});
         dialogRef.afterClosed().subscribe(() => {
           console.log('closed');
         });
@@ -98,21 +101,34 @@ export class GraphViewComponent implements OnInit {
     (this.cy as any).on('ehstart', (event: any, sourceNode: cytoscape.NodeSingular) => {
 
       const allElesToHide = this.getCorrespondingEles(sourceNode);
-
+      console.log('all eles to hide', allElesToHide);
       // we want to show the source node.
-      const elesToHide = allElesToHide.symmetricDifference(sourceNode);
-      removedElements = elesToHide.remove();
+      if (allElesToHide.length > 0) {
+        const elesToHide = allElesToHide.symmetricDifference(sourceNode);
+        console.log('eles to actually hide', elesToHide);
+        removedElements = elesToHide.remove();
+      }
+
     });
   }
 
-  private getNodeToDisconnect(edgeList: cytoscape.EdgeCollection, sourceNodeType: ComponentType ): cytoscape.NodeSingular {
-    const nodes = edgeList.nodes();
-    return null;
+  private getNodeToDisconnect(edgeList: cytoscape.EdgeCollection, sourceNode: cytoscape.NodeSingular ): cytoscape.NodeSingular {
+    console.log('edge list', edgeList);
+    const nodes = edgeList.connectedNodes();
+    console.log('connected nodes', nodes);
+    const correspondingEles = this.getCorrespondingEles(sourceNode, nodes);
+
+    const actualElement = nodes.symmetricDifference(correspondingEles);
+    if (actualElement.length > 1) {
+      throw new Error('Invalid node collection returned');
+    }
+
+    return actualElement;
   }
 
-  private getCorrespondingEles(node: cytoscape.NodeSingular, eles?: cytoscape.Collection): cytoscape.CollectionReturnValue {
+  private getCorrespondingEles(node: cytoscape.NodeSingular, eles?: cytoscape.NodeCollection): cytoscape.NodeCollection {
       const type = node.data('type');
-      let result: cytoscape.CollectionReturnValue;
+      let result: cytoscape.NodeCollection = this.cy.collection();
       switch (type) {
         case ComponentTypeEnum.WebApi:
         result = this.getElementsWithDifferentType(ComponentTypeEnum.ElasticSearch, eles);
@@ -130,8 +146,10 @@ export class GraphViewComponent implements OnInit {
    * Returns all elements to hide except those
    * of the given @param type.
    */
-  private getElementsWithDifferentType(type: ComponentType, eles?: cytoscape.Collection): cytoscape.CollectionReturnValue {
-    return this.cy.elements('node[type !="' + type + '"]');
+  private getElementsWithDifferentType(type: ComponentType, eles?: cytoscape.NodeCollection): cytoscape.NodeCollection {
+    console.log('type', type);
+    console.log('eles', eles);
+    return eles ? eles.nodes('node[type !="' + type + '"]') : this.cy.nodes('node[type !="' + type + '"]');
   }
 
   private updateElements(elements: Array<cytoscape.ElementDefinition>) {
