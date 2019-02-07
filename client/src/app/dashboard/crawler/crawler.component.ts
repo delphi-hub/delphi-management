@@ -19,6 +19,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Instance, ComponentType, ComponentTypeEnum} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
+import { MatTableDataSource } from '@angular/material';
 
 
 @Component({
@@ -29,16 +30,17 @@ import { ModelService } from 'src/app/model/model.service';
 export class CrawlerComponent implements OnInit {
 
   // this array is inserted into the table all component in the html code
-  tableData: Instance[];
-  compType: ComponentType;
+  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
+  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>();
+  crawlerData: Instance[];
 
   constructor(private modelService: ModelService) {
-    this.tableData = [];
+    this.crawlerData = [];
   }
 
   ngOnInit() {
     this.modelService.getObservableForInstances().subscribe(() => {
-      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
+      this.crawlerData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
     });
   }
 

@@ -28,6 +28,7 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
 import {HelpComponent} from '../help/help.component';
 import { GraphViewComponent } from './graph-view/graph-view/graph-view.component';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
+import { TableAllComponent } from './table-all/table-all.component';
 
 
 const dashboardRoutes: Routes = [
@@ -50,6 +51,10 @@ const dashboardRoutes: Routes = [
       {
         path: 'webApi',
         component: WebApiComponent
+      },
+      {
+        path: 'tableAll',
+        component: TableAllComponent
       },
       {
         path: 'userManagement',

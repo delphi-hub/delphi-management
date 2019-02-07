@@ -19,6 +19,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
+import { MatTableDataSource } from '@angular/material';
+
 
 
 @Component({
@@ -28,14 +30,16 @@ import { ModelService } from 'src/app/model/model.service';
 })
 export class WebappComponent implements OnInit {
   // this array is inserted into the table all component in the html code
-  tableData: Instance[];
+  displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action'];
+  dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>();
+  webappData: Instance[];
   constructor(private modelService: ModelService) {
   }
 
   ngOnInit() {
-    this.tableData = [];
+    this.webappData = [];
     this.modelService.getObservableForInstances().subscribe(() => {
-      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
+      this.webappData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
     });
   }
 
