@@ -22,14 +22,18 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSClient, WSResponse}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
+import play.api.http.ContentTypes
+import play.api.libs.json.Json
+import play.api.libs.json._
 
 trait MyExecutionContext extends ExecutionContext
 
@@ -135,11 +139,12 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @param componentType
     * @param name
     */
-  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async { request =>
+  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async
+  {
+    request =>
     ws.url(instanceRegistryUri + "/instances" + "/deploy")
-      .addQueryStringParameters("ComponentType" -> compType, "InstanceName" -> name)
       .withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
-      .post(Map("ComponentType" -> compType, "InstanceName" -> name))
+      .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
       .map { response =>
         response.status match {
           // scalastyle:off magic.number
@@ -151,6 +156,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
+
   /**
     * This function is to authenticate Delphi-Management at the Instance Registry
     *
