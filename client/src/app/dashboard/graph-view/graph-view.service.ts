@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, Subject} from 'rxjs';
 import * as cytoscape from 'cytoscape';
 import { InstanceLink } from 'src/app/model/models/instanceLink';
 import { Actions } from 'src/app/model/store.service';
+import { GraphConfig } from './GraphConfig';
 
 interface NodeEdgeMap {
   nodes: Array<cytoscape.ElementDefinition>;
@@ -46,6 +47,8 @@ const TYPE_TO_IMG = {
       'NotReachable' : '../../../assets/images/elasticsearch-failed.png',
       'Unknown' : '../../../assets/images/elasticsearch.png'} ,
 };
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -114,6 +117,10 @@ export class GraphViewService {
       return {data: {id: edgeVal.idFrom + '_' + edgeVal.idTo, source: edgeVal.idFrom, target: edgeVal.idTo, status: edgeVal.linkState}};
     });
     return edges;
+  }
+
+  public getGraphConfig() {
+    return new GraphConfig();
   }
 
   public getElementObservable(): Observable<ElementUpdate> {
