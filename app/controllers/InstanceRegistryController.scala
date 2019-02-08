@@ -22,7 +22,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
@@ -31,9 +31,9 @@ import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
-import play.api.http.ContentTypes
+
 import play.api.libs.json.Json
-import play.api.libs.json._
+
 
 trait MyExecutionContext extends ExecutionContext
 
@@ -67,6 +67,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
   val authheader = AuthProvider.generateJwt()
 
+  /**This method maps list of instances with specific componentType.
+    *
+    * @param componentType
+    * @return
+    */
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
     ws.url(instanceRegistryUri + "/instances" ).addQueryStringParameters("ComponentType" -> componentType)
@@ -86,9 +91,15 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }
   }
 
+  /**Called to fetch network graph of current registry. Contains a list of all instances and all links
+    * currently registered.
+    *
+    * @return
+    */
+
   def getNetwork(): Action[AnyContent] = Action.async {
 
-    ws.url(instanceRegistryUri +"/instances" + "/network").withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
+    ws.url(instanceRegistryUri + "/instances" + "/network").withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Logger.debug(response.body)
@@ -99,6 +110,14 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }
     }(myExecutionContext)
   }
+
+  /**
+    * Fetches the number of instances for the specified ComponentType. The ComponentType is an optional parameter which is passed as an query
+    * argument named 'ComponentType'
+    *
+    * @param componentType
+    * @return
+    */
 
   def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
@@ -117,15 +136,14 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   /**
     * This function is for handling all(start, stop, play, pause, resume) POST request.
-    * To control the instance State
+    * To control the instance State (E.g. /instances/42/stop )
     *
     * @param componentId
     */
 
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
-    ws.url(instanceRegistryUri + action)
-      .addQueryStringParameters("Id" -> instanceID)
+    ws.url(instanceRegistryUri + "/instances" + "/" + instanceID + action)
       .withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
       .post("")
       .map { response =>
@@ -135,10 +153,12 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   /**
     * This function is for handling an POST request for adding an instance to the Scala web server
+    * (E.g. .../instances/deploy
     *
     * @param componentType
     * @param name
     */
+
   def postInstance(compType: String, name: String): Action[AnyContent] = Action.async
   {
     request =>
