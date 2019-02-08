@@ -28,10 +28,8 @@ import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import play.api.mvc._
-
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
-
 import play.api.libs.json.Json
 
 
@@ -65,7 +63,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
-  val authheader = AuthProvider.generateJwt()
+  val authheader = ("Authorization",s"Bearer ${AuthProvider.generateJwt()}")
 
   /**This method maps list of instances with specific componentType.
     *
@@ -74,8 +72,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
   def instances(componentType: String): Action[AnyContent] = Action.async {
 
-    ws.url(instanceRegistryUri + "/instances" ).addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
+    ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
+      .withHttpHeaders(authheader)
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
 
@@ -99,7 +97,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def getNetwork(): Action[AnyContent] = Action.async {
 
-    ws.url(instanceRegistryUri + "/instances" + "/network").withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
+    ws.url(instanceRegistryUri + "/network").withHttpHeaders(authheader)
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Logger.debug(response.body)
@@ -122,8 +120,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
-    ws.url(instanceRegistryUri + "/instances" + "/count").addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
+    ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
+      .withHttpHeaders(authheader)
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       if (response.status == 200) {
@@ -143,8 +141,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
-    ws.url(instanceRegistryUri + "/instances" + "/" + instanceID + action)
-      .withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
+    ws.url(instanceRegistryUri + instanceID + action)
+      .withHttpHeaders(authheader)
       .post("")
       .map { response =>
         new Status(response.status)
@@ -162,8 +160,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def postInstance(compType: String, name: String): Action[AnyContent] = Action.async
   {
     request =>
-    ws.url(instanceRegistryUri + "/instances" + "/deploy")
-      .withHttpHeaders(("Authorization",s"Bearer ${authheader}"))
+    ws.url(instanceRegistryUri + "/deploy")
+      .withHttpHeaders(authheader)
       .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
       .map { response =>
         response.status match {
@@ -201,5 +199,3 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
           }
   }
 }
-
-

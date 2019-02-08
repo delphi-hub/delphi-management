@@ -33,7 +33,7 @@ object AuthProvider  {
     val jwtSecretKey = "changeme"// configuration.get[String]("play.http.secret.JWTkey")
     val claim = JwtClaim()
       .issuedNow
-      .expiresIn(validFor*300)
+      .expiresIn(validFor*1200)
       .startsNow
       . + ("user_id", "Management")// configuration.get[String]("play.http.instance"))
       . + ("user_type", "Admin")
