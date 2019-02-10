@@ -97,7 +97,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def getNetwork(): Action[AnyContent] = Action.async {
 
-    ws.url(instanceRegistryUri + "/network").withHttpHeaders(authheader)
+    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(authheader)
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Logger.debug(response.body)
