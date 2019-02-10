@@ -160,7 +160,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def postInstance(compType: String, name: String): Action[AnyContent] = Action.async
   {
     request =>
-    ws.url(instanceRegistryUri + "/deploy")
+    ws.url(instanceRegistryUri + "/instances/deploy")
       .withHttpHeaders(authheader)
       .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
       .map { response =>
