@@ -17,8 +17,6 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import { Instance, ComponentType, ComponentTypeEnum} from '../../model/models/instance';
-import { ModelService } from 'src/app/model/model.service';
 
 
 @Component({
@@ -28,18 +26,12 @@ import { ModelService } from 'src/app/model/model.service';
 })
 export class CrawlerComponent implements OnInit {
 
-  // this array is inserted into the table all component in the html code
-  tableData: Instance[];
-  compType: ComponentType;
+  constructor() {
 
-  constructor(private modelService: ModelService) {
-    this.tableData = [];
   }
 
   ngOnInit() {
-    this.modelService.getObservableForInstances().subscribe(() => {
-      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
-    });
+
   }
 
 }

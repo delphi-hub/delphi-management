@@ -58,11 +58,10 @@ export class TableAllComponent implements OnInit {
     data = new MatTableDataSource<Instance>();
     dialogResult: string;
     expandedElement: Instance;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
-
-    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;

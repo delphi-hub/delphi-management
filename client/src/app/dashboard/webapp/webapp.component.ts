@@ -17,9 +17,6 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {ComponentTypeEnum, Instance} from '../../model/models/instance';
-import { ModelService } from 'src/app/model/model.service';
-
 
 @Component({
   selector: 'app-webapp',
@@ -27,16 +24,8 @@ import { ModelService } from 'src/app/model/model.service';
   styleUrls: ['./webapp.component.css']
 })
 export class WebappComponent implements OnInit {
-  // this array is inserted into the table all component in the html code
-  tableData: Instance[];
-  constructor(private modelService: ModelService) {
+  constructor() {
   }
-
   ngOnInit() {
-    this.tableData = [];
-    this.modelService.getObservableForInstances().subscribe(() => {
-      this.tableData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
-    });
   }
-
 }

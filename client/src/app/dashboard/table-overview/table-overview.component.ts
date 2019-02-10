@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import {ComponentTypeEnum, Instance} from '../../model/models/instance';
+import { Component, OnInit, Input } from '@angular/core';
+import { ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
 
 @Component({
@@ -26,29 +26,28 @@ import { ModelService } from 'src/app/model/model.service';
   styleUrls: ['./table-overview.component.css']
 })
 export class TableOverviewComponent implements OnInit {
-
-  webapiData: Instance[];
-  webappData: Instance[];
-  crawlerData: Instance[];
-
-  constructor(private modelService: ModelService) { }
-
-  ngOnInit() {
-    this.webapiData = [];
-    this.webappData = [];
-    this.crawlerData = [];
-
-    this.modelService.getObservableForInstances().subscribe(() => {
-      this.webapiData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
-    });
-
-    this.modelService.getObservableForInstances().subscribe(() => {
-      this.webappData = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
-    });
-
-    this.modelService.getObservableForInstances().subscribe(() => {
-      this.crawlerData = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
-    });
+    webapiDetails: Instance[];
+    webappDetails: Instance[];
+    crawlerDetails: Instance[];
+constructor(private modelService: ModelService) { 
   }
+  ngOnInit() {
+    /** * Function for getting all the instances of component type 'WebApi' using ModelService
+   * @param ComponentType */
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.webapiDetails = this.modelService.getComponentsByType(ComponentTypeEnum.WebApi);
+    });
 
+    /** * Function for getting all the instances of component type 'WebApplication' using ModelService
+   * @param ComponentType */
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.webappDetails = this.modelService.getComponentsByType(ComponentTypeEnum.WebApp);
+    });
+
+    /** * Function for getting all the instances of component type 'Crawler' using ModelService
+   * @param ComponentType */
+    this.modelService.getObservableForInstances().subscribe(() => {
+      this.crawlerDetails = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
+    });   
+  }
 }
