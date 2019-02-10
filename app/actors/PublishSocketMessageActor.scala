@@ -22,7 +22,7 @@ object PublishSocketMessageActor {
 }
 
 class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys: ActorSystem) extends Actor with EventJsonSupport {
-  
+
   val eventActorMap: mutable.HashMap[EventType, ListBuffer[ActorRef]] = new mutable.HashMap[EventType, ListBuffer[ActorRef]]()
 
   override def preStart() {
@@ -46,9 +46,9 @@ class PublishSocketMessageActor(irBasePath: String, mat: Materializer, actorSys:
   override def postStop() {
     Logger.debug("post stop called in publisher" + self)
   }
-  
+
   def receive: PartialFunction[Any, Unit] = {
-    
+
     case StopMessage(toStop) =>
       Logger.debug("stop received" + toStop)
       for ((k, v) <- eventActorMap) v -= toStop
