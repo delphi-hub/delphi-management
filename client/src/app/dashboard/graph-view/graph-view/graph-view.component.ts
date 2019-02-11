@@ -86,7 +86,7 @@ export class GraphViewComponent implements OnInit {
         console.log('added ele', addedEles);
         const edgesSource = sourceNode.connectedEdges();
         console.log('edges', edgesSource);
-        const nodeToDisconnect = this.getNodeToDisconnect(edgesSource, sourceNode);
+        const nodeToDisconnect = this.getNodeToDisconnect(edgesSource, sourceNode, targetNode);
         const nodeName = nodeToDisconnect.reduce((prevVal, ele) => {
           return ele.data('name');
         }, '');
@@ -98,6 +98,7 @@ export class GraphViewComponent implements OnInit {
           console.log('closed with value', reconnect);
           if (reconnect) {
             // TODO: issue api call to reconnect the given components
+            this.graphViewService.reconnect(sourceNode.data('id'), targetNode.data('id'));
           }
           this.cy.remove(addedEles);
         });
@@ -117,14 +118,16 @@ export class GraphViewComponent implements OnInit {
     });
   }
 
-  private getNodeToDisconnect(edgeList: cytoscape.EdgeCollection, sourceNode: cytoscape.NodeSingular ): cytoscape.NodeSingular {
+  private getNodeToDisconnect(edgeList: cytoscape.EdgeCollection, sourceNode: cytoscape.NodeSingular,
+    targetNode: cytoscape.NodeSingular ): cytoscape.NodeSingular {
     console.log('edge list', edgeList);
     const nodes = edgeList.connectedNodes();
     console.log('connected nodes', nodes);
     const correspondingEles = this.getCorrespondingEles(sourceNode, nodes);
 
-    const actualElement = nodes.symmetricDifference(correspondingEles);
+    const actualElement = nodes.symmetricDifference(correspondingEles).symmetricDifference(targetNode);
     if (actualElement.length > 1) {
+      console.log('invalid element:', actualElement);
       throw new Error('Invalid node collection returned');
     }
 

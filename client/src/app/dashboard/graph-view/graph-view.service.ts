@@ -6,6 +6,7 @@ import * as cytoscape from 'cytoscape';
 import { InstanceLink } from 'src/app/model/models/instanceLink';
 import { Actions } from 'src/app/model/store.service';
 import { GraphConfig } from './GraphConfig';
+import { ApiService } from 'src/app/api/api/api.service';
 
 interface NodeEdgeMap {
   nodes: Array<cytoscape.ElementDefinition>;
@@ -56,7 +57,7 @@ export class GraphViewService {
   private elementProvider: BehaviorSubject<ElementUpdate>;
   private elementRemover: Subject<Array<string>>;
 
-  constructor(private modelService: ModelService) {
+  constructor(private modelService: ModelService, private apiService: ApiService) {
     this.elementProvider = new BehaviorSubject<ElementUpdate>({type: Actions.NONE, elements: []});
     this.elementRemover = new BehaviorSubject<Array<string>>([]);
 
@@ -69,6 +70,13 @@ export class GraphViewService {
           this.handleElements(change.type, change.elements);
         }
       }
+    });
+  }
+
+  public reconnect(from: string, to: string) {
+    console.log('trying to reconnect', from, to);
+    this.apiService.postReconnect(Number(from), Number(to)).subscribe((res) => {
+      console.log('reconnect returned with result', res);
     });
   }
 

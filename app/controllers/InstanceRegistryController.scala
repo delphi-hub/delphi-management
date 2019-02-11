@@ -149,13 +149,15 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
-  def reconnect(from: String, to: String): Action[AnyContent] = Action.async { request =>
+  def reconnect(from: Int, to: Int): Action[AnyContent] = Action.async { request =>
+
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
     )
-      .post("AssignedInstanceId" -> to)
+      .withHttpHeaders(authheader)
+      .post(Json.obj("AssignedInstanceId" -> to))
       .map { response =>
         response.status match {
-          case 202 =>
+          case 200 =>
             Ok(response.body)
           case x =>
             new Status(x)

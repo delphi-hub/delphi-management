@@ -35,7 +35,8 @@ import {
   PAUSE_INSTANCE,
   RESUME_INSTANCE,
   DELETE_INSTANCE,
-  INSTANCE_NETWORK
+  INSTANCE_NETWORK,
+  RECONNECT
 } from '../variables';
 
 
@@ -69,20 +70,18 @@ export class ApiService {
     return this.get<Array<Instance>>(INSTANCE_NETWORK);
   }
 
-  public postReconnect(from: string, to: string) {
+  public postReconnect(from: number, to: number) {
 
-    let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+    let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
 
-    queryParameters = queryParameters.set('from', from);
-    queryParameters = queryParameters.set('to', to);
-
-    return this.httpClient.post<number>(`${this.basePath}${'reconnectInstance'}`, {},
-    {
-      params: queryParameters,
-      withCredentials: this.configuration.withCredentials,
-      headers: this.defaultHeaders,
+    if (from === null || to === undefined) {
+      throw new Error('Parameter to or from not given');
+    } else {
+      queryParam = queryParam.set('from', <any>from);
+      queryParam = queryParam.set('to', <any>to);
     }
-  );
+
+    return this.commonConf(RECONNECT, queryParam);
   }
   /**
    * Find number of running instances
