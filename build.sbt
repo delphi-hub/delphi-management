@@ -4,7 +4,9 @@ name := "delphi-management"
 
 organization := "de.upb"
 
+
 version := "0.9.0-SNAPSHOT"
+
 
 scalaVersion := "2.12.4"
 
@@ -12,7 +14,14 @@ lazy val management = (project in file(".")).enablePlugins(SbtWeb).enablePlugins
                                       .enablePlugins(BuildInfoPlugin).
                                         settings(
                                           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-                                          buildInfoPackage := "de.upb.cs.swt.delphi.management"
+                                          buildInfoPackage := "de.upb.cs.swt.delphi.management",
+                                          (scalastyleSources in Compile) := {
+                                            // all .scala files in "src/main/scala"
+                                            val scalaSourceFiles = ((scalaSource in Compile).value ** "*.scala").get    
+                                            val fSep = java.io.File.separator // "/" or "\"
+                                            val dirNameToExclude = "app" + fSep + "models" // "com/folder_to_exclude"
+                                            scalaSourceFiles.filterNot(_.getAbsolutePath.contains(dirNameToExclude))
+                                          }
                                         )
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
