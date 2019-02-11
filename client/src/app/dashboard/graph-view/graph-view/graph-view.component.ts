@@ -182,7 +182,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     this.config.cytoscapeConfig.container = this.cyDiv.nativeElement;
 
     this.cy = cytoscape(this.config.cytoscapeConfig);
-    
+
     (this.cy as any).edgehandles(this.config.edgeDragConfig);
   }
 }
