@@ -141,7 +141,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
-    ws.url(instanceRegistryUri + instanceID + action)
+    ws.url(instanceRegistryUri + "/instances/" + instanceID + action)
       .withHttpHeaders(authheader)
       .post("")
       .map { response =>
