@@ -69,6 +69,21 @@ export class ApiService {
     return this.get<Array<Instance>>(INSTANCE_NETWORK);
   }
 
+  public postReconnect(from: string, to: string) {
+
+    let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+
+    queryParameters = queryParameters.set('from', from);
+    queryParameters = queryParameters.set('to', to);
+
+    return this.httpClient.post<number>(`${this.basePath}${'reconnectInstance'}`, {},
+    {
+      params: queryParameters,
+      withCredentials: this.configuration.withCredentials,
+      headers: this.defaultHeaders,
+    }
+  );
+  }
   /**
    * Find number of running instances
    * How many instances per type are running

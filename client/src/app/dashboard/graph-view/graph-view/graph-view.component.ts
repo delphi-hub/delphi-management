@@ -81,8 +81,9 @@ export class GraphViewComponent implements OnInit {
     });
 
     (this.cy as any).on('ehcomplete',
-      (event: any, sourceNode: cytoscape.NodeSingular, targetNode: cytoscape.NodeSingular, addedEles: cytoscape.NodeSingular) => {
+      (event: any, sourceNode: cytoscape.NodeSingular, targetNode: cytoscape.NodeSingular, addedEles: any) => {
         console.log('position', sourceNode, targetNode, addedEles);
+        console.log('added ele', addedEles);
         const edgesSource = sourceNode.connectedEdges();
         console.log('edges', edgesSource);
         const nodeToDisconnect = this.getNodeToDisconnect(edgesSource, sourceNode);
@@ -93,8 +94,12 @@ export class GraphViewComponent implements OnInit {
           nameOne: sourceNode.data('name'),
           nameTwo: nodeName,
           nameThree: targetNode.data('name')}});
-        dialogRef.afterClosed().subscribe(() => {
-          console.log('closed');
+        dialogRef.afterClosed().subscribe((reconnect: boolean) => {
+          console.log('closed with value', reconnect);
+          if (reconnect) {
+            // TODO: issue api call to reconnect the given components
+          }
+          this.cy.remove(addedEles);
         });
     });
 
