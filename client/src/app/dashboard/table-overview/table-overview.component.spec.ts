@@ -16,9 +16,14 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TableOverviewComponent } from './table-overview.component';
+import { MaterialModule } from '../../material-module/material.module';
+import { TableAllComponent } from '../table-all/table-all.component';
+import { ModelService } from 'src/app/model/model.service';
 
 describe('TableOverviewComponent', () => {
   let component: TableOverviewComponent;
@@ -26,7 +31,9 @@ describe('TableOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableOverviewComponent ]
+      declarations: [ TableOverviewComponent, TableAllComponent],
+      imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule,
+        MaterialModule]
     })
     .compileComponents();
   }));
@@ -37,7 +44,8 @@ describe('TableOverviewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it(`should create`, async(inject([HttpTestingController, ModelService],
+    (modelService: ModelService) => {
+      expect(modelService).toBeTruthy();
+  })));
 });

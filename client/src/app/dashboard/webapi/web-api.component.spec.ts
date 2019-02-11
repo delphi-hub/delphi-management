@@ -17,34 +17,29 @@
  */
 
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { TableAllComponent } from '../table-all/table-all.component';
 import { WebApiComponent } from './web-api.component';
-import { MaterialModule } from 'src/app/material-module/material.module';
-import { ModelService } from 'src/app/model/model.service';
-
 
 describe('WebApiComponent', () => {
   let fixture: ComponentFixture<WebApiComponent>;
+  let component: WebApiComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WebApiComponent, TableAllComponent ],
-      imports: [HttpClientTestingModule,  HttpClientModule, BrowserAnimationsModule,
-        MaterialModule]
+      declarations: [ WebApiComponent ],
+      imports: [BrowserAnimationsModule,
+        ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(WebApiComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it(`should create`, async(inject([HttpTestingController, ModelService],
-    (modelService: ModelService) => {
-      expect(modelService).toBeTruthy();
-  })));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

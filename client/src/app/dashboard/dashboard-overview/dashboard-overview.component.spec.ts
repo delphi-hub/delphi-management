@@ -22,6 +22,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { StatusCardComponent } from '../status-card/status-card.component';
 import { DashboardCardComponent } from '../dashboard-card/dashboard-card.component';
 import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../../material-module/material.module';
+import { InforCenterComponent } from '../infor-center/infor-center.component';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
 
 describe('DashboardOverviewComponent', () => {
@@ -30,8 +32,8 @@ describe('DashboardOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent ],
-      imports: [RouterModule, HttpClientModule, RouterTestingModule]
+      declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent, InforCenterComponent],
+      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule]
     })
     .compileComponents();
   }));

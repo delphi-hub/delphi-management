@@ -48,12 +48,6 @@ export interface Instance {
   labels?: Array<string>;
 }
 
-export interface InfoCenter {
-  type: string;
-  time: string;
-  description: string;
-}
-
 export interface InstanceDetails {
   type: string;
   time: string;
