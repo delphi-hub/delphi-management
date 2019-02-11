@@ -180,6 +180,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     *
     */
   //This method might be helpful when User Authentication is implemented.
+  /*
    def authentication()(implicit configuration: Configuration): Action[AnyContent] = Action.async {
 
      val username = configuration.get[String]("play.http.user")
@@ -198,4 +199,5 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
             }
           }
   }
+  */
 }

@@ -17,27 +17,27 @@ package authorization
 
 
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
+import play.api.Configuration
+
+  object AuthProvider {
+
+    /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
+      *
+      * @param validFor
+      * @return
+      */
+
+    def generateJwt(validFor: Long = 1)(implicit configuration: Configuration): String = {
 
 
-object AuthProvider  {
+      val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
+      val claim = JwtClaim()
+        .issuedNow
+        .expiresIn(validFor * 1800)
+        .startsNow
+        . +("user_id",  configuration.get[String]("play.http.instance"))
+        . +("user_type", "Admin")
 
-  /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
-    *
-    *
-    * @param validFor
-    * @return
-    */
-
-
-  def generateJwt(validFor: Long = 1): String = {
-    val jwtSecretKey = "changeme"// configuration.get[String]("play.http.secret.JWTkey")
-    val claim = JwtClaim()
-      .issuedNow
-      .expiresIn(validFor*1200)
-      .startsNow
-      . + ("user_id", "Management")// configuration.get[String]("play.http.instance"))
-      . + ("user_type", "Admin")
-
-    Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
+      Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
+    }
   }
-}
