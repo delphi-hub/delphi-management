@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import * as cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import {GraphViewService, ElementUpdate} from '../graph-view.service';
@@ -14,7 +14,7 @@ import { GraphConfig } from '../GraphConfig';
   templateUrl: './graph-view.component.html',
   styleUrls: ['./graph-view.component.css']
 })
-export class GraphViewComponent implements OnInit {
+export class GraphViewComponent implements OnInit, OnDestroy {
   @ViewChild('cy') cyDiv: ElementRef;
   private cy: cytoscape.Core;
   private config: GraphConfig;
@@ -30,6 +30,10 @@ export class GraphViewComponent implements OnInit {
     this.configureCytoscape();
     this.addEdgeDragListener();
     this.addChangeListener();
+  }
+
+  ngOnDestroy() {
+    this.cy.destroy();
   }
 
   /**
@@ -82,10 +86,9 @@ export class GraphViewComponent implements OnInit {
 
     (this.cy as any).on('ehcomplete',
       (event: any, sourceNode: cytoscape.NodeSingular, targetNode: cytoscape.NodeSingular, addedEles: any) => {
-        console.log('position', sourceNode, targetNode, addedEles);
-        console.log('added ele', addedEles);
+
         const edgesSource = sourceNode.connectedEdges();
-        console.log('edges', edgesSource);
+
         const nodeToDisconnect = this.getNodeToDisconnect(edgesSource, sourceNode, targetNode);
         const nodeName = nodeToDisconnect.reduce((prevVal, ele) => {
           return ele.data('name');
@@ -95,9 +98,7 @@ export class GraphViewComponent implements OnInit {
           nameTwo: nodeName,
           nameThree: targetNode.data('name')}});
         dialogRef.afterClosed().subscribe((reconnect: boolean) => {
-          console.log('closed with value', reconnect);
           if (reconnect) {
-            // TODO: issue api call to reconnect the given components
             this.graphViewService.reconnect(sourceNode.data('id'), targetNode.data('id'));
           }
           this.cy.remove(addedEles);
@@ -179,11 +180,9 @@ export class GraphViewComponent implements OnInit {
   private configureCytoscape() {
     this.config = this.graphViewService.getGraphConfig();
     this.config.cytoscapeConfig.container = this.cyDiv.nativeElement;
-    console.log('config', this.config.cytoscapeConfig);
-    // TODO: set container = this.cyDiv.nativeElement
+
     this.cy = cytoscape(this.config.cytoscapeConfig);
-
-
+    
     (this.cy as any).edgehandles(this.config.edgeDragConfig);
   }
 }
