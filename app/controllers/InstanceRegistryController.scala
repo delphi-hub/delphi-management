@@ -26,11 +26,11 @@ import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
-import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
 import play.api.libs.json.Json
+import scala.concurrent.duration._
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -63,7 +63,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
-  val authheader = ("Authorization",s"Bearer ${AuthProvider.generateJwt()}")
+  var authheader = ("Authorization", s"Bearer ${newJWTtoken()}")
+  system.scheduler.schedule(0 seconds,5 minutes){
+    newJWTtoken()
+  }
+  def newJWTtoken(): String ={
+    AuthProvider.generateJwt()
+  }
 
   /**This method maps list of instances with specific componentType.
     *
