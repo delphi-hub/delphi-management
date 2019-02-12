@@ -33,7 +33,7 @@ import play.api.Configuration
       val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
       val claim = JwtClaim()
         .issuedNow
-        .expiresIn(validFor * 360)
+        .expiresIn(validFor * 300)
         .startsNow
         . +("user_id",  configuration.get[String]("play.http.instance"))
         . +("user_type", "Admin")
