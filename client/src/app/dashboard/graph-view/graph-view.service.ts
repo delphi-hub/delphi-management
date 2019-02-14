@@ -4,7 +4,7 @@ import { Instance } from 'src/app/model/models/instance';
 import { BehaviorSubject, Observable, Subject} from 'rxjs';
 import * as cytoscape from 'cytoscape';
 import { InstanceLink } from 'src/app/model/models/instanceLink';
-import { Actions } from 'src/app/model/store.service';
+import { Actions, StoreService } from 'src/app/model/store.service';
 import { GraphConfig } from './GraphConfig';
 import { ApiService } from 'src/app/api/api/api.service';
 
@@ -57,7 +57,7 @@ export class GraphViewService {
   private elementProvider: BehaviorSubject<ElementUpdate>;
   private elementRemover: Subject<Array<string>>;
 
-  constructor(private modelService: ModelService, private apiService: ApiService) {
+  constructor(private modelService: ModelService, private apiService: ApiService, private storeService: StoreService) {
     this.elementProvider = new BehaviorSubject<ElementUpdate>({type: Actions.NONE, elements: []});
     this.elementRemover = new BehaviorSubject<Array<string>>([]);
 
@@ -133,8 +133,12 @@ export class GraphViewService {
 
   public getElementObservable(): Observable<ElementUpdate> {
     return new Observable((observer) => {
+      // calculate init value
+      const allInstances = Object.values(this.storeService.getState().instances);
+      console.log('all instances', allInstances);
+      const cyElements = this.createCytoscapeElements(allInstances);
+      observer.next({type: Actions.ADD, elements: cyElements});
       this.elementProvider.subscribe(observer);
-      observer.next(this.elementProvider.value);
     });
   }
 
