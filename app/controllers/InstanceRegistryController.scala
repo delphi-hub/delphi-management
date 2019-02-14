@@ -150,7 +150,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
     )
-      .withHttpHeaders(authheader)
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post(Json.obj("AssignedInstanceId" -> to))
       .map { response =>
         response.status match {
