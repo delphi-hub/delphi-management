@@ -26,11 +26,11 @@ import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
-import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
 import play.api.libs.json.Json
+
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -63,7 +63,6 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
-  val authheader = ("Authorization",s"Bearer ${AuthProvider.generateJwt()}")
 
   /**This method maps list of instances with specific componentType.
     *
@@ -71,9 +70,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
   def instances(componentType: String): Action[AnyContent] = Action.async {
-
     ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(authheader)
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
 
@@ -96,8 +94,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = Action.async {
-
-    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(authheader)
+    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Logger.debug(response.body)
@@ -121,7 +118,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(authheader)
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       if (response.status == 200) {
@@ -142,7 +139,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + action)
-      .withHttpHeaders(authheader)
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post("")
       .map { response =>
         new Status(response.status)
@@ -176,7 +173,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   {
     request =>
     ws.url(instanceRegistryUri + "/instances/deploy")
-      .withHttpHeaders(authheader)
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
       .map { response =>
         response.status match {
@@ -188,29 +185,5 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
             new Status(x)
         }
       }(myExecutionContext)
-  }
-
-  /**
-    * This function is to authenticate Delphi-Management at the Instance Registry
-    *
-    */
-  //This method might be helpful when User Authentication is implemented.
-   def authentication()(implicit configuration: Configuration): Action[AnyContent] = Action.async {
-
-     val username = configuration.get[String]("play.http.user")
-     val password = configuration.get[String]("play.http.pass")
-     val authHeader= Authorization(BasicHttpCredentials(username, password))
-     ws.url(instanceRegistryUri + "/authenticate")
-       .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization",s"${AuthProvider.generateJwt()}"))
-            .post("")
-          .map { response =>
-            if (response.status == 200)
-            {
-              Ok
-            } else
-            {
-              new Status(response.status)
-            }
-          }
   }
 }
