@@ -82,4 +82,8 @@ tr.example-element-row:not(.example-expanded-row):active {
   outline: none;
 }
 
+.tablepos{
+  margin:30px;
+}
+
 
