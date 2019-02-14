@@ -10,6 +10,7 @@ import { MatInputModule,
   MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule} from '@angular/material';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [],
@@ -24,7 +25,8 @@ import { MatInputModule,
     MatPaginatorModule,
     MatCheckboxModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatGridListModule
   ],
   exports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { MatInputModule,
     MatPaginatorModule,
     MatCheckboxModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatGridListModule
   ]
 })
 export class MaterialModule { }

@@ -46,7 +46,7 @@ describe('AddDialogComponent', () => {
     });
 
   it('should check for button inside the Add dialog', () => {
-    component.onCloseCancle();
+    component.onCloseCancel();
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 });
