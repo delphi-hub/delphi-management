@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConnectDialogComponent } from './connect-dialog.component';
+import { MaterialModule } from 'src/app/material-module/material.module';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 describe('ConnectDialogComponent', () => {
   let component: ConnectDialogComponent;
@@ -8,7 +10,12 @@ describe('ConnectDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConnectDialogComponent ]
+      declarations: [ ConnectDialogComponent ],
+      imports: [MaterialModule],
+      providers: [ {
+        provide: MAT_DIALOG_DATA,
+        useValue: {}
+      }]
     })
     .compileComponents();
   }));

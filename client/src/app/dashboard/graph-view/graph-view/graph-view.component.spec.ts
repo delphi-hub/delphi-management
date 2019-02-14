@@ -4,6 +4,9 @@ import {GraphViewComponent} from './graph-view.component';
 import { ApiModule } from 'src/app/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MaterialModule } from 'src/app/material-module/material.module';
 
 describe('GraphViewComponent', () => {
   let component: GraphViewComponent;
@@ -12,9 +15,15 @@ describe('GraphViewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GraphViewComponent],
-      imports: [HttpClientTestingModule, HttpClientModule, ApiModule]
+      imports: [HttpClientTestingModule, HttpClientModule, ApiModule, MaterialModule]
     })
       .compileComponents();
+
+      TestBed.overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [ConnectDialogComponent],
+        }
+      });
   }));
 
   beforeEach(() => {
