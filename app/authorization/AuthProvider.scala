@@ -40,6 +40,6 @@ import play.api.Configuration
 
         token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
       }
-      return token
+      token
     }
   }
