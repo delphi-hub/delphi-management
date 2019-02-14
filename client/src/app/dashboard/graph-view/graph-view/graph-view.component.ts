@@ -20,8 +20,9 @@ export class GraphViewComponent implements OnInit, OnDestroy {
   private config: GraphConfig;
 
   constructor(private graphViewService: GraphViewService, public dialog: MatDialog) {
-
-    cytoscape.use(edgehandles);
+      if (!(cytoscape as any).edgehandles) {
+        cytoscape.use(edgehandles);
+      }
   }
 
 
