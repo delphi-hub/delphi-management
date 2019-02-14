@@ -23,7 +23,7 @@ import { WebappComponent } from './webapp.component';
 describe('WebappComponent', () => {
   let fixture: ComponentFixture<WebappComponent>;
   let component: WebappComponent;
-  
+
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

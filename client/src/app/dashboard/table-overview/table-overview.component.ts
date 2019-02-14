@@ -29,7 +29,7 @@ export class TableOverviewComponent implements OnInit {
     webapiDetails: Instance[];
     webappDetails: Instance[];
     crawlerDetails: Instance[];
-constructor(private modelService: ModelService) { 
+constructor(private modelService: ModelService) {
   }
   ngOnInit() {
     /** * Function for getting all the instances of component type 'WebApi' using ModelService
@@ -48,6 +48,6 @@ constructor(private modelService: ModelService) {
    * @param ComponentType */
     this.modelService.getObservableForInstances().subscribe(() => {
       this.crawlerDetails = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
-    });   
+    });
   }
 }
