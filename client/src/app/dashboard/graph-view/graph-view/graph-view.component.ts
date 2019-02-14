@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material';
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 import { ComponentTypeEnum, ComponentType } from 'src/app/model/models/instance';
 import { GraphConfig } from '../GraphConfig';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-graph-view',
@@ -18,11 +19,11 @@ export class GraphViewComponent implements OnInit, OnDestroy {
   @ViewChild('cy') cyDiv: ElementRef;
   private cy: cytoscape.Core;
   private config: GraphConfig;
+  private elementSubscription: Subscription;
+  private elementRemoveSubscription: Subscription;
 
   constructor(private graphViewService: GraphViewService, public dialog: MatDialog) {
-      if (!(cytoscape as any).edgehandles) {
-        cytoscape.use(edgehandles);
-      }
+
   }
 
 
@@ -35,6 +36,8 @@ export class GraphViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cy.destroy();
+    this.elementSubscription.unsubscribe();
+    this.elementRemoveSubscription.unsubscribe();
   }
 
   /**
@@ -42,7 +45,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
    * view should be updated if it receives any changes / updates.
    */
   private addChangeListener() {
-    this.graphViewService.getElementObservable().subscribe((update: ElementUpdate) => {
+    this.elementSubscription = this.graphViewService.getElementObservable().subscribe((update: ElementUpdate) => {
       if (update.elements) {
         if (update.type === Actions.ADD) {
           this.cy.add(update.elements);
@@ -65,7 +68,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.graphViewService.getElementRemoveObservable().subscribe((ids: Array<string>) => {
+    this.elementRemoveSubscription = this.graphViewService.getElementRemoveObservable().subscribe((ids: Array<string>) => {
       if (ids) {
         for (let i = 0; i < ids.length; i++) {
           this.cy.remove(this.cy.getElementById(ids[i]));
@@ -183,6 +186,9 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     this.config.cytoscapeConfig.container = this.cyDiv.nativeElement;
 
     this.cy = cytoscape(this.config.cytoscapeConfig);
+    if (!Object.getPrototypeOf(this.cy).edgehandles) {
+      cytoscape.use(edgehandles);
+    }
 
     (this.cy as any).edgehandles(this.config.edgeDragConfig);
   }

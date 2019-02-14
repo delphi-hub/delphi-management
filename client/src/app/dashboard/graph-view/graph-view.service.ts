@@ -139,8 +139,6 @@ export class GraphViewService {
   }
 
   public getElementRemoveObservable(): Observable<Array<string>> {
-    return new Observable((observer) => {
-      this.elementRemover.subscribe(observer);
-    });
+    return this.elementRemover.asObservable();
   }
 }
