@@ -15,18 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
-  selector: 'app-web-api',
-  templateUrl: './web-api.component.html',
-  styleUrls: ['./web-api.component.css']
+  selector: 'app-infor-center',
+  templateUrl: './infor-center.component.html',
+  styleUrls: ['./infor-center.component.css']
 })
 
-export class WebApiComponent implements OnInit {
+export class InforCenterComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

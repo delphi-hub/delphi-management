@@ -33,8 +33,8 @@ export class AddDialogComponent implements OnInit {
     });
   }
 
-  onCloseCancle() {
-    this.thisDialogRef.close('CancleAdd');
+  onCloseCancel() {
+    this.thisDialogRef.close('CancelAdd');
 
   }
 

@@ -15,20 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { InstanceDetails } from '../../model/models/instance';
 
-import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-web-api',
-  templateUrl: './web-api.component.html',
-  styleUrls: ['./web-api.component.css']
+  selector: 'app-instance-details',
+  templateUrl: './instance-details.component.html',
+  styleUrls: ['./instance-details.component.css']
 })
-
-export class WebApiComponent implements OnInit {
+export class InstanceDetailsComponent implements OnInit {
 
   constructor() { }
 
   ngOnInit() {
-  }
-
+}
 }
