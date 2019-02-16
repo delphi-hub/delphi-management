@@ -26,7 +26,9 @@ import play.api.libs.ws.WSClient
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
+import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
 import play.api.libs.json.Json
@@ -63,8 +65,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
+  val username = config.get[String]("play.http.user")
+  val password = config.get[String]("play.http.password")
+  val authHeader = Authorization(BasicHttpCredentials(username, password))
 
-  /**This method maps list of instances with specific componentType.
+  /** This method maps list of instances with specific componentType.
     *
     * @param componentType
     * @return
@@ -87,7 +92,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }
   }
 
-  /**Called to fetch network graph of current registry. Contains a list of all instances and all links
+  /** Called to fetch network graph of current registry. Contains a list of all instances and all links
     * currently registered.
     *
     * @return
@@ -154,21 +159,35 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @param name
     */
 
-  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async
-  {
+  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async {
     request =>
-    ws.url(instanceRegistryUri + "/instances/deploy")
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
+      ws.url(instanceRegistryUri + "/instances/deploy")
+        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
+        .map { response =>
+          response.status match {
+            // scalastyle:off magic.number
+            case 202 =>
+              // scalastyle:on magic.number
+              Ok(response.body)
+            case x: Any =>
+              new Status(x)
+          }
+        }(myExecutionContext)
+  }
+
+  //This method might be helpful when User Authentication is implemented.
+
+  def authentication(): Action[AnyContent] = Action.async {
+    ws.url(instanceRegistryUri + "/users" + "/authenticate")
+      .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .post("")
       .map { response =>
-        response.status match {
-          // scalastyle:off magic.number
-          case 202 =>
-          // scalastyle:on magic.number
-            Ok(response.body)
-          case x: Any =>
-            new Status(x)
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
         }
-      }(myExecutionContext)
+      }
   }
 }
