@@ -4,7 +4,9 @@ import { Instance } from 'src/app/model/models/instance';
 import { BehaviorSubject, Observable, Subject} from 'rxjs';
 import * as cytoscape from 'cytoscape';
 import { InstanceLink } from 'src/app/model/models/instanceLink';
-import { Actions } from 'src/app/model/store.service';
+import { Actions, StoreService } from 'src/app/model/store.service';
+import { GraphConfig } from './GraphConfig';
+import { ApiService } from 'src/app/api/api/api.service';
 
 interface NodeEdgeMap {
   nodes: Array<cytoscape.ElementDefinition>;
@@ -21,26 +23,33 @@ const TYPE_TO_IMG = {
       'Failed' : '../../../assets/images/crawler-failed.png',
       'Stopped' : '../../../assets/images/crawler-stopped.png',
       'Paused' : '../../../assets/images/crawler-paused.png',
-      'NotReachable' : '../../../assets/images/crawler-failed.png' },
+      'NotReachable' : '../../../assets/images/crawler-failed.png',
+      'Unknown' : '../../../assets/images/crawler.png',
+     },
   'WebApp': {
     'Running': '../../../assets/images/webapp-running.png',
     'Failed' : '../../../assets/images/webapp-failed.png',
     'Stopped' : '../../../assets/images/webapp-stopped.png',
     'Paused' : '../../../assets/images/webapp-paused.png',
-    'NotReachable' : '../../../assets/images/webapp-failed.png' },
+    'NotReachable' : '../../../assets/images/webapp-failed.png',
+    'Unknown' : '../../../assets/images/webapp.png', },
     'WebApi': {
       'Running': '../../../assets/images/webapi-running.png',
       'Failed' : '../../../assets/images/webapi-failed.png',
       'Stopped' : '../../../assets/images/webapi-stopped.png',
       'Paused' : '../../../assets/images/webapi-paused.png',
-      'NotReachable' : '../../../assets/images/webapi-failed.png' },
+      'NotReachable' : '../../../assets/images/webapi-failed.png',
+      'Unknown' : '../../../assets/images/webapi.png', },
     'ElasticSearch': {
       'Running': '../../../assets/images/elasticsearch-running.png',
       'Failed' : '../../../assets/images/elasticsearch-failed.png',
       'Stopped' : '../../../assets/images/elasticsearch-stopped.png',
       'Paused' : '../../../assets/images/elasticsearch-paused.png',
-      'NotReachable' : '../../../assets/images/elasticsearch-failed.png' },
+      'NotReachable' : '../../../assets/images/elasticsearch-failed.png',
+      'Unknown' : '../../../assets/images/elasticsearch.png'} ,
 };
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,7 +57,7 @@ export class GraphViewService {
   private elementProvider: BehaviorSubject<ElementUpdate>;
   private elementRemover: Subject<Array<string>>;
 
-  constructor(private modelService: ModelService) {
+  constructor(private modelService: ModelService, private apiService: ApiService, private storeService: StoreService) {
     this.elementProvider = new BehaviorSubject<ElementUpdate>({type: Actions.NONE, elements: []});
     this.elementRemover = new BehaviorSubject<Array<string>>([]);
 
@@ -61,6 +70,13 @@ export class GraphViewService {
           this.handleElements(change.type, change.elements);
         }
       }
+    });
+  }
+
+  public reconnect(from: string, to: string) {
+    console.log('trying to reconnect', from, to);
+    this.apiService.postReconnect(Number(from), Number(to)).subscribe((res) => {
+      console.log('reconnect returned with result', res);
     });
   }
 
@@ -79,13 +95,17 @@ export class GraphViewService {
   private createCytoscapeElements(instances: Array<Instance>): Array<cytoscape.ElementDefinition>  {
     const newElements = instances.reduce(
       ( accumulator: NodeEdgeMap, value: Instance) => {
-
+        let img = TYPE_TO_IMG[value.componentType][value.instanceState];
+        if (img === undefined) {
+          img = TYPE_TO_IMG[value.componentType]['Unknown'];
+        }
         accumulator.nodes.push({
           group: 'nodes',
           data: {
             id: '' + value.id,
+            type: value.componentType,
             name: value.name,
-            image: TYPE_TO_IMG[value.componentType][value.instanceState],
+            image: img,
             status: value.instanceState
           }
         });
@@ -107,16 +127,22 @@ export class GraphViewService {
     return edges;
   }
 
+  public getGraphConfig() {
+    return new GraphConfig();
+  }
+
   public getElementObservable(): Observable<ElementUpdate> {
     return new Observable((observer) => {
+      // calculate init value
+      const allInstances = Object.values(this.storeService.getState().instances);
+      console.log('all instances', allInstances);
+      const cyElements = this.createCytoscapeElements(allInstances);
+      observer.next({type: Actions.ADD, elements: cyElements});
       this.elementProvider.subscribe(observer);
-      observer.next(this.elementProvider.value);
     });
   }
 
   public getElementRemoveObservable(): Observable<Array<string>> {
-    return new Observable((observer) => {
-      this.elementRemover.subscribe(observer);
-    });
+    return this.elementRemover.asObservable();
   }
 }

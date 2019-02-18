@@ -17,29 +17,35 @@
  */
 
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { WebApiComponent } from './web-api.component';
+import { TableOverviewComponent } from './table-overview.component';
+import { MaterialModule } from '../../material-module/material.module';
+import { TableAllComponent } from '../table-all/table-all.component';
+import { ModelService } from 'src/app/model/model.service';
 
-describe('WebApiComponent', () => {
-  let fixture: ComponentFixture<WebApiComponent>;
-  let component: WebApiComponent;
+describe('TableOverviewComponent', () => {
+  let component: TableOverviewComponent;
+  let fixture: ComponentFixture<TableOverviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WebApiComponent ],
-      imports: [BrowserAnimationsModule,
-        ]
+      declarations: [ TableOverviewComponent, TableAllComponent],
+      imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule,
+        MaterialModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WebApiComponent);
+    fixture = TestBed.createComponent(TableOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it(`should create`, async(inject([HttpTestingController, ModelService],
+    (modelService: ModelService) => {
+      expect(modelService).toBeTruthy();
+  })));
 });

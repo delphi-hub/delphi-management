@@ -58,11 +58,10 @@ export class TableAllComponent implements OnInit {
     data = new MatTableDataSource<Instance>();
     dialogResult: string;
     expandedElement: Instance;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
     }
-
-    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;
@@ -87,7 +86,7 @@ export class TableAllComponent implements OnInit {
                 console.log('data', this.dataSource.data);
 
             } else {
-                if (result !== 'Cancle') {
+                if (result !== 'Cancel') {
                     this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
                         console.log('result', deleteResult);
                     }, err => {
@@ -120,7 +119,7 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            if (dialogResult === 'CancleAdd') {
+            if (dialogResult === 'CancelAdd') {
                 dialogRef.close();
             } else {
                 console.log('dialogResult', dialogResult);

@@ -19,8 +19,8 @@ export class DeleteDialogComponent implements OnInit {
       this.thisDialogRef.close('Confirm');
   }
 
-  onCloseCancle() {
-      this.thisDialogRef.close('Cancle');
+  onCloseCancel() {
+      this.thisDialogRef.close('Cancel');
 
   }
 
