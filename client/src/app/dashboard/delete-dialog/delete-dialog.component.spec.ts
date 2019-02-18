@@ -51,8 +51,8 @@ describe('DeleteDialogComponent', () => {
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 
-  it('should check for cancle button inside the Delete dialog', () => {
-    component.onCloseCancle();
+  it('should check for cancel button inside the Delete dialog', () => {
+    component.onCloseCancel();
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 });

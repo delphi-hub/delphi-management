@@ -151,6 +151,21 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
+  def reconnect(from: Int, to: Int): Action[AnyContent] = Action.async { request =>
+
+    ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
+    )
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .post(Json.obj("AssignedInstanceId" -> to))
+      .map { response =>
+        response.status match {
+          case 200 =>
+            Ok(response.body)
+          case x =>
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
   /**
     * This function is for handling an POST request for adding an instance to the Scala web server
     * (E.g. .../instances/deploy

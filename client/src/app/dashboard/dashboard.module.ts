@@ -39,6 +39,9 @@ import {ApiModule} from '../api/api.module';
 import {ModelModule} from '../model/model.module';
 import { MaterialModule } from '../material-module/material.module';
 import { GraphViewModule } from './graph-view/graph-view.module';
+import { InforCenterComponent } from './infor-center/infor-center.component';
+import { InstanceDetailsComponent } from './instance-details/instance-details.component';
+import { TableOverviewComponent } from './table-overview/table-overview.component';
 
 
 @NgModule({
@@ -68,7 +71,10 @@ import { GraphViewModule } from './graph-view/graph-view.module';
     UserProfileComponent,
     UserManagementComponent,
     DeleteDialogComponent,
-    AddDialogComponent
+    AddDialogComponent,
+    InforCenterComponent,
+    InstanceDetailsComponent,
+    TableOverviewComponent
   ],
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent
