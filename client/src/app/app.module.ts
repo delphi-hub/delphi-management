@@ -30,7 +30,7 @@ import { HelpComponent } from './help/help.component';
   declarations: [
     AppComponent,
     LandingPageComponent,
-    HelpComponent,
+    HelpComponent
   ],
   imports: [
     DashboardModule,
