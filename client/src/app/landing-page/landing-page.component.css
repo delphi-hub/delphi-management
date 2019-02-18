@@ -16,3 +16,8 @@
  * limitations under the License.
  */
 
+ .required::after{
+    content:'*';
+    color: red;
+}
+
