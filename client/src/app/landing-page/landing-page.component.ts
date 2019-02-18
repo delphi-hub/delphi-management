@@ -17,6 +17,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-landing-page',
@@ -24,10 +25,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
+  username =  new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required]);
+  public loginFailed = false;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  loginForm() {
   }
 
 }
