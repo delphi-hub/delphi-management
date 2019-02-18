@@ -65,9 +65,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
-  val username = config.get[String]("play.http.user")
-  val password = config.get[String]("play.http.password")
-  val authHeader = Authorization(BasicHttpCredentials(username, password))
+
 
   /** This method maps list of instances with specific componentType.
     *
@@ -192,8 +190,15 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   }
 
   //This method might be helpful when User Authentication is implemented.
-
   def authentication(): Action[AnyContent] = Action.async {
+    request =>
+    val json = request.body.asJson.get
+    println(json)
+    val username = (json \ "username").as[String]
+    val password = (json \ "password").as[String]
+    println(username)
+    println(password)
+    val authHeader = Authorization(BasicHttpCredentials(username, password))
     ws.url(instanceRegistryUri + "/users" + "/authenticate")
       .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post("")
