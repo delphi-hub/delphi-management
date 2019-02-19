@@ -4,7 +4,9 @@ name := "delphi-management"
 
 organization := "de.upb"
 
-version := "0.8.0"
+
+version := "0.9.0"
+
 
 scalaVersion := "2.12.4"
 
@@ -58,3 +60,5 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "25.1-jre",
   "org.apache.commons" % "commons-compress" % "1.16"
 )
+
+libraryDependencies += "com.pauldijou" %% "jwt-core" % "1.0.0"

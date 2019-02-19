@@ -26,6 +26,10 @@ import {UserManagementComponent} from './user-management/user-management.compone
 import {WebApiComponent} from './webapi/web-api.component';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {HelpComponent} from '../help/help.component';
+import { GraphViewComponent } from './graph-view/graph-view/graph-view.component';
+import { InstanceDetailsComponent } from './instance-details/instance-details.component';
+import { TableAllComponent } from './table-all/table-all.component';
+import { TableOverviewComponent } from './table-overview/table-overview.component';
 
 
 const dashboardRoutes: Routes = [
@@ -50,6 +54,10 @@ const dashboardRoutes: Routes = [
         component: WebApiComponent
       },
       {
+        path: 'tableOverview',
+        component: TableOverviewComponent
+      },
+      {
         path: 'userManagement',
         component: UserManagementComponent
       },
@@ -60,6 +68,14 @@ const dashboardRoutes: Routes = [
       {
         path: 'help',
         component: HelpComponent
+      },
+      {
+        path: 'graphView',
+        component: GraphViewComponent
+      },
+      {
+        path: 'instanceDetails',
+        component: InstanceDetailsComponent
       }
     ]
   }];

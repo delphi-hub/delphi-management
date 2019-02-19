@@ -26,11 +26,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
-    HelpComponent,
+    HelpComponent
   ],
   imports: [
     DashboardModule,

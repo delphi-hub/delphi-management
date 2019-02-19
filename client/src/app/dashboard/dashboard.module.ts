@@ -38,6 +38,10 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import {ApiModule} from '../api/api.module';
 import {ModelModule} from '../model/model.module';
 import { MaterialModule } from '../material-module/material.module';
+import { GraphViewModule } from './graph-view/graph-view.module';
+import { InforCenterComponent } from './infor-center/infor-center.component';
+import { InstanceDetailsComponent } from './instance-details/instance-details.component';
+import { TableOverviewComponent } from './table-overview/table-overview.component';
 
 
 @NgModule({
@@ -51,7 +55,8 @@ import { MaterialModule } from '../material-module/material.module';
     DashboardRoutingModule,
     DashboardRoutingModule,
     ApiModule,
-    ModelModule
+    ModelModule,
+    GraphViewModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -66,7 +71,10 @@ import { MaterialModule } from '../material-module/material.module';
     UserProfileComponent,
     UserManagementComponent,
     DeleteDialogComponent,
-    AddDialogComponent
+    AddDialogComponent,
+    InforCenterComponent,
+    InstanceDetailsComponent,
+    TableOverviewComponent
   ],
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent

@@ -15,17 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { InstanceDetails } from '../../model/models/instance';
 
-import { DashboardRoutingModule } from './dashboard-routing.module';
 
-describe('DashboardRoutingModule', () => {
-  let dashboardRoutingModule: DashboardRoutingModule;
+@Component({
+  selector: 'app-instance-details',
+  templateUrl: './instance-details.component.html',
+  styleUrls: ['./instance-details.component.css']
+})
+export class InstanceDetailsComponent implements OnInit {
 
-  beforeEach(() => {
-    dashboardRoutingModule = new DashboardRoutingModule();
-  });
+  constructor() { }
 
-  it('should create an instance', () => {
-    expect(dashboardRoutingModule).toBeTruthy();
-  });
-});
+  ngOnInit() {
+}
+}
