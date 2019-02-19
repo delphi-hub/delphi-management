@@ -16,40 +16,28 @@
   ~ limitations under the License.
   -->
 
-<div id="content" class="container">
+<div class="col-md-6 col-md-offset-3" class="container">
+    <h2>Login</h2>
 
-    <article>
+    <form (ngsubmit)="loginForm()">
+        <div class="form-group" [class.has-error]=" username.invalid && username.dirty">
+            <label class="control-label required" for="username"> Username</label>
+            <input type="text" class="form-control" name="username" required 
+                id="username">
+            <span *ngIf="username.invalid && username.dirty" class="help-block"> Username is required</span>
+        </div>
+        <div class="form-group">
+            <label class="control-label required" for="password">Password</label>
+            <input type="password" class="form-control" name="password" required>
+            <span *ngIf="password.invalid && password.dirty" class="help-block"> password is required</span>
+        </div>
+        <div *ngIf="loginFailed" class="alert alert-warning" id="error-id">
+            <strong>Error:</strong> Wrong username or password.
+        </div>
+        <div class="text-right">
 
-        <h1>What is Delphi?</h1>
-
-        <p>
-            Delphi is a platform to retrieve meta-information on JVM-bytecode based projects.
-        </p>
-
-
-        <h2>What can Delphi do for you?</h2>
-
-        <p>
-            You can either query a complete set of information for a specific project or you can retrieve a list of
-            matching projects based on specific metrics.
-        </p>
-
-        <h2>What is this page used for?</h2>
-
-        <p>
-            Once implemented, this page will give you access to the management interface of Delphi. You will be able
-            to control the Delphi-Crawlers, configure the Elasticsearch database and administrate your instances of
-            Delphi. For now, this page is a placeholder for the future implementation.
-        </p>
-
-
-        <p>
-          For now you can find a first implementation of the dashboard we are currently developing here:
-              <button type="button" class="btn btn-primary" routerLink="/dashboard" routerLinkActive="active">Go To Dashboard</button>
-        </p>
-
-    </article>
-
-
-
+            <button type="button" class="btn btn-primary" routerLink="/dashboard"
+                routerLinkActive="active">Login</button>
+        </div>
+    </form>
 </div>
