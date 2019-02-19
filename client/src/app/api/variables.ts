@@ -30,6 +30,7 @@ export const PAUSE_INSTANCE = 'api/pauseInstance';
 export const RESUME_INSTANCE = 'api/resumeInstance';
 export const DELETE_INSTANCE = 'api/deleteInstance';
 export const RECONNECT = 'api/reconnectInstance';
+export const AUTH = 'api/authenticate';
 export const COLLECTION_FORMATS = {
     'csv': ',',
     'tsv': '   ',

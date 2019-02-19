@@ -36,7 +36,8 @@ import {
   RESUME_INSTANCE,
   DELETE_INSTANCE,
   INSTANCE_NETWORK,
-  RECONNECT
+  RECONNECT,
+  AUTH
 } from '../variables';
 
 
@@ -115,6 +116,30 @@ export class ApiService {
    */
   public postInstance(componentType: string, name: string, observe: any = 'body', reportProgress: boolean = false): Observable<Instance> {
     return this.post(NEW_INSTANCE, componentType, name);
+  }
+
+  public login(username: string, password: string) {
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<string>(`${this.basePath}${AUTH}`, {
+      username: username,
+      password: password
+    },
+      {
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+      }
+    );
   }
 
   /**
