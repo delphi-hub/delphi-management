@@ -21,22 +21,22 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
+import { LandingPageModule } from './landing-page/landing-page.module';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingPageComponent,
     HelpComponent
   ],
   imports: [
     DashboardModule,
     AppRoutingModule,
     BrowserModule,
+    LandingPageModule,
     HttpClientModule
   ],
   providers: [],
