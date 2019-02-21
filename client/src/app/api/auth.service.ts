@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api/api.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-const TOKEN_IDENT = 'token';
+export const TOKEN_IDENT = 'token';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private helperService: JwtHelperService;
-  constructor(private apiService: ApiService) {
-    this.helperService = new JwtHelperService();
-  }
+
+  constructor(private apiService: ApiService, public helperService: JwtHelperService) {}
 
   login(username: string, password: string) {
     this.apiService.login(username, password).subscribe((token: string) => {
