@@ -21,6 +21,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
+import { LabelDialogComponent } from '../label-dialog/label-dialog.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpEvent } from '@angular/common/http';
 import { ModelService } from 'src/app/model/model.service';
@@ -132,6 +133,33 @@ export class TableAllComponent implements OnInit {
             }
         });
     }
+
+    /**
+   * Adding an instance using mat-dialog component
+   * @param InstanceID
+   * @param labelName
+   */
+    openlabelDialog(id: string) {
+        const labelDialogRef = this.dialog.open(LabelDialogComponent, {
+            width: '300px',
+
+        });
+
+        labelDialogRef.afterClosed().subscribe(dialogResult => {
+            console.log('dialogResult', dialogResult);
+            if (dialogResult === 'CancelLabel') {
+                labelDialogRef.close();
+            } else {
+                this.apiService.labelInstance(id, dialogResult.labelName).subscribe((result: Instance) => {
+                    this.dataSource.data.push(result);
+                }, err => {
+
+                    console.log('error receiving data for label');
+                });
+            }
+        });
+    }
+
 
    /**
    * Function used to control the state of the instance. Case1: 'start' an instance

@@ -42,6 +42,7 @@ import { GraphViewModule } from './graph-view/graph-view.module';
 import { InforCenterComponent } from './infor-center/infor-center.component';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
+import { LabelDialogComponent } from './label-dialog/label-dialog.component';
 
 
 @NgModule({
@@ -74,10 +75,11 @@ import { TableOverviewComponent } from './table-overview/table-overview.componen
     AddDialogComponent,
     InforCenterComponent,
     InstanceDetailsComponent,
-    TableOverviewComponent
+    TableOverviewComponent,
+    LabelDialogComponent
   ],
   entryComponents: [
-    DeleteDialogComponent, AddDialogComponent
+    DeleteDialogComponent, AddDialogComponent, LabelDialogComponent
   ],
   providers: [],
 })

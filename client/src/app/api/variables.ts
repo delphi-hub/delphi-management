@@ -29,6 +29,7 @@ export const STOP_INSTANCE = 'api/stopInstance';
 export const PAUSE_INSTANCE = 'api/pauseInstance';
 export const RESUME_INSTANCE = 'api/resumeInstance';
 export const DELETE_INSTANCE = 'api/deleteInstance';
+export const NEW_LABEL_INSTANCE = 'api/labelInstance';
 export const COLLECTION_FORMATS = {
     'csv': ',',
     'tsv': '   ',
