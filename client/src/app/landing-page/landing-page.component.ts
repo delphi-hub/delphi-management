@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ApiService } from '../api/api/api.service';
+import { AuthService } from '../api/auth.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -32,14 +32,14 @@ export class LandingPageComponent implements OnInit {
     password: ['', Validators.required],
   });
 
-  constructor(private apiService: ApiService, private fb: FormBuilder) { }
+  constructor(private authService: AuthService, private fb: FormBuilder) { }
 
   ngOnInit() {
 
   }
 
   login() {
-    this.apiService.login(this.loginForm.value.username, this.loginForm.value.password);
+    this.authService.login(this.loginForm.value.username, this.loginForm.value.password);
   }
 
 }
