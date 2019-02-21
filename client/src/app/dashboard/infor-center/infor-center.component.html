@@ -15,6 +15,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */-->
- 
+
 <h4>Information Center</h4>
-<div [ngClass]="'infoCenter'">In a future version a notification center will be shown here.</div>
+<div class="mat-elevation-z8" [ngClass]="'infoCenter'">
+  <mat-table #table class="full-width-table" [dataSource]="dataSource" matSort aria-label="Elements">
+    <!-- type Column -->
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+      <mat-cell *matCellDef="let row"><mat-icon>{{row.type}}</mat-icon></mat-cell>
+    </ng-container>
+
+    <!-- Name notif Column -->
+    <ng-container matColumnDef="notifName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Notification</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.notifName}}</mat-cell>
+    </ng-container>
+
+    <!-- Date name Column -->
+    <ng-container matColumnDef="dateTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Date and Time</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.dateTime}}</mat-cell>
+    </ng-container>
+
+
+    <!-- Details Column -->
+    <ng-container matColumnDef="details">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Details</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.details}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource.data.length"
+                 [pageIndex]="0"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>

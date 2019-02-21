@@ -15,8 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator, MatSort } from '@angular/material';
+import { InfoCenterDataSource } from './infor-center.dataSource';
+import {SocketService} from "../../api/api/socket.service";
+import {Instance} from "../../model/models/instance";
+import {EventTypeEnum} from "../../model/models/socketMessage";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-infor-center',
@@ -26,10 +31,40 @@ import { MatTableDataSource } from '@angular/material';
 
 export class InforCenterComponent implements OnInit {
 
-  constructor() {
-  }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  dataSource: InfoCenterDataSource;
+  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+  displayedColumns = ['type', 'notifName', 'dateTime', 'details'];
+
+  constructor(private socketService: SocketService, private changeDetectorRefs: ChangeDetectorRef){}
+
 
   ngOnInit() {
+    this.dataSource = new InfoCenterDataSource(this.paginator, this.sort);
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: newInstance.id, type: 'add_circle', notifName: 'new Instance added', dateTime: actualDate, details: 'Instance Name: '+newInstance.name};
+        this.dataSource.add(line);
+        this.changeDetectorRefs.detectChanges();
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removeInstance: Instance) => {
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: removeInstance.id, type: 'delete_sweep', notifName: 'Instance removed', dateTime: actualDate, details: 'Instance Name: '+removeInstance.name};
+        this.dataSource.add(line);
+        this.changeDetectorRefs.detectChanges();
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: changeInstance.id, type: 'link', notifName: 'Instance changed', dateTime: actualDate, details: changeInstance.name};
+        this.dataSource.add(line);
+        this.changeDetectorRefs.detectChanges();
+    });
   }
 
+
 }
+
