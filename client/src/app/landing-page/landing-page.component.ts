@@ -17,7 +17,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ApiService } from '../api/api/api.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -25,16 +26,20 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  username =  new FormControl('', [Validators.required]);
-  password = new FormControl('', [Validators.required]);
-  public loginFailed = false;
 
-  constructor() { }
+  loginForm = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+  });
+
+  constructor(private apiService: ApiService, private fb: FormBuilder) { }
 
   ngOnInit() {
+
   }
 
-  loginForm() {
+  login() {
+    this.apiService.login(this.loginForm.value.username, this.loginForm.value.password);
   }
 
 }
