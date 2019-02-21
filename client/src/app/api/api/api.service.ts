@@ -131,7 +131,7 @@ export class ApiService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
-    return this.httpClient.post<string>(`${this.basePath}${AUTH}`, {
+    return this.httpClient.post<any>(`${this.basePath}${AUTH}`, {
       username: username,
       password: password
     },

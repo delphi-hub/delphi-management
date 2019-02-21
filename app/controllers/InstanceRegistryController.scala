@@ -22,7 +22,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSClient, WSAuthScheme}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
@@ -203,13 +203,15 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       val password = (json \ "password").as[String]
       println(username)
       println(password)
-      val authHeader = Authorization(BasicHttpCredentials(username, password))
+      // val authHeader = Authorization(BasicHttpCredentials(username, password))
       ws.url(instanceRegistryUri + "/users" + "/authenticate")
-        .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withAuth(username, password, WSAuthScheme.BASIC)
+        .withHttpHeaders( ("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
         .post("")
         .map { response =>
           if (response.status == 200) {
-            Ok(response.body)
+            println(response.body)
+            Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
           //if (response.status == 200) {
             //Ok{if(!AuthProvider.validateJWT(response.body))
             // {Unauthorized}}

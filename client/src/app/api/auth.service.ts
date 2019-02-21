@@ -11,9 +11,9 @@ export class AuthService {
   constructor(private apiService: ApiService, public helperService: JwtHelperService) {}
 
   login(username: string, password: string) {
-    this.apiService.login(username, password).subscribe((token: string) => {
+    this.apiService.login(username, password).subscribe((token: any) => {
       console.log('got token', token);
-      localStorage.setItem(TOKEN_IDENT, token);
+      localStorage.setItem(TOKEN_IDENT, token.token);
     });
   }
 
