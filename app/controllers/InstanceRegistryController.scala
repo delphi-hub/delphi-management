@@ -206,7 +206,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         .post("")
         .map { response =>
           if (response.status == 200) {
-            Ok{if(AuthProvider.validateJWT(response.body)==false)
+            Ok{if(!AuthProvider.validateJWT(response.body))
             {"Not a Valid Token"}
             }
           } else {

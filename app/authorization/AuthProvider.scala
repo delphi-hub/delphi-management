@@ -44,8 +44,6 @@ import play.api.Configuration
       Token
     }
     def validateJWT(recievedToken: String): Boolean = {
-      if(Jwt.isValid(recievedToken)==true) {true}
-      else
-      {false}
+      Jwt.isValid(recievedToken)
     }
   }
