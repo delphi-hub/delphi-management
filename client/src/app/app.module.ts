@@ -24,7 +24,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
 import { LandingPageModule } from './landing-page/landing-page.module';
-
+import { JwtModule } from '@auth0/angular-jwt';
+import { TOKEN_IDENT } from './api/auth.service';
+import { BASE_PATH, AUTH } from './api/variables';
 
 
 @NgModule({
@@ -37,10 +39,18 @@ import { LandingPageModule } from './landing-page/landing-page.module';
     AppRoutingModule,
     BrowserModule,
     LandingPageModule,
-    HttpClientModule
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => {console.log('here', localStorage.getItem(TOKEN_IDENT)); return localStorage.getItem(TOKEN_IDENT); },
+        whitelistedDomains: [`${BASE_PATH}`],
+        blacklistedRoutes: [`${BASE_PATH}${AUTH}`]
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
 
 })
-export class AppModule { }
+export class AppModule {
+}
