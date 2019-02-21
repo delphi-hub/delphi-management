@@ -192,6 +192,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }(myExecutionContext)
   }
 
+
   def authentication()(implicit writeable: Writeable[Any]): Action[AnyContent] = Action.async {
     request =>
       val json = request.body.asJson.get
