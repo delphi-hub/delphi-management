@@ -24,8 +24,8 @@ export class AuthService {
   }
 
   isValid(): boolean {
-    console.log('token', this.getToken());
-    console.log('validity check result', this.helperService.isTokenExpired(this.getToken()));
+    // TODO: for dev purpose it will be sufficient to return true here and thereby skipp
+    // the authorization in the complete application
     return !this.helperService.isTokenExpired(this.getToken());
   }
 
