@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatTable } from '@angular/material';
 import { InfoCenterDataSource } from './info-center-datasource';
 import {SocketService} from "../../api/api/socket.service";
 import {DatePipe} from "@angular/common";
@@ -14,6 +14,7 @@ import {Instance} from "../../model/models/instance";
 export class InfoCenterComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable) table: MatTable<any>;
   dataSource: InfoCenterDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -29,6 +30,8 @@ export class InfoCenterComponent implements OnInit {
       let line = {instanceId: newInstance.id, type: 'add_circle', notifName: 'new Instance added', dateTime: actualDate, details: 'Instance Name: '+newInstance.name};
       this.dataSource.add(line);
       this.changeDetectorRefs.detectChanges();
+      this.paginator.lastPage();
+      this.paginator.firstPage();
     });
     this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removeInstance: Instance) => {
       var datePipe = new DatePipe("en-US");
@@ -36,6 +39,8 @@ export class InfoCenterComponent implements OnInit {
       let line = {instanceId: removeInstance.id, type: 'delete_sweep', notifName: 'Instance removed', dateTime: actualDate, details: 'Instance Name: '+removeInstance.name};
       this.dataSource.add(line);
       this.changeDetectorRefs.detectChanges();
+      this.paginator.lastPage();
+      this.paginator.firstPage();
     });
     this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
       var datePipe = new DatePipe("en-US");
@@ -43,6 +48,8 @@ export class InfoCenterComponent implements OnInit {
       let line = {instanceId: changeInstance.id, type: 'link', notifName: 'Instance changed', dateTime: actualDate, details: changeInstance.name};
       this.dataSource.add(line);
       this.changeDetectorRefs.detectChanges();
+      this.paginator.lastPage();
+      this.paginator.firstPage();
     });
   }
 }
