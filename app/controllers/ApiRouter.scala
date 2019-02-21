@@ -19,7 +19,6 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.http.Writeable
 import play.api.routing.Router.Routes
 import play.api.routing.SimpleRouter
 import play.api.routing.sird._
@@ -29,7 +28,7 @@ import play.api.routing.sird._
   * Endpoints.
   * @param controller Controller components reference
   */
-class ApiRouter @Inject()(implicit writeable: Writeable[Any],irController: InstanceRegistryController, sysController: SystemInfoController)
+class ApiRouter @Inject()(irController: InstanceRegistryController, sysController: SystemInfoController)
   extends SimpleRouter
 {
 
