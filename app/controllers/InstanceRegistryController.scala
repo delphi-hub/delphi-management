@@ -100,6 +100,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = Action.async {
+    println("Token Check")
+    println(AuthProvider.validateJWT(token))
     ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
@@ -193,7 +195,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   }
 
 
-  def authentication()(implicit writeable: Writeable[Any]): Action[AnyContent] = Action.async {
+  def authentication(): Action[AnyContent] = Action.async {
     request =>
       val json = request.body.asJson.get
       println(json)
@@ -207,9 +209,10 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         .post("")
         .map { response =>
           if (response.status == 200) {
-            Ok{if(!AuthProvider.validateJWT(response.body))
-            {"Not a Valid Token"}
-            }
+            Ok(response.body)
+          //if (response.status == 200) {
+            //Ok{if(!AuthProvider.validateJWT(response.body))
+            // {Unauthorized}}
           } else {
             new Status(response.status)
           }
