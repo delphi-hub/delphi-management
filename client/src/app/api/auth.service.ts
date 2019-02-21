@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api/api.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { HashLocationStrategy } from '@angular/common';
 
 const TOKEN_IDENT = 'token';
 @Injectable({
