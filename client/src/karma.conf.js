@@ -45,11 +45,11 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ["Chrome", "Chromium"],
     customLaunchers: {
-      // ChromeHeadlessCI: {
-      //   base: "ChromeHeadless",
-      //   flags: ["--no-sandbox"]
-      // }
+      ChromeHeadlessCI: {
+        base: "ChromeHeadless",
+        flags: ["--no-sandbox"]
+      }
     },
-    singleRun: false
+    singleRun: true
   });
 };
