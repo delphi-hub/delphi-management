@@ -135,7 +135,7 @@ export class TableAllComponent implements OnInit {
     }
 
     /**
-   * Adding an instance using mat-dialog component
+   * Adding a custom label using mat-dialog component
    * @param InstanceID
    * @param labelName
    */

@@ -49,17 +49,6 @@
                 <mat-cell *matCellDef="let element"> {{element.instanceState}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Details">
-                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-                <mat-cell *matCellDef="let element; let row" class="example-element-row"
-                    [class.example-expanded-row]="expandedElement === element"
-                    (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
-                    <button mat-button [ngClass]="'customOutline'">
-                        View Details
-                    </button>
-                </mat-cell>
-            </ng-container>
-
             <ng-container matColumnDef="action">
                 <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef> Action </mat-header-cell>
                 <mat-cell [ngClass]="'customWidthClass customWidthClassNew'"
@@ -93,8 +82,19 @@
 
             </ng-container>
 
+            <ng-container matColumnDef="Details">
+                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                <mat-cell *matCellDef="let element; let row" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
+                    <button mat-button [ngClass]="'customOutline'">
+                        View Details
+                    </button>
+                </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="expandedDetail">
-                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <td mat-cell *matCellDef="let element; let row" [attr.colspan]="displayedColumns.length">
                     <div class="example-element-detail"
                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                         <table mat-table [dataSource]="data" class="mat-elevation-z8">
