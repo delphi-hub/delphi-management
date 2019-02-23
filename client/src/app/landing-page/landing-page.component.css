@@ -21,3 +21,14 @@
     color: red;
 }
 
+.alignForm{
+  margin-left:45px;
+}
+.alignCenter{
+   /* margin: 0 auto;
+    width: 100px;*/
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

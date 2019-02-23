@@ -20,22 +20,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
+
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingPageComponent,
     HelpComponent
   ],
   imports: [
     DashboardModule,
     AppRoutingModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     HttpClientModule
   ],

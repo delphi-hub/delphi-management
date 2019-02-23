@@ -25,15 +25,29 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  username =  new FormControl('', [Validators.required]);
-  password = new FormControl('', [Validators.required]);
   public loginFailed = false;
+  hide = true;
 
   constructor() { }
+  userName: String;
+  password: String;
+
+  formControl = new FormControl('', [
+    Validators.required
+  ]);
 
   ngOnInit() {
   }
 
+  getErrorMessageName() {
+    return this.formControl.hasError('required') ? 'Username is required field' :
+      this.formControl.hasError('userName') ? 'Not a valid name' :
+        '';
+  }
+  getErrorMessagePwd() {
+    return this.formControl.hasError('required') ? 'Password is required field' :
+        '';
+  }
   loginForm() {
   }
 
