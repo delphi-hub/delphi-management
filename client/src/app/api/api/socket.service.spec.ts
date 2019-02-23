@@ -17,9 +17,7 @@
  */
 
 import {TestBed} from '@angular/core/testing';
-
 import {SocketService} from './socket.service';
-import { doesNotReject } from 'assert';
 
 describe('SocketService', () => {
   let socketService: SocketService;

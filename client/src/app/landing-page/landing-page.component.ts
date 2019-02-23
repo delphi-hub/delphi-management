@@ -17,6 +17,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../api/auth.service';
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -28,15 +30,21 @@ export class LandingPageComponent implements OnInit {
   public loginFailed = false;
   hide = true;
 
-  constructor() { }
-  userName: String;
-  password: String;
+  loginForm = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+  });
 
-  formControl = new FormControl('', [
-    Validators.required
-  ]);
+  constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit() {
+
+  }
+
+  login() {
+    this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(() => {
+      this.router.navigate(['/dashboard']);
+    });
   }
 
   getErrorMessageName() {

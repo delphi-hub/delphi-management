@@ -22,7 +22,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSClient, WSAuthScheme}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
@@ -31,6 +31,7 @@ import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
+import play.api.http.Writeable
 import play.api.libs.json.Json
 
 
@@ -65,6 +66,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
+  //Sample Token for testing
+  val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRGVscGhpTWFuYWdlbWVudCIsInVzZXJfdHlwZSI6IkNvbXBvbmVudCJ9.dPxLDxQfnKRNpoNE9TMi9R4iU1-xl7SugDNxI0gwGNU"
 
 
   /** This method maps list of instances with specific componentType.
@@ -97,6 +100,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = Action.async {
+    println("Token Check")
+    println(AuthProvider.validateJWT(token))
     ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
@@ -189,25 +194,30 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }(myExecutionContext)
   }
 
-  //This method might be helpful when User Authentication is implemented.
+
   def authentication(): Action[AnyContent] = Action.async {
     request =>
-    val json = request.body.asJson.get
-    println(json)
-    val username = (json \ "username").as[String]
-    val password = (json \ "password").as[String]
-    println(username)
-    println(password)
-    val authHeader = Authorization(BasicHttpCredentials(username, password))
-    ws.url(instanceRegistryUri + "/users" + "/authenticate")
-      .withHttpHeaders(("Authorization", s"${authHeader}"), ("Delphi-Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .post("")
-      .map { response =>
-        if (response.status == 200) {
-          Ok(response.body)
-        } else {
-          new Status(response.status)
-        }
-      }
+      val json = request.body.asJson.get
+      println(json)
+      val username = (json \ "username").as[String]
+      val password = (json \ "password").as[String]
+      println(username)
+      println(password)
+      // val authHeader = Authorization(BasicHttpCredentials(username, password))
+      ws.url(instanceRegistryUri + "/users" + "/authenticate")
+      .withAuth(username, password, WSAuthScheme.BASIC)
+        .withHttpHeaders( ("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
+        .post("")
+        .map { response =>
+          if (response.status == 200) {
+            println(response.body)
+            Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+          //if (response.status == 200) {
+            //Ok{if(!AuthProvider.validateJWT(response.body))
+            // {Unauthorized}}
+          } else {
+            new Status(response.status)
+          }
+        }(myExecutionContext)
   }
 }
