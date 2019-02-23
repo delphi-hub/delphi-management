@@ -27,7 +27,6 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  public loginFailed = false;
   hide = true;
 
   loginForm = this.fb.group({
@@ -41,22 +40,18 @@ export class LandingPageComponent implements OnInit {
 
   }
 
+  getErrorMessageName() {
+    return this.loginForm.hasError('required') ? 'Username is required field' :
+      this.loginForm.hasError('userName') ? 'Not a valid name' :
+        '';
+  }
+  getErrorMessagePwd() {
+    return this.loginForm.hasError('required') ? 'Password is required field' :
+        '';
+  }
   login() {
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(() => {
       this.router.navigate(['/dashboard']);
     });
   }
-
-  getErrorMessageName() {
-    return this.formControl.hasError('required') ? 'Username is required field' :
-      this.formControl.hasError('userName') ? 'Not a valid name' :
-        '';
-  }
-  getErrorMessagePwd() {
-    return this.formControl.hasError('required') ? 'Password is required field' :
-        '';
-  }
-  loginForm() {
-  }
-
 }

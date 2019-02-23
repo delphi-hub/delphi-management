@@ -20,8 +20,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
@@ -29,7 +27,6 @@ import { LandingPageModule } from './landing-page/landing-page.module';
 import { JwtModule } from '@auth0/angular-jwt';
 import { TOKEN_IDENT } from './api/auth.service';
 import { BASE_PATH, AUTH } from './api/variables';
-
 
 
 @NgModule({
@@ -40,9 +37,6 @@ import { BASE_PATH, AUTH } from './api/variables';
   imports: [
     DashboardModule,
     AppRoutingModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     BrowserModule,
     LandingPageModule,
     HttpClientModule,
