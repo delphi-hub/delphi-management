@@ -32,3 +32,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.loginbtn{
+  padding-left: 30%;
+}

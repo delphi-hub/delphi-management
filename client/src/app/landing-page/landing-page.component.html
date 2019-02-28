@@ -22,19 +22,19 @@
         <div class="example-container">
             <div>
                 <mat-form-field color="primary">
-                    <input matInput #input class="form-control" placeholder="Username" [(ngModel)]="username"
-                        name="username" required>
+                    <input matInput #input class="form-control" placeholder="Username" for="username" [(ngModel)]="username"
+                        name="username" id="username" required>
                     <mat-error *ngIf="loginForm.invalid">{{getErrorMessageName()}}</mat-error>
                 </mat-form-field>
             </div>
-            <mat-form-field>
-                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'">
+            <mat-form-field color="primary">
+                <input matInput #input class="form-control" placeholder="Password" [type]="hide ? 'password' : 'text'" for="password" [(ngModel)]="password"  name="password" required>
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 <mat-error *ngIf="loginForm.invalid">{{getErrorMessagePwd()}}</mat-error>
             </mat-form-field>
         </div>
     </form>
-    <div class="alignForm">
-        <button mat-raised-button type="submit" color="warn" [disabled]="!loginForm.valid" id="loginButton">Login</button>
+    <div class="loginbtn">
+        <button mat-raised-button type="submit" color="warn" [disabled]="!loginForm.form.valid" id="loginButton">Login</button>
     </div>
 </div>

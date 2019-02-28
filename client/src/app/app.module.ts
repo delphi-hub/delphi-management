@@ -42,7 +42,7 @@ import { BASE_PATH, AUTH } from './api/variables';
     HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => localStorage.getItem(TOKEN_IDENT),
+        tokenGetter: jwtGetter,
         whitelistedDomains: [`${BASE_PATH}`],
         blacklistedRoutes: [`${BASE_PATH}${AUTH}`],
       }
@@ -53,4 +53,7 @@ import { BASE_PATH, AUTH } from './api/variables';
 
 })
 export class AppModule {
+}
+export function jwtGetter() {
+  return localStorage.getItem(TOKEN_IDENT)
 }
