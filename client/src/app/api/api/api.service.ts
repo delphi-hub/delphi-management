@@ -241,7 +241,7 @@ export class ApiService {
 
   private postLabel(endpoint: string, idInstance: string, labelName: string, observe: any = 'body', reportProgress: boolean = false): any {
     if (idInstance === null || idInstance === undefined && labelName === null || labelName === undefined) {
-      throw new Error('Required parameter instanceId and Instance Name was null or undefined when calling getInstanceNumber.');
+      throw new Error('Required parameter instanceId and Label Name was null or undefined when calling postlabel.');
     }
 
     let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
@@ -261,16 +261,7 @@ export class ApiService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
-    console.log('endpoint', endpoint);
-    return this.httpClient.post<Instance>(`${this.basePath}${endpoint}`, {},
-      {
-        params: queryParameters,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress
-      }
-    );
+    return this.commonConf(endpoint, queryParameters, observe, reportProgress);
   }
 
   private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false) {

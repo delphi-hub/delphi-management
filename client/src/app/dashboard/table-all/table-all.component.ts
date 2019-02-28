@@ -146,7 +146,6 @@ export class TableAllComponent implements OnInit {
         });
 
         labelDialogRef.afterClosed().subscribe(dialogResult => {
-            console.log('dialogResult', dialogResult);
             if (dialogResult === 'CancelLabel') {
                 labelDialogRef.close();
             } else {
