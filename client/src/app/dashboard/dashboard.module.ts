@@ -42,8 +42,7 @@ import { GraphViewModule } from './graph-view/graph-view.module';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { InfoCenterComponent } from './info-center/info-center.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
-
+import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -60,7 +59,8 @@ import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/mate
     GraphViewModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatIconModule
   ],
   declarations: [
     DashboardCardComponent,

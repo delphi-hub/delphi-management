@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
+import { MatPaginatorModule, MatSortModule, MatTableModule, MatIconModule } from '@angular/material';
 
 import { InfoCenterComponent } from './info-center.component';
 
@@ -16,6 +16,7 @@ describe('InfoCenterComponent', () => {
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
+        MatIconModule,
       ]
     }).compileComponents();
   }));

@@ -23,7 +23,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard.component';
 
-
 describe('component: DashboardComponent', () => {
 
   let location: Location, router: Router;
@@ -38,7 +37,6 @@ describe('component: DashboardComponent', () => {
       ])
     ],
       declarations: [ DashboardComponent, HeaderComponent],
-
     });
   });
 
