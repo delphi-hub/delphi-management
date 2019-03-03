@@ -3,4 +3,5 @@
   width: 100%;
   display: block;
   position: absolute;
+  min-height: 550px;
 }
