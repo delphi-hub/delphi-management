@@ -16,34 +16,55 @@
 package authorization
 
 
+import afu.org.checkerframework.checker.units.qual.A
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
 import play.api.Configuration
+import play.api.mvc.ActionBuilder
+import javax.inject.Inject
+import play.api.libs.json.Json
+import play.api.mvc._
 
-  object AuthProvider {
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+case class UserRequest[A](request: Request[A]) extends WrappedRequest(request)
 
-    var Token = "" // scalastyle:ignore
+  object AuthProvider  {
 
-    /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
-      *
-      * @param validFor
-      * @return
-      */
+      var Token = "" // scalastyle:ignore
 
-    def generateJwt(validFor: Long = 1)(implicit configuration: Configuration): String = {
-      val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
-      if (Token == "" || !Jwt.isValid(Token, jwtSecretKey, Seq(JwtAlgorithm.HS256))) {
-        val claim = JwtClaim()
-          .issuedNow
-          .expiresIn(validFor * 300)
-          .startsNow
-          . +("user_id",  configuration.get[String]("play.http.instance"))
-          . +("user_type", "Admin")
+      /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
+        *
+        * @param validFor
+        * @return
+        */
 
-        Token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
+      def generateJwt(validFor: Long = 1)(implicit configuration: Configuration): String = {
+        val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
+        if (Token == "" || !Jwt.isValid(Token, jwtSecretKey, Seq(JwtAlgorithm.HS256))) {
+          val claim = JwtClaim()
+            .issuedNow
+            .expiresIn(validFor * 300)
+            .startsNow
+            .+("user_id", configuration.get[String]("play.http.instance"))
+            .+("user_type", "Admin")
+
+          Token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
+        }
+        Token
       }
-      Token
     }
-    def validateJWT(recievedToken: String): Boolean = {
-      Jwt.isValid(recievedToken)
+ /* object Author extends ActionBuilder[Request,AnyContent] with BaseController
+  {
+   // override protected def executionContext: ExecutionContext = executionContext
+    def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
+      //val jwtToken = request.headers.get("jw_token").getOrElse("")
+      if (!Jwt.isValid("Token")) {
+        Future.successful(Results.Unauthorized)
+      }
+      else {
+        Future.successful(Results.Ok)
+        block(request)
+      }
     }
   }
+*/

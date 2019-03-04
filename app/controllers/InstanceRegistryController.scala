@@ -22,16 +22,14 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.{WSClient, WSAuthScheme}
+import play.api.libs.ws.{WSAuthScheme, WSClient}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
-import akka.http.scaladsl.model.headers.{Authorization, BasicHttpCredentials}
 import play.api.mvc._
-
-import scala.concurrent.ExecutionContext
+import pdi.jwt.Jwt
+import scala.concurrent.{ExecutionContext, Future}
 import authorization.AuthProvider
-import play.api.http.Writeable
 import play.api.libs.json.Json
 
 
@@ -66,6 +64,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
+  val Sampletoken = ""
 
 
   /** This method maps list of instances with specific componentType.
@@ -97,7 +96,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
 
-  def getNetwork(): Action[AnyContent] = Action.async {
+  def getNetwork(): Action[AnyContent] = userAuthentication.async {
     ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
@@ -165,6 +164,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
+
   /**
     * This function is for handling an POST request for adding an instance to the Scala web server
     * (E.g. .../instances/deploy
@@ -193,6 +193,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   /**
     * This function sends JWT token and Username:Password encoded into the headers to Instance Registry
     * Instance registry returns a valid JWT token.
+    *
     * @return
     */
 
@@ -204,10 +205,9 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       val password = (json \ "password").as[String]
       println(username)
       println(password)
-
       ws.url(instanceRegistryUri + "/users" + "/authenticate")
-      .withAuth(username, password, WSAuthScheme.BASIC)
-        .withHttpHeaders( ("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
+        .withAuth(username, password, WSAuthScheme.BASIC)
+        .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
         .post("")
         .map { response =>
           if (response.status == 200) {
@@ -217,5 +217,20 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
             new Status(response.status)
           }
         }(myExecutionContext)
+  }
+
+  class RequestwithToken[A](val jwttoken: String,request: Request[A]) extends WrappedRequest[A](request)
+  {}
+  object userAuthentication extends ActionBuilder[RequestwithToken] {
+    def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]):
+    Future[Result] = {
+      if (!Jwt.isValid(Sampletoken)) {
+        Future.successful(Results.Unauthorized)
+      }
+      else {
+        Future.successful(Results.Ok)
+        block(request)
+      }
+    }
   }
 }
