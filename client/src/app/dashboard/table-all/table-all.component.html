@@ -85,8 +85,8 @@
             <ng-container matColumnDef="Details">
                 <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                 <mat-cell *matCellDef="let element; let row" class="example-element-row"
-                    [class.example-expanded-row]="expandedElement === element"
-                    (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
+                    [class.example-expanded-row]="expandedID === element.id"
+                    (click)="onRowClicked(row)">
                     <button mat-button [ngClass]="'customOutline'">
                         View Details
                     </button>
@@ -96,7 +96,7 @@
             <ng-container matColumnDef="expandedDetail">
                 <td mat-cell *matCellDef="let element; let row" [attr.colspan]="displayedColumns.length">
                     <div class="example-element-detail"
-                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        [@detailExpand]="element.id == expandedID ? 'expanded' : 'collapsed'">
                         <table mat-table [dataSource]="data" class="mat-elevation-z8">
                             <ng-container matColumnDef="dockerId">
                 <th mat-header-cell *matHeaderCellDef> DockerID </th>

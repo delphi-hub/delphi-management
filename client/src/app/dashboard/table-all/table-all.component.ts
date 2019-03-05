@@ -44,21 +44,33 @@ export class TableAllComponent implements OnInit {
     @Input() type: Instance['componentType'];
 
     @Input() set dataArray(dataArray: Instance[]) {
-        if (this.dataSource != null) {
+
+        if (this.dataSource == null) {
             this.dataSource = new MatTableDataSource<Instance>(dataArray);
         } else {
             this.dataSource.data = dataArray;
+        }
+        if (this.expandedID != null) {
+            const newExpanded = dataArray.filter((value) => value.id === this.expandedID);
+            if (newExpanded.length > 1) {
+                this.expandedElement = null;
+                this.expandedID = null;
+            } else {
+                this.expandedElement = newExpanded[0];
+                this.onRowClicked(this.expandedElement, true);
+            }
         }
     }
     @Input() compType: string;
 
 
-    displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'Details', 'action'];
+    displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action', 'Details'];
     columnsToDisplay: string[] = ['dockerId', 'labels'];
-    dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
-    data = new MatTableDataSource<Instance>();
+    dataSource: MatTableDataSource<Instance>;
+    data = new MatTableDataSource<{dockerId: string, labels: string[]}>();
     dialogResult: string;
     expandedElement: Instance;
+    expandedID: number;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
@@ -211,20 +223,28 @@ export class TableAllComponent implements OnInit {
      /**
    * Function used to expand table row and show details of Docker and Labels
    */
-  onRowClicked(row: Instance): Array<{dockerId: string, labels: string[]}> {
-    let filteredList: Array<{dockerId: string, labels: string[]}>;
-    const NoId = 'Id not available';
-    const NoIdLabels = ['Labels not available'];
-    if (row.dockerId !== undefined && row.labels.length !== 0) {
-        filteredList = [{ dockerId: row.dockerId, labels: row.labels }];
-    } else if (row.dockerId === undefined && row.labels.length !== 0) {
-        filteredList = [{ dockerId: NoId, labels: row.labels }];
-    } else if (row.dockerId !== undefined && row.labels.length === 0) {
-        filteredList = [{ dockerId: row.dockerId, labels: NoIdLabels }];
+  onRowClicked(row: Instance, reload= false) {
+    if (!reload && row.id === this.expandedID) {
+        this.expandedElement = null;
+        this.expandedID = null;
+        this.data.data = null;
     } else {
-        filteredList = [{ dockerId: NoId, labels: NoIdLabels }];
+        let filteredList: Array<{dockerId: string, labels: string[]}>;
+        this.expandedID = row.id;
+        this.expandedElement = row;
+        const NoId = 'Id not available';
+        const NoIdLabels = ['Labels not available'];
+        if (row.dockerId !== undefined && row.labels.length !== 0) {
+            filteredList = [{ dockerId: row.dockerId, labels: row.labels }];
+        } else if (row.dockerId === undefined && row.labels.length !== 0) {
+            filteredList = [{ dockerId: NoId, labels: row.labels }];
+        } else if (row.dockerId !== undefined && row.labels.length === 0) {
+            filteredList = [{ dockerId: row.dockerId, labels: NoIdLabels }];
+        } else {
+            filteredList = [{ dockerId: NoId, labels: NoIdLabels }];
+        }
+        this.data.data = filteredList;
     }
-    return filteredList;
 }
 
 }
