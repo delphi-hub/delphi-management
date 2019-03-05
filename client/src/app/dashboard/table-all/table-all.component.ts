@@ -66,7 +66,7 @@ export class TableAllComponent implements OnInit {
 
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action', 'Details'];
     columnsToDisplay: string[] = ['dockerId', 'labels'];
-    dataSource: MatTableDataSource<Instance>;
+    dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
     data = new MatTableDataSource<{dockerId: string, labels: string[]}>();
     dialogResult: string;
     expandedElement: Instance;
