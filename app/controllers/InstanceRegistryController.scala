@@ -186,8 +186,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
-  
-    def labelInstance(instanceID: String, label: String): Action[AnyContent] = Action.async
+
+  def labelInstance(instanceID: String, label: String): Action[AnyContent] = Action.async
   {
     request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label")
