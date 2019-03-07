@@ -38,4 +38,13 @@ export class AddDialogComponent implements OnInit {
 
   }
 
+  onKeydown(event) {
+    console.log(event);
+    this.thisDialogRef.close({
+      status: 'Add',
+      name: this.name
+    });
+
+  }
+
 }

@@ -45,5 +45,6 @@ class ApiRouter @Inject()(irController: InstanceRegistryController, sysControlle
     case POST(p"/deleteInstance" ? q"instanceID=$instanceID") => irController.handleRequest(action="/delete", instanceID)
     case POST(p"/reconnectInstance" ? q"from=$from"& q"to=$to") => irController.reconnect(from.toInt, to.toInt)
     case POST(p"/authenticate") => irController.authentication()
+    case POST(p"/labelInstance" ? q"instanceID=$instanceID"& q"label=$label") => irController.labelInstance(instanceID, label)
   }
 }

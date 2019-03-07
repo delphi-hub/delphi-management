@@ -35,6 +35,7 @@ import {
   PAUSE_INSTANCE,
   RESUME_INSTANCE,
   DELETE_INSTANCE,
+  NEW_LABEL_INSTANCE,
   INSTANCE_NETWORK,
   RECONNECT,
   AUTH
@@ -192,6 +193,17 @@ export class ApiService {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
 
+  /**
+   * Create an Instance
+   * @param instanceId
+   * @param label
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public labelInstance( instanceId: string, labelName: string, observe: any = 'body', reportProgress: boolean = false) {
+    return this.postLabel(NEW_LABEL_INSTANCE, instanceId, labelName);
+  }
+
   private get<T>(endpoint: string, componentType?: string) {
 
     let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
@@ -252,6 +264,30 @@ export class ApiService {
     );
   }
 
+  private postLabel(endpoint: string, idInstance: string, labelName: string, observe: any = 'body', reportProgress: boolean = false): any {
+    if (idInstance === null || idInstance === undefined && labelName === null || labelName === undefined) {
+      throw new Error('Required parameter instanceId and Label Name was null or undefined when calling postlabel.');
+    }
+
+    let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+    if (idInstance !== undefined && labelName !== undefined) {
+      queryParameters = queryParameters.set('instanceID', <any>idInstance);
+      queryParameters = queryParameters.set('label', <any>labelName);
+    }
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.commonConf(endpoint, queryParameters, observe, reportProgress);
+  }
 
   private postAction(endpoint: string, idInstance: string, observe: any = 'body', reportProgress: boolean = false) {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });

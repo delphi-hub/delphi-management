@@ -31,6 +31,7 @@ export const RESUME_INSTANCE = 'api/resumeInstance';
 export const DELETE_INSTANCE = 'api/deleteInstance';
 export const RECONNECT = 'api/reconnectInstance';
 export const AUTH = 'api/authenticate';
+export const NEW_LABEL_INSTANCE = 'api/labelInstance';
 export const COLLECTION_FORMATS = {
     'csv': ',',
     'tsv': '   ',

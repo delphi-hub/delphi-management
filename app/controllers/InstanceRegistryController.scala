@@ -219,4 +219,21 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   }
 
 
+  def labelInstance(instanceID: String, label: String): Action[AnyContent] = authAction.async
+  {
+    request =>
+    ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label")
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .post(Json.obj("Label" -> label))
+      .map { response =>
+        response.status match {
+          // scalastyle:off magic.number
+          case 202 =>
+          // scalastyle:on magic.number
+            Ok(response.body)
+          case x: Any =>
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
 }
