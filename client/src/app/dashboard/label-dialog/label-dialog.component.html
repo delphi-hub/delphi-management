@@ -4,7 +4,7 @@
 	<form class="mat-dialog-content" #formControl="ngForm">
 		<div class="form">
 			<mat-form-field color="primary">
-				<input matInput #input class="form-control" placeholder="Label name" [(ngModel)]="labelName" name="labelName" required> 
+				<input matInput #input class="form-control" (keydown.enter)="onKeydown($event)" placeholder="Label name" [(ngModel)]="labelName" name="labelName" required> 
 				<mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
 			 </mat-form-field>
 		</div>
