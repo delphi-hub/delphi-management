@@ -16,13 +16,10 @@
 package authorization
 
 
-import afu.org.checkerframework.checker.units.qual.A
+
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
 import play.api.Configuration
-import javax.inject.Inject
-import play.api.libs.json.Json
-import play.api.mvc._
-import scala.concurrent.{Future, ExecutionContext}
+
 
 
   object AuthProvider  {
@@ -50,6 +47,12 @@ import scala.concurrent.{Future, ExecutionContext}
         Token
       }
 
+    /**
+      *  This method receives a token and validates if it is valid
+      * @param token
+      * @param configuration
+      * @return
+      */
 
     def validateJwt(token: String)(implicit configuration: Configuration): Boolean = {
       val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")

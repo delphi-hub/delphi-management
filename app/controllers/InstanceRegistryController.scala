@@ -27,8 +27,7 @@ import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import play.api.mvc._
-import pdi.jwt.Jwt
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import authorization.AuthProvider
 import authorization.AuthAction
 import play.api.libs.json.Json
@@ -149,6 +148,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
+  /**
+    *  This method is called to assign a new instance to the instance with specified ID.
+    * @param from
+    * @param to
+    * @return
+    */
+
   def reconnect(from: Int, to: Int): Action[AnyContent] = authAction.async { request =>
 
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
@@ -217,6 +223,12 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }(myExecutionContext)
   }
 
+  /**
+    * This function is used to add a label to specific instance.
+    * @param instanceID ID of the instance on which label is to be added
+    * @param label
+    * @return
+    */
 
   def labelInstance(instanceID: String, label: String): Action[AnyContent] = authAction.async
   {
