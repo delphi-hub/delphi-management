@@ -17,7 +17,6 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { LandingPageComponent } from './landing-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material-module/material.module';
@@ -25,7 +24,7 @@ import { MaterialModule } from '../material-module/material.module';
 @NgModule({
   imports: [
     MaterialModule,
-    FormsModule, 
+    FormsModule,
     ReactiveFormsModule
   ],
   declarations: [LandingPageComponent]
