@@ -49,17 +49,6 @@
                 <mat-cell *matCellDef="let element"> {{element.instanceState}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Details">
-                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-                <mat-cell *matCellDef="let element; let row" class="example-element-row"
-                    [class.example-expanded-row]="expandedElement === element"
-                    (click)="expandedElement = expandedElement === element ? null : element; data = onRowClicked(row)">
-                    <button mat-button [ngClass]="'customOutline'">
-                        View Details
-                    </button>
-                </mat-cell>
-            </ng-container>
-
             <ng-container matColumnDef="action">
                 <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef> Action </mat-header-cell>
                 <mat-cell [ngClass]="'customWidthClass customWidthClassNew'"
@@ -93,10 +82,21 @@
 
             </ng-container>
 
+            <ng-container matColumnDef="Details">
+                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                <mat-cell *matCellDef="let element; let row" class="example-element-row"
+                    [class.example-expanded-row]="expandedID === element.id"
+                    (click)="onRowClicked(row)">
+                    <button mat-button [ngClass]="'customOutline'">
+                        View Details
+                    </button>
+                </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="expandedDetail">
-                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <td mat-cell *matCellDef="let element; let row" [attr.colspan]="displayedColumns.length">
                     <div class="example-element-detail"
-                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        [@detailExpand]="element.id == expandedID ? 'expanded' : 'collapsed'">
                         <table mat-table [dataSource]="data" class="mat-elevation-z8">
                             <ng-container matColumnDef="dockerId">
                 <th mat-header-cell *matHeaderCellDef> DockerID </th>
@@ -104,7 +104,12 @@
             </ng-container>
             <ng-container matColumnDef="labels">
                 <th mat-header-cell *matHeaderCellDef> Labels </th>
-                <td mat-cell *matCellDef="let element"> {{element.labels}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.labels}}
+                    <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
+                        matTooltip="Add labels">
+                        <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
+                    </button>
+                </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
