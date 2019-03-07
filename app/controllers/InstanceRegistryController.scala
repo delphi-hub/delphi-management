@@ -200,11 +200,10 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def authentication(): Action[AnyContent] = Action.async {
     request =>
       val json = request.body.asJson.get
-      println(json)
+
       val username = (json \ "username").as[String]
       val password = (json \ "password").as[String]
-      println(username)
-      println(password)
+
       ws.url(instanceRegistryUri + "/users" + "/authenticate")
         .withAuth(username, password, WSAuthScheme.BASIC)
         .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
