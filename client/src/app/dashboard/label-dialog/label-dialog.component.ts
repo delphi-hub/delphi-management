@@ -39,7 +39,6 @@ export class LabelDialogComponent implements OnInit {
   }
 
   onKeydown(event) {
-    console.log(event);
     this.thislabelDialogRef.close({
       status: 'Add',
       labelName: this.labelName
