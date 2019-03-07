@@ -43,6 +43,7 @@ import { InstanceDetailsComponent } from './instance-details/instance-details.co
 import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { InfoCenterComponent } from './info-center/info-center.component';
 import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '@angular/material';
+import { LabelDialogComponent } from './label-dialog/label-dialog.component';
 
 @NgModule({
   imports: [
@@ -78,10 +79,11 @@ import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '
     AddDialogComponent,
     InstanceDetailsComponent,
     TableOverviewComponent,
-    InfoCenterComponent
+    InfoCenterComponent,
+    LabelDialogComponent
   ],
   entryComponents: [
-    DeleteDialogComponent, AddDialogComponent
+    DeleteDialogComponent, AddDialogComponent, LabelDialogComponent
   ],
   providers: [],
 })
