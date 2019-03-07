@@ -102,10 +102,13 @@ export class TableAllComponent implements OnInit {
                 if (result !== 'Cancel') {
                     this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
                         console.log('result', deleteResult);
+                        this.removeAt(i);
                     }, err => {
                         console.log('error delete Instance', err);
+                        if (err.status === 400) {
+                            alert('Cannot delete this instance, other running instances are depending on it');
+                        }
                     });
-                    this.removeAt(i);
                 }
              }
             this.dialogResult = result;
