@@ -8,7 +8,7 @@ import {SocketService} from '../../api/api/socket.service';
 describe('InfoCenterComponent', () => {
   let component: InfoCenterComponent;
   let fixture: ComponentFixture<InfoCenterComponent>;
-  let socketMock: SocketService;
+ // let socketMock: SocketService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

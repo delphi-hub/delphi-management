@@ -35,7 +35,7 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
     const dataMutations = [
       observableOf(this.data),
       this.paginator.page,
-      //this.sort.sortChange
+      // this.sort.sortChange
     ];
 
     // Set the paginator's length
