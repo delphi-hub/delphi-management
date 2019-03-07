@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import { MatPaginator, MatSort, MatTable } from '@angular/material';
-import { InfoCenterDataSource } from './info-center-datasource';
+import {MatPaginator, MatSort, MatTable} from '@angular/material';
+import {InfoCenterDataSource } from './info-center-datasource';
 import {SocketService} from '../../api/api/socket.service';
 import {DatePipe} from '@angular/common';
 import {EventTypeEnum} from '../../model/models/socketMessage';
