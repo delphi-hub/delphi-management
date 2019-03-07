@@ -45,12 +45,9 @@
      }
    }
 
-
-
-   private def getHostName(): String = {
+    private def getHostName(): String = {
        InetAddress.getLocalHost().getHostName()
    }
-
 
    private def getPlatformName(): String = {
        val os = "os.name";
