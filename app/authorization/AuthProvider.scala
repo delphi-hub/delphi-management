@@ -19,12 +19,10 @@ package authorization
 import afu.org.checkerframework.checker.units.qual.A
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
 import play.api.Configuration
-import play.api.mvc.ActionBuilder
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+import scala.concurrent.{Future, ExecutionContext}
 
 
   object AuthProvider  {
@@ -44,8 +42,8 @@ import scala.concurrent.Future
             .issuedNow
             .expiresIn(validFor * 300)
             .startsNow
-            .+("user_id", configuration.get[String]("play.http.instance"))
-            .+("user_type", "Admin")
+            . +("user_id", configuration.get[String]("play.http.instance"))
+            . +("user_type", "Admin")
 
           Token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
         }
