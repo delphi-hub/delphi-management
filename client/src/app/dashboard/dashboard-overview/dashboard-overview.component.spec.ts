@@ -23,7 +23,7 @@ import { StatusCardComponent } from '../status-card/status-card.component';
 import { DashboardCardComponent } from '../dashboard-card/dashboard-card.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material-module/material.module';
-import { InfoCenterComponent} from "../info-center/info-center.component";
+import { InfoCenterComponent} from '../info-center/info-center.component';
 import { GraphViewModule} from '../graph-view/graph-view.module';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,7 +36,7 @@ describe('DashboardOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent, InfoCenterComponent],
-      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule, GraphViewModule,NoopAnimationsModule]
+      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule, GraphViewModule, NoopAnimationsModule]
     })
     .compileComponents();
   }));
