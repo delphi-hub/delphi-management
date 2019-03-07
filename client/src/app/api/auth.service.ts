@@ -11,16 +11,12 @@ export const TOKEN_IDENT = 'token';
 export class AuthService {
 
   constructor(private apiService: ApiService, public helperService: JwtHelperService) {}
-
+  // TODO: store refresh token
   login(username: string, password: string) {
     return this.apiService.login(username, password).
     pipe(
       map(token => localStorage.setItem(TOKEN_IDENT, token.token)
       ));
-    // this.apiService.login(username, password).subscribe((token: any) => {
-    //   console.log('got token', token);
-    //   localStorage.setItem(TOKEN_IDENT, token.token);
-    // });
   }
 
   isValid(): boolean {
