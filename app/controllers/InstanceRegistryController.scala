@@ -118,7 +118,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
 
-  def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
+  def numberOfInstances(componentType: String): Action[AnyContent] = authAction.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
@@ -141,7 +141,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
 
-  def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
+  def handleRequest(action: String, instanceID: String): Action[AnyContent] = authAction.async { request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + action)
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post("")
@@ -150,7 +150,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
-  def reconnect(from: Int, to: Int): Action[AnyContent] = Action.async { request =>
+  def reconnect(from: Int, to: Int): Action[AnyContent] = authAction.async { request =>
 
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
     )
@@ -174,7 +174,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @param name
     */
 
-  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async {
+  def postInstance(compType: String, name: String): Action[AnyContent] = authAction.async {
     request =>
       ws.url(instanceRegistryUri + "/instances/deploy")
         .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
