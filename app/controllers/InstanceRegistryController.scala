@@ -30,6 +30,7 @@ import play.api.mvc._
 import pdi.jwt.Jwt
 import scala.concurrent.{ExecutionContext, Future}
 import authorization.AuthProvider
+import authorization.AuthAction
 import play.api.libs.json.Json
 
 
@@ -56,7 +57,7 @@ class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
 
 class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Materializer, myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
-                                           ws: WSClient, config: Configuration)
+                                           ws: WSClient, config: Configuration, authAction: AuthAction)
   extends BaseController {
 
 
@@ -72,7 +73,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @param componentType
     * @return
     */
-  def instances(componentType: String): Action[AnyContent] = Action.async {
+  def instances(componentType: String): Action[AnyContent] = authAction.async {
     ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
@@ -96,7 +97,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
 
-  def getNetwork(): Action[AnyContent] = userAuthentication.async {
+  def getNetwork(): Action[AnyContent] = authAction.async {
     ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
@@ -219,18 +220,5 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }(myExecutionContext)
   }
 
-  class RequestwithToken[A](val jwttoken: String,request: Request[A]) extends WrappedRequest[A](request)
-  {}
-  object userAuthentication extends ActionBuilder[RequestwithToken] {
-    def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]):
-    Future[Result] = {
-      if (!Jwt.isValid(Sampletoken)) {
-        Future.successful(Results.Unauthorized)
-      }
-      else {
-        Future.successful(Results.Ok)
-        block(request)
-      }
-    }
-  }
+
 }

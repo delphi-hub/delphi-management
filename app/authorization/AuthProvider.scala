@@ -23,10 +23,9 @@ import play.api.mvc.ActionBuilder
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc._
-
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-case class UserRequest[A](request: Request[A]) extends WrappedRequest(request)
+
 
   object AuthProvider  {
 
@@ -52,7 +51,14 @@ case class UserRequest[A](request: Request[A]) extends WrappedRequest(request)
         }
         Token
       }
+
+
+    def validateJwt(token: String)(implicit configuration: Configuration): Boolean = {
+      val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
+      Jwt.isValid(token, jwtSecretKey, Seq(JwtAlgorithm.HS256)) // Decode the token using the secret key
     }
+
+  }
  /* object Author extends ActionBuilder[Request,AnyContent] with BaseController
   {
    // override protected def executionContext: ExecutionContext = executionContext
