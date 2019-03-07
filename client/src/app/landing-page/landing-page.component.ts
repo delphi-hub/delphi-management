@@ -28,8 +28,6 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 })
 export class LandingPageComponent implements OnInit {
   hide = true;
-  username : string;
-  password : string;
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
@@ -44,7 +42,7 @@ export class LandingPageComponent implements OnInit {
 
   getErrorMessageName() {
     return this.loginForm.hasError('required') ? 'Username is required field' :
-      this.loginForm.hasError('userName') ? 'Not a valid name' :
+      this.loginForm.hasError('username') ? 'Not a valid name' :
         '';
   }
   getErrorMessagePwd() {
@@ -52,6 +50,9 @@ export class LandingPageComponent implements OnInit {
         '';
   }
   login() {
+    console.log('MY LOGIN FORM', this.loginForm);
+    console.log('nuser', this.loginForm.value.username);
+   // console.log('user', this.username, this.password);
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(() => {
       this.router.navigate(['/dashboard']);
     });
