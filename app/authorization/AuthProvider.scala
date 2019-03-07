@@ -59,18 +59,3 @@ import scala.concurrent.Future
     }
 
   }
- /* object Author extends ActionBuilder[Request,AnyContent] with BaseController
-  {
-   // override protected def executionContext: ExecutionContext = executionContext
-    def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
-      //val jwtToken = request.headers.get("jw_token").getOrElse("")
-      if (!Jwt.isValid("Token")) {
-        Future.successful(Results.Unauthorized)
-      }
-      else {
-        Future.successful(Results.Ok)
-        block(request)
-      }
-    }
-  }
-*/
