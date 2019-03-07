@@ -92,20 +92,19 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('delete state', instance.instanceState);
-            if (result === 'Confirm' && instance.instanceState === 'Running') {
-                console.log('alert working');
-                alert('Please Stop the Instance before you try to delete');
-                console.log('data', this.dataSource.data);
 
+            if (result === 'Confirm' && instance.instanceState === 'Running') {
+                alert('Please Stop the Instance before you try to delete');
             } else {
                 if (result !== 'Cancel') {
                     this.apiService.deleteInstance(id).subscribe((deleteResult: HttpEvent<number>) => {
-                        console.log('result', deleteResult);
+                        this.removeAt(i);
                     }, err => {
                         console.log('error delete Instance', err);
+                        if (err.status === 400) {
+                            alert('Cannot delete this instance, other running instances are depending on it');
+                        }
                     });
-                    this.removeAt(i);
                 }
              }
             this.dialogResult = result;

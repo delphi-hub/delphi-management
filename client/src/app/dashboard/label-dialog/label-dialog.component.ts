@@ -36,6 +36,12 @@ export class LabelDialogComponent implements OnInit {
 
   onCloseCancelLabel() {
     this.thislabelDialogRef.close('CancelLabel');
-
   }
+
+  onKeydown(event) {
+    this.thislabelDialogRef.close({
+      status: 'Add',
+      labelName: this.labelName
+      });
+    }
 }
