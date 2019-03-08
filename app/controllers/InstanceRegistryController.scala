@@ -210,7 +210,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       val jsonBody: Option[JsValue] = request.body.asJson
 
       jsonBody.map { json =>
-      
+
         val username = (json \ "username").as[String]
         val password = (json \ "password").as[String]
 
