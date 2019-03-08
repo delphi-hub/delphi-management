@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 
 export interface InfoCenterItem {
+  instanceId: number;
   type: string;
   notifName: string;
   dateTime: string;
@@ -78,8 +79,8 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
       }
     });
   }
-  public add(element: any) {
-    return this.data.push(element);
+  public add(element: InfoCenterItem) {
+    this.data.push(element);
   }
 }
 

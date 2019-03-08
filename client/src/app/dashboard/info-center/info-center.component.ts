@@ -25,7 +25,7 @@ export class InfoCenterComponent implements OnInit {
   ngOnInit() {
     this.dataSource = new InfoCenterDataSource(this.paginator, this.sort);
 
-    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+      this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
       const newEntry = this.transformEventToNotificaton(newInstance, 'new Instance added', 'add_circle');
       this.applyUpdate(newEntry);
     });
@@ -35,13 +35,13 @@ export class InfoCenterComponent implements OnInit {
       this.applyUpdate(newEntry);
     });
 
-    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.StateChangedEvent).subscribe((changeInstance: Instance) => {
       const newEntry = this.transformEventToNotificaton(changeInstance, 'Instance changed', 'link');
       this.applyUpdate(newEntry);
     });
   }
 
-  private transformEventToNotificaton(instance: Instance, notifName: string, type: string) {
+  private transformEventToNotificaton(instance: Instance, notifName: string, type: string): InfoCenterItem {
     const datePipe = new DatePipe('en-US');
     const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
     return {instanceId: instance.id, type: type,
