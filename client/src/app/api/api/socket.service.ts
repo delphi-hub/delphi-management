@@ -17,7 +17,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable, Observer, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {
   DockerOperationError,
   EventType,
@@ -88,7 +88,6 @@ export class SocketService {
    * @param eventName
    */
   public subscribeForEvent<T extends ReturnType>(eventName: EventType): Observable<T> {
-    return new Observable<T>((observer: Observer<T>) => {
 
       /**
        * First step to subscribe for an event is to append the new observer to the set
@@ -113,19 +112,8 @@ export class SocketService {
 
         this.send({event: publishEventName});
       }
-      this.observers[eventName].subscribe(observer);
 
-      this.socket.addEventListener('message', (e: MessageEvent) => this.socketOnMessage(e));
-
-      /**
-       * If an observable stream ends the observer is removed from the
-       * observer list and the list is deleted if it is empty.
-       */
-      return () => {
-        // TODO: see console log
-        console.log('observer completed, implement unsubscribe logic !');
-      };
-    });
+      return (this.observers[eventName].asObservable() as Observable<T>);
   }
 
   /**
@@ -244,7 +232,10 @@ export class SocketService {
    */
   public initSocket(): Promise<void> {
     if (this.socket === null) {
+
       this.socket = new WebSocket(this.wsUri);
+      this.socket.addEventListener('message', (e: MessageEvent) => this.socketOnMessage(e));
+
       setInterval(() => {
         this.send({event: EventTypeEnum.Heartbeat});
       }, 5000);
