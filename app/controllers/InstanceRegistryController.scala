@@ -28,8 +28,7 @@ import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import play.api.mvc._
 import scala.concurrent.{Future, ExecutionContext}
-import authorization.AuthProvider
-import authorization.AuthAction
+import authorization.{AuthProvider, AuthAction}
 import play.api.libs.json.{Json, JsValue}
 
 
