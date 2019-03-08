@@ -35,7 +35,6 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
     const dataMutations = [
       observableOf(this.data),
       this.paginator.page,
-      // this.sort.sortChange
     ];
 
     // Set the paginator's length
@@ -85,6 +84,6 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
 }
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */
-function compare(a, b, isAsc) {
+function compare(a: string | number, b: string | number, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
