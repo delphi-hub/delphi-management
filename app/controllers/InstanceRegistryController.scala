@@ -27,11 +27,10 @@ import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import play.api.mvc._
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Future, ExecutionContext}
 import authorization.AuthProvider
 import authorization.AuthAction
-import play.api.libs.json.Json
-
+import play.api.libs.json.{Json, JsValue}
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -205,23 +204,30 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def authentication(): Action[AnyContent] = Action.async {
     request =>
-      val json = request.body.asJson.get
+      //val json = request.body.asJson.get
 
-      val username = (json \ "username").as[String]
-      val password = (json \ "password").as[String]
 
-      ws.url(instanceRegistryUri + "/users" + "/authenticate")
-        .withAuth(username, password, WSAuthScheme.BASIC)
-        .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
-        .post("")
-        .map { response =>
-          if (response.status == 200) {
-            Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
-          } else {
-            new Status(response.status)
+      val jsonBody: Option[JsValue] = request.body.asJson
+
+      jsonBody.map { json =>
+      
+        val username = (json \ "username").as[String]
+        val password = (json \ "password").as[String]
+
+        ws.url(instanceRegistryUri + "/users" + "/authenticate")
+          .withAuth(username, password, WSAuthScheme.BASIC)
+          .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
+          .post("")
+          .map { response =>
+            if (response.status == 200) {
+              Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+            } else {
+              new Status(response.status)
+            }
           }
-        }(myExecutionContext)
-  }
+      }.getOrElse{ Future(BadRequest("Invalid body"))}
+
+    }
 
   /**
     * This function is used to add a label to specific instance.
