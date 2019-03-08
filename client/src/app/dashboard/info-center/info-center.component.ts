@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTable} from '@angular/material';
-import {InfoCenterDataSource } from './info-center-datasource';
+import {InfoCenterDataSource, InfoCenterItem } from './info-center-datasource';
 import {SocketService} from '../../api/api/socket.service';
 import {DatePipe} from '@angular/common';
 import {EventTypeEnum} from '../../model/models/socketMessage';
@@ -21,37 +21,37 @@ export class InfoCenterComponent implements OnInit {
   displayedColumns = ['type', 'notifName', 'dateTime', 'details'];
 
   constructor(private socketService: SocketService, private changeDetectorRefs: ChangeDetectorRef) {}
+
   ngOnInit() {
     this.dataSource = new InfoCenterDataSource(this.paginator, this.sort);
+
     this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
-      const datePipe = new DatePipe('en-US');
-      const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
-      const line = {instanceId: newInstance.id, type: 'add_circle',
-        notifName: 'new Instance added', dateTime: actualDate, details: 'Instance Name: ' + newInstance.name};
-      this.dataSource.add(line);
-      this.changeDetectorRefs.detectChanges();
-      this.paginator.lastPage();
-      this.paginator.firstPage();
+      const newEntry = this.transformEventToNotificaton(newInstance, 'new Instance added', 'add_circle');
+      this.applyUpdate(newEntry);
     });
+
     this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removeInstance: Instance) => {
-      const datePipe = new DatePipe('en-US');
-      const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
-      const line = {instanceId: removeInstance.id, type: 'delete_sweep',
-        notifName: 'Instance removed', dateTime: actualDate, details: 'Instance Name: ' + removeInstance.name};
-      this.dataSource.add(line);
-      this.changeDetectorRefs.detectChanges();
-      this.paginator.lastPage();
-      this.paginator.firstPage();
+      const newEntry = this.transformEventToNotificaton(removeInstance, 'Instance removed', 'delete_sweep');
+      this.applyUpdate(newEntry);
     });
+
     this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
-      const datePipe = new DatePipe('en-US');
-      const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
-      const line = {instanceId: changeInstance.id, type: 'link',
-        notifName: 'Instance changed', dateTime: actualDate, details: changeInstance.name};
-      this.dataSource.add(line);
-      this.changeDetectorRefs.detectChanges();
-      this.paginator.lastPage();
-      this.paginator.firstPage();
+      const newEntry = this.transformEventToNotificaton(changeInstance, 'Instance changed', 'link');
+      this.applyUpdate(newEntry);
     });
+  }
+
+  private transformEventToNotificaton(instance: Instance, notifName: string, type: string) {
+    const datePipe = new DatePipe('en-US');
+    const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+    return {instanceId: instance.id, type: type,
+      notifName: notifName, dateTime: actualDate, details: instance.name};
+  }
+
+  private applyUpdate(newEntry: InfoCenterItem) {
+    this.dataSource.add(newEntry);
+    this.changeDetectorRefs.detectChanges();
+    this.paginator.lastPage();
+    this.paginator.firstPage();
   }
 }
