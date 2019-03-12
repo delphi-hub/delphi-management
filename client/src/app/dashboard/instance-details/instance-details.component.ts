@@ -15,8 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { InstanceDetails } from '../../model/models/instance';
+import { Component, OnInit } from '@angular/core';
+import { StoreService } from 'src/app/model/store.service';
+import { Instance } from 'src/app/model/models/instance';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -26,8 +28,21 @@ import { InstanceDetails } from '../../model/models/instance';
 })
 export class InstanceDetailsComponent implements OnInit {
 
-  constructor() { }
+  instance: Instance;
+
+
+  constructor(private storeService: StoreService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-}
+    this.route.params.subscribe((params) => {
+      const instanceId = params['instanceId'];
+      if (instanceId) {
+        const instance = this.storeService.getState().instances[+instanceId];
+        if (instance) {
+          this.instance = instance;
+        }
+      }
+    });
+
+  }
 }

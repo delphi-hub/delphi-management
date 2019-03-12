@@ -9,6 +9,7 @@ import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.compone
 import { ComponentTypeEnum, ComponentType } from 'src/app/model/models/instance';
 import { GraphConfig } from '../GraphConfig';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-graph-view',
@@ -22,9 +23,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
   private elementSubscription: Subscription;
   private elementRemoveSubscription: Subscription;
 
-  constructor(private graphViewService: GraphViewService, public dialog: MatDialog) {
-
-  }
+  constructor(private graphViewService: GraphViewService, public dialog: MatDialog, private router: Router) {}
 
 
   ngOnInit() {
@@ -32,12 +31,22 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     this.configureCytoscape();
     this.addEdgeDragListener();
     this.addChangeListener();
+    this.addClickListener();
   }
 
   ngOnDestroy() {
     this.cy.destroy();
     this.elementSubscription.unsubscribe();
     this.elementRemoveSubscription.unsubscribe();
+  }
+
+  private addClickListener() {
+    this.cy.nodes().on('click', (e) => {
+      const clickedNode: cytoscape.NodeSingular = e.target;
+      const instanceId = clickedNode.data('id');
+      console.log('node clicked', clickedNode, 'id', instanceId);
+      this.router.navigate(['/dashboard/instanceDetails/' + instanceId]);
+    });
   }
 
   /**
@@ -65,6 +74,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
         });
         const layout = this.cy.layout(this.config.layout);
         layout.run();
+        this.addClickListener();
       }
     });
 
