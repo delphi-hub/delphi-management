@@ -47,18 +47,15 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     this.cy.nodes().on('click', (e) => {
       const clickedNode: cytoscape.NodeSingular = e.target;
       const instanceId = clickedNode.data('id');
-      console.log('node clicked', clickedNode, 'id', instanceId);
       this.router.navigate(['/dashboard/instanceDetails/' + instanceId]);
     });
   }
 
   private applySubnetFilter() {
     if (this.subnetElementId !== -1) {
-      console.log('applying subnet filter');
       const subentElement = this.cy.getElementById('' + this.subnetElementId);
       const neighborhood = subentElement.neighborhood().add(subentElement);
       const elesToRemove = this.cy.elements().difference(neighborhood);
-      console.log('outgoears', neighborhood, 'to remove', elesToRemove);
       this.cy.remove(elesToRemove);
     }
   }
@@ -137,11 +134,9 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     (this.cy as any).on('ehstart', (event: any, sourceNode: cytoscape.NodeSingular) => {
 
       const allElesToHide = this.getCorrespondingEles(sourceNode);
-      console.log('all eles to hide', allElesToHide);
       // we want to show the source node.
       if (allElesToHide.length > 0) {
         const elesToHide = allElesToHide.symmetricDifference(sourceNode);
-        console.log('eles to actually hide', elesToHide);
         removedElements = elesToHide.remove();
       }
 
@@ -150,9 +145,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
 
   private getNodeToDisconnect(edgeList: cytoscape.EdgeCollection, sourceNode: cytoscape.NodeSingular,
     targetNode: cytoscape.NodeSingular ): cytoscape.NodeSingular {
-    console.log('edge list', edgeList);
     const nodes = edgeList.connectedNodes();
-    console.log('connected nodes', nodes);
     const correspondingEles = this.getCorrespondingEles(sourceNode, nodes);
 
     const actualElement = nodes.symmetricDifference(correspondingEles).symmetricDifference(targetNode);
@@ -185,8 +178,6 @@ export class GraphViewComponent implements OnInit, OnDestroy {
    * of the given @param type.
    */
   private getElementsWithDifferentType(type: ComponentType, eles?: cytoscape.NodeCollection): cytoscape.NodeCollection {
-    console.log('type', type);
-    console.log('eles', eles);
     return eles ? eles.nodes('node[type !="' + type + '"]') : this.cy.nodes('node[type !="' + type + '"]');
   }
 
