@@ -48,12 +48,6 @@ export interface Instance {
   labels?: Array<string>;
 }
 
-export interface InstanceDetails {
-  type: string;
-  time: string;
-  description: string;
-}
-
 export type StateEnum = 'Running' | 'Failed' | 'Stopped' | 'Paused' | 'NotReachable';
 export const StateEnum = {
   Running: 'Running' as StateEnum,
