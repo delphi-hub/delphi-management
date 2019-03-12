@@ -18,7 +18,12 @@
  */ -->
 
 <div class="container-fluid">
-
-  <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
-
+  <div class="row">
+    <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
+  </div>
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <app-graph-view [subnetElementId]="instance.id"></app-graph-view>
+    </div>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, OnDestroy} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, OnDestroy, Input} from '@angular/core';
 import * as cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import {GraphViewService, ElementUpdate} from '../graph-view.service';
@@ -18,6 +18,9 @@ import { Router } from '@angular/router';
 })
 export class GraphViewComponent implements OnInit, OnDestroy {
   @ViewChild('cy') cyDiv: ElementRef;
+
+  @Input() subnetElementId = -1;
+
   private cy: cytoscape.Core;
   private config: GraphConfig;
   private elementSubscription: Subscription;
@@ -49,6 +52,17 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  private applySubnetFilter() {
+    if (this.subnetElementId !== -1) {
+      console.log('applying subnet filter');
+      const subentElement = this.cy.getElementById('' + this.subnetElementId);
+      const neighborhood = subentElement.neighborhood().add(subentElement);
+      const elesToRemove = this.cy.elements().difference(neighborhood);
+      console.log('outgoears', neighborhood, 'to remove', elesToRemove);
+      this.cy.remove(elesToRemove);
+    }
+  }
+
   /**
    * Adds listeners to the graphViewService and describe how the
    * view should be updated if it receives any changes / updates.
@@ -72,6 +86,7 @@ export class GraphViewComponent implements OnInit, OnDestroy {
             default: return 'orange';
           }
         });
+        this.applySubnetFilter();
         const layout = this.cy.layout(this.config.layout);
         layout.run();
         this.addClickListener();
