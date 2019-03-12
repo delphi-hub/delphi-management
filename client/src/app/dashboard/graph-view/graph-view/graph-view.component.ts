@@ -205,7 +205,8 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     if (!Object.getPrototypeOf(this.cy).edgehandles) {
       cytoscape.use(edgehandles);
     }
-
-    (this.cy as any).edgehandles(this.config.edgeDragConfig);
+    if (this.subnetElementId === -1) {
+      (this.cy as any).edgehandles(this.config.edgeDragConfig);
+    }
   }
 }
