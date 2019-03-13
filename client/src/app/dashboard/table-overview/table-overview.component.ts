@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
 
@@ -29,6 +29,12 @@ export class TableOverviewComponent implements OnInit {
     webapiDetails: Instance[];
     webappDetails: Instance[];
     crawlerDetails: Instance[];
+    numberOfNotification: string = '0';
+    showNotifCrawler = false;
+    showNotifWebapi = false;
+    showNotifWebapp = false;
+
+
 constructor(private modelService: ModelService) {
   }
   ngOnInit() {
@@ -49,5 +55,21 @@ constructor(private modelService: ModelService) {
     this.modelService.getObservableForInstances().subscribe(() => {
       this.crawlerDetails = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
     });
+
+  }
+
+  /**
+   *
+   */
+  public showCrawler() {
+    this.showNotifCrawler = !this.showNotifCrawler;
+  }
+
+  public showWebapp() {
+   this.showNotifWebapp = !this.showNotifWebapp;
+  }
+
+  public showWebapi() {
+   this.showNotifWebapi = !this.showNotifWebapi;
   }
 }

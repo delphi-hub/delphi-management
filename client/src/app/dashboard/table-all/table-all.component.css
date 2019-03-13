@@ -24,7 +24,7 @@ table {
   display: flex;
   flex-direction: column;
   max-height: 500px;
-  
+
   margin: 0 auto;
   margin-top: 20px;
 }

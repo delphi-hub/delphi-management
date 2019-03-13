@@ -43,6 +43,10 @@ import { InforCenterComponent } from './infor-center/infor-center.component';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { LabelDialogComponent } from './label-dialog/label-dialog.component';
+import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { TableNotificationWebapiComponent } from './table-notification-webapi/table-notification-webapi.component';
+import { TableNotificationWebappComponent } from './table-notification-webapp/table-notification-webapp.component';
+import { TableNotificationCrawlerComponent } from './table-notification-crawler/table-notification-crawler.component';
 
 
 @NgModule({
@@ -57,7 +61,10 @@ import { LabelDialogComponent } from './label-dialog/label-dialog.component';
     DashboardRoutingModule,
     ApiModule,
     ModelModule,
-    GraphViewModule
+    GraphViewModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -76,7 +83,10 @@ import { LabelDialogComponent } from './label-dialog/label-dialog.component';
     InforCenterComponent,
     InstanceDetailsComponent,
     TableOverviewComponent,
-    LabelDialogComponent
+    LabelDialogComponent,
+    TableNotificationWebapiComponent,
+    TableNotificationWebappComponent,
+    TableNotificationCrawlerComponent
   ],
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent, LabelDialogComponent
