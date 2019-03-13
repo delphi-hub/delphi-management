@@ -50,10 +50,8 @@ describe('DashboardOverviewComponent', () => {
         fixture.destroy();
     });
 
-/*
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  */
+
 });

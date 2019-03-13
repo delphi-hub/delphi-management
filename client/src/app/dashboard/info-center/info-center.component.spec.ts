@@ -8,10 +8,9 @@ import {SocketService} from '../../api/api/socket.service';
 describe('InfoCenterComponent', () => {
   let component: InfoCenterComponent;
   let fixture: ComponentFixture<InfoCenterComponent>;
- // let socketMock: SocketService;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
+      TestBed.configureTestingModule({
       declarations: [ InfoCenterComponent],
       imports: [
         NoopAnimationsModule,
@@ -19,21 +18,17 @@ describe('InfoCenterComponent', () => {
         MatSortModule,
         MatTableModule,
         MatIconModule,
-      ],
-      providers: [
-        SocketService
       ]
+
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InfoCenterComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  /*it('should compile', () => {
-    socketMock = TestBed.get(SocketService);
+  it('should compile', () => {
     expect(component).toBeTruthy();
-  });*/
+  });
 });
