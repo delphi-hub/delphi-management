@@ -53,5 +53,7 @@ export class InfoCenterComponent implements OnInit {
     this.changeDetectorRefs.detectChanges();
     this.paginator.lastPage();
     this.paginator.firstPage();
+    this.paginator._changePageSize(10);
+    this.paginator._changePageSize(5);
   }
 }
