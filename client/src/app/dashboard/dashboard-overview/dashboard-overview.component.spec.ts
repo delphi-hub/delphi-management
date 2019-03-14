@@ -23,9 +23,11 @@ import { StatusCardComponent } from '../status-card/status-card.component';
 import { DashboardCardComponent } from '../dashboard-card/dashboard-card.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material-module/material.module';
-import { InforCenterComponent } from '../infor-center/infor-center.component';
+import { InfoCenterComponent} from '../info-center/info-center.component';
 import { GraphViewModule} from '../graph-view/graph-view.module';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 
 describe('DashboardOverviewComponent', () => {
   let component: DashboardOverviewComponent;
@@ -33,8 +35,8 @@ describe('DashboardOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent, InforCenterComponent],
-      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule, GraphViewModule]
+      declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent, InfoCenterComponent],
+      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule, GraphViewModule, NoopAnimationsModule]
     })
     .compileComponents();
   }));
@@ -48,9 +50,8 @@ describe('DashboardOverviewComponent', () => {
         fixture.destroy();
     });
 
-
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

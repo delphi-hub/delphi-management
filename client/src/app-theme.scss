@@ -6,7 +6,7 @@ $app-theme-primary: mat-palette($mat-indigo);
 
 $app-theme-accent: mat-palette($mat-indigo, A200, A100, A400);
 
-$app-theme-warn: mat-palette($mat-yellow);
+$app-theme-warn: mat-palette($mat-red);
 
 $app-theme: mat-light-theme($app-theme-primary, $app-theme-accent, $app-theme-warn);
 

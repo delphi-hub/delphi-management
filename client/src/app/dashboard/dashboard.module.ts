@@ -39,15 +39,15 @@ import {ApiModule} from '../api/api.module';
 import {ModelModule} from '../model/model.module';
 import { MaterialModule } from '../material-module/material.module';
 import { GraphViewModule } from './graph-view/graph-view.module';
-import { InforCenterComponent } from './infor-center/infor-center.component';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
+import { InfoCenterComponent } from './info-center/info-center.component';
+import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '@angular/material';
 import { LabelDialogComponent } from './label-dialog/label-dialog.component';
 import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { TableNotificationWebapiComponent } from './table-notification-webapi/table-notification-webapi.component';
 import { TableNotificationWebappComponent } from './table-notification-webapp/table-notification-webapp.component';
 import { TableNotificationCrawlerComponent } from './table-notification-crawler/table-notification-crawler.component';
-
 
 @NgModule({
   imports: [
@@ -64,7 +64,8 @@ import { TableNotificationCrawlerComponent } from './table-notification-crawler/
     GraphViewModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatIconModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -80,13 +81,14 @@ import { TableNotificationCrawlerComponent } from './table-notification-crawler/
     UserManagementComponent,
     DeleteDialogComponent,
     AddDialogComponent,
-    InforCenterComponent,
     InstanceDetailsComponent,
     TableOverviewComponent,
     LabelDialogComponent,
     TableNotificationWebapiComponent,
     TableNotificationWebappComponent,
     TableNotificationCrawlerComponent
+    InfoCenterComponent,
+    LabelDialogComponent
   ],
   entryComponents: [
     DeleteDialogComponent, AddDialogComponent, LabelDialogComponent

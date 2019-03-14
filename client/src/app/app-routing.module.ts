@@ -20,12 +20,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AuthGuard } from './AuthGuard';
 
 
 const appRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     data: { title: 'Dashboard' }
   },
   {
@@ -35,7 +37,7 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'landingpage',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
 ];
