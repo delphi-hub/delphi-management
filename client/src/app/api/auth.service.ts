@@ -11,12 +11,27 @@ export const TOKEN_IDENT = 'token';
 export class AuthService {
 
   constructor(private apiService: ApiService, public helperService: JwtHelperService) {}
+
   // TODO: store refresh token
   login(username: string, password: string) {
     return this.apiService.login(username, password).
     pipe(
       map(token => localStorage.setItem(TOKEN_IDENT, token.token)
       ));
+  }
+
+  userIsAdmin(): boolean {
+    const rawToken = this.getToken();
+    if (rawToken && this.isValid()) {
+      try {
+      const token = this.helperService.decodeToken(rawToken);
+      return token.user_type === 'Admin';
+      } catch {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   isValid(): boolean {
