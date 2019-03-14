@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule} from '@angular/material';
+import {MatIconModule, MatPaginatorModule, MatSort, MatSortModule, MatTableModule} from '@angular/material';
 
 import { TableNotificationWebappComponent } from './table-notification-webapp.component';
 import {TableOverviewComponent} from "../table-overview/table-overview.component";
@@ -17,10 +17,11 @@ describe('TableNotificationWebappComponent', () => {
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
-        MatIconModule,
+        MatIconModule
       ],
       providers: [
-        TableOverviewComponent
+        TableOverviewComponent,
+        MatSort
       ]
     }).compileComponents();
   }));

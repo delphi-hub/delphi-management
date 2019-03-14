@@ -37,7 +37,7 @@ export class TableNotificationCrawlerDataSource extends DataSource<TableNotifica
     // stream for the data-table to consume.
     const dataMutations = [
       observableOf(this.data),
-      this.paginator.page,
+      this.paginator.page
       //this.sort.sortChange
     ];
 
