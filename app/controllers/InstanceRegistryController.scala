@@ -252,4 +252,19 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
+  def refreshToken(): Action[AnyContent] = authAction.async
+  {
+    request =>
+      ws.url(instanceRegistryUri + "/users" + "/refreshToken")
+        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .post("")
+        .map { response =>
+          response.status match {
+            case 200 =>
+              Ok(response.body)
+            case  400 =>
+              Unauthorized
+          }
+        }(myExecutionContext)
+  }
 }
