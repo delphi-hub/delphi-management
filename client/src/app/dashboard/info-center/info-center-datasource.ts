@@ -1,7 +1,10 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
-import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { SocketService } from 'src/app/api/api/socket.service';
+import { Instance } from 'src/app/model/models/instance';
+import { DatePipe } from '@angular/common';
+import { EventTypeEnum } from 'src/app/model/models/socketMessage';
 
 export interface InfoCenterItem {
   instanceId: number;
@@ -11,18 +14,46 @@ export interface InfoCenterItem {
   details: string;
 }
 
-const DATA: InfoCenterItem[] = [];
-
 /**
  * Data source for the InfoCenter view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
 export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
-  data: InfoCenterItem[] = DATA;
+  private infoCenterSubject: BehaviorSubject<InfoCenterItem[]>;
 
-  constructor(private paginator: MatPaginator, private sort: MatSort) {
+  private instanceAddedSubscription: Subscription;
+  private instanceChangedSubscription: Subscription;
+  private instanceRemovedSubscription: Subscription;
+  private data: InfoCenterItem[];
+  public numberEvents = 0;
+
+  constructor(private socketService: SocketService, private paginator: MatPaginator, private sort: MatSort) {
     super();
+    this.data = [];
+
+    this.infoCenterSubject = new BehaviorSubject<InfoCenterItem[]>([]);
+
+    this.paginator.page.subscribe(() => { this.infoCenterSubject.next(this.getPagedData()); });
+    this.sort.sortChange.subscribe(() => {this.data = this.getSortedData(this.data); this.infoCenterSubject.next(this.getPagedData()); });
+
+    this.instanceAddedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).
+      subscribe((newInstance: Instance) => {
+        const newEntry = this.transformEventToNotificaton(newInstance, 'new Instance added', 'add_circle');
+        this.applyUpdate(newEntry);
+      });
+
+      this.instanceRemovedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).
+        subscribe((removeInstance: Instance) => {
+          const newEntry = this.transformEventToNotificaton(removeInstance, 'Instance removed', 'delete_sweep');
+          this.applyUpdate(newEntry);
+        });
+
+      this.instanceChangedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.StateChangedEvent).
+        subscribe((changeInstance: Instance) => {
+          const newEntry = this.transformEventToNotificaton(changeInstance, 'Instance changed', 'link');
+          this.applyUpdate(newEntry);
+        });
   }
 
   /**
@@ -31,34 +62,33 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<InfoCenterItem[]> {
-    // Combine everything that affects the rendered data into one update
-    // stream for the data-table to consume.
-    const dataMutations = [
-      observableOf(this.data),
-      this.paginator.page,
-    ];
+    return this.infoCenterSubject.asObservable();
+  }
 
-    // Set the paginator's length
-    this.paginator.length = this.data.length;
-
-    return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
-    }));
+  private applyUpdate(newEntry: InfoCenterItem) {
+    this.data = this.getSortedData([newEntry, ...this.data]);
+    this.numberEvents = this.data.length;
+    this.infoCenterSubject.next(this.getPagedData());
   }
 
   /**
    *  Called when the table is being destroyed. Use this function, to clean up
    * any open connections or free any held resources that were set up during connect.
    */
-  disconnect() {}
+  disconnect() {
+    this.instanceAddedSubscription.unsubscribe();
+    this.instanceChangedSubscription.unsubscribe();
+    this.instanceRemovedSubscription.unsubscribe();
+    this.infoCenterSubject.complete();
+  }
 
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: InfoCenterItem[]) {
+  private getPagedData() {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-    return data.splice(startIndex, this.paginator.pageSize);
+    return [...this.data].splice(startIndex, this.paginator.pageSize);
   }
 
   /**
@@ -73,15 +103,21 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.notifName, b.notifName, isAsc);
-        case 'id': return compare(+a.dateTime, +b.dateTime, isAsc);
+        case 'notifName': return compare(a.notifName, b.notifName, isAsc);
+        case 'dateTime': return compare(+a.dateTime, +b.dateTime, isAsc);
+        case 'details': return compare(a.details, b.details, isAsc);
         default: return 0;
       }
     });
   }
-  public add(element: InfoCenterItem) {
-    this.data.push(element);
+
+  private transformEventToNotificaton(instance: Instance, notifName: string, type: string): InfoCenterItem {
+    const datePipe = new DatePipe('en-US');
+    const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+    return {instanceId: instance.id, type: type,
+      notifName: notifName, dateTime: actualDate, details: instance.name};
   }
+
 }
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */
