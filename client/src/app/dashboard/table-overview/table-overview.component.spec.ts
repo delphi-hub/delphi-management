@@ -24,6 +24,9 @@ import { TableOverviewComponent } from './table-overview.component';
 import { MaterialModule } from '../../material-module/material.module';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { ModelService } from 'src/app/model/model.service';
+import {TableNotificationWebapiComponent} from "../table-notification-webapi/table-notification-webapi.component";
+import {TableNotificationCrawlerComponent} from "../table-notification-crawler/table-notification-crawler.component";
+import {TableNotificationWebappComponent} from "../table-notification-webapp/table-notification-webapp.component";
 
 describe('TableOverviewComponent', () => {
   let component: TableOverviewComponent;
@@ -31,7 +34,8 @@ describe('TableOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableOverviewComponent, TableAllComponent],
+      declarations: [ TableOverviewComponent, TableAllComponent,
+        TableNotificationWebapiComponent, TableNotificationCrawlerComponent, TableNotificationWebappComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule,
         MaterialModule]
     })

@@ -2,7 +2,6 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import {InfoCenterItem} from "../info-center/info-center-datasource";
 
 export interface TableNotificationWebapiItem {
   instanceId: number;
@@ -37,7 +36,7 @@ export class TableNotificationWebapiDataSource extends DataSource<TableNotificat
     const dataMutations = [
       observableOf(this.data),
       this.paginator.page,
-      this.sort.sortChange
+      //this.sort.sortChange
     ];
 
     // Set the paginator's length
