@@ -16,9 +16,14 @@
  * limitations under the License.
  */
 
-import { Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ComponentTypeEnum, Instance} from '../../model/models/instance';
 import { ModelService } from 'src/app/model/model.service';
+import {EventTypeEnum} from "../../model/models/socketMessage";
+import { DatePipe } from '@angular/common';
+import {SocketService} from "../../api/api/socket.service";
+
+
 
 @Component({
   selector: 'app-table-overview',
@@ -29,13 +34,16 @@ export class TableOverviewComponent implements OnInit {
     webapiDetails: Instance[];
     webappDetails: Instance[];
     crawlerDetails: Instance[];
-    numberOfNotification: string = '0';
-    showNotifCrawler = false;
-    showNotifWebapi = false;
-    showNotifWebapp = false;
+    webAppEvents = [];
+    webAppEventsNumbers = 0;
 
+    webApiEvents = [];
+    webApiEventsNumbers = 0;
 
-constructor(private modelService: ModelService) {
+    crawlerEvents = [];
+    crawlerEventsNumbers = 0;
+
+constructor(private modelService: ModelService, private socketService: SocketService, private changeDetectorRefs: ChangeDetectorRef) {
   }
   ngOnInit() {
     /** * Function for getting all the instances of component type 'WebApi' using ModelService
@@ -56,20 +64,103 @@ constructor(private modelService: ModelService) {
       this.crawlerDetails = this.modelService.getComponentsByType(ComponentTypeEnum.Crawler);
     });
 
+    /**
+     * Get Events by component type
+     */
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+      if (newInstance.componentType=='WebApp'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: newInstance.id, type: 'add_circle', notifName: 'new Instance added', dateTime: actualDate, details: 'Instance Name: '+newInstance.name};
+        this.webAppEvents.push(line);
+        this.webAppEventsNumbers = this.webAppEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removeInstance: Instance) => {
+      if (removeInstance.componentType=='WebApp'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: removeInstance.id, type: 'delete_sweep', notifName: 'Instance removed', dateTime: actualDate, details: removeInstance.name};
+        this.webAppEvents.push(line);
+        this.webAppEventsNumbers = this.webAppEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
+      if (changeInstance.componentType=='WebApp'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: changeInstance.id, type: 'link', notifName: 'Instance changed', dateTime: actualDate, details:'Instance Name: '+ changeInstance.name};
+        this.webAppEvents.push(line);
+        this.webAppEventsNumbers = this.webAppEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+
+
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+      if (newInstance.componentType=='WebApi'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: newInstance.id, type: 'add_circle', notifName: 'new Instance added', dateTime: actualDate, details:'Instance Name: '+ newInstance.name};
+        this.webApiEvents.push(line);
+        this.webApiEventsNumbers = this.webApiEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removeInstance: Instance) => {
+      if (removeInstance.componentType=='WebApi'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: removeInstance.id, type: 'delete_sweep', notifName: 'Instance removed', dateTime: actualDate, details: removeInstance.name};
+        this.webApiEvents.push(line);
+        this.webApiEventsNumbers = this.webApiEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
+      if (changeInstance.componentType=='WebApi'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: changeInstance.id, type: 'link', notifName: 'Instance changed', dateTime: actualDate, details: 'Instance Name: '+changeInstance.name};
+        this.webApiEvents.push(line);
+        this.webApiEventsNumbers = this.webApiEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).subscribe((newInstance: Instance) => {
+      if (newInstance.componentType=='Crawler'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: newInstance.id, type: 'add_circle', notifName: 'new Instance added', dateTime: actualDate, details:'Instance Name: '+ newInstance.name};
+        this.crawlerEvents.push(line);
+        this.crawlerEventsNumbers = this.crawlerEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).subscribe((removeInstance: Instance) => {
+      if (removeInstance.componentType=='Crawler'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: removeInstance.id, type: 'delete_sweep', notifName: 'Instance removed', dateTime: actualDate, details: removeInstance.name};
+        this.crawlerEvents.push(line);
+        this.crawlerEventsNumbers = this.crawlerEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+    this.socketService.subscribeForEvent<Instance>(EventTypeEnum.LinkStateChangedEvent).subscribe((changeInstance: Instance) => {
+      if (changeInstance.componentType=='Crawler'){
+        var datePipe = new DatePipe("en-US");
+        var actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
+        let line = {instanceId: changeInstance.id, type: 'link', notifName: 'Instance changed', dateTime: actualDate, details: changeInstance.name};
+        this.crawlerEvents.push(line);
+        this.crawlerEventsNumbers = this.crawlerEvents.length;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+
   }
 
-  /**
-   *
-   */
-  public showCrawler() {
-    this.showNotifCrawler = !this.showNotifCrawler;
-  }
-
-  public showWebapp() {
-   this.showNotifWebapp = !this.showNotifWebapp;
-  }
-
-  public showWebapi() {
-   this.showNotifWebapi = !this.showNotifWebapi;
-  }
 }
