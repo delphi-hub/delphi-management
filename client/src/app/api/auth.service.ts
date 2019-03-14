@@ -24,8 +24,8 @@ export class AuthService {
     const rawToken = this.getToken();
     if (rawToken && this.isValid()) {
       try {
-      const token = this.helperService.decodeToken(rawToken);
-      return token.user_type === 'Admin';
+        const token = this.helperService.decodeToken(rawToken);
+        return token.user_type === 'Admin';
       } catch {
         return false;
       }
