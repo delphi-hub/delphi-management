@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
+import {MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule} from '@angular/material';
 
 import { TableNotificationWebappComponent } from './table-notification-webapp.component';
+import {TableOverviewComponent} from "../table-overview/table-overview.component";
 
 describe('TableNotificationWebappComponent', () => {
   let component: TableNotificationWebappComponent;
@@ -16,6 +17,10 @@ describe('TableNotificationWebappComponent', () => {
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
+        MatIconModule,
+      ],
+      providers: [
+        TableOverviewComponent
       ]
     }).compileComponents();
   }));
@@ -23,7 +28,6 @@ describe('TableNotificationWebappComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TableNotificationWebappComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should compile', () => {

@@ -37,7 +37,7 @@ export class TableNotificationWebappDataSource extends DataSource<TableNotificat
     const dataMutations = [
       observableOf(this.data),
       this.paginator.page,
-      this.sort.sortChange
+      //this.sort.sortChange
     ];
 
     // Set the paginator's length
