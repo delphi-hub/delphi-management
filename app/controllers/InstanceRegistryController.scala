@@ -94,6 +94,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = authAction.async {
+    println(AuthProvider.generateRefreshJWT())
     ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
@@ -256,14 +257,19 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   {
     request =>
       ws.url(instanceRegistryUri + "/users" + "/refreshToken")
-        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateRefreshJWT()}"))
         .post("")
         .map { response =>
           response.status match {
-            case 200 =>
-              Ok(response.body)
-            case  400 =>
+            // scalastyle:off magic.number
+            case 202 =>
+              Ok((response.json \ "token" \ "refreshToken").as[String])
+              //Ok(Json.obj("token" -> "", "refreshToken" -> ""))
+            case  401 =>
               Unauthorized
+            // scalastyle:on magic.number
+            case x: Any =>
+              new Status(x)
           }
         }(myExecutionContext)
   }
