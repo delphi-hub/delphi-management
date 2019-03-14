@@ -2,36 +2,18 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import {TableNotificationWebapiItem} from "../table-notification-webapi/table-notification-webapi-datasource";
 
 // TODO: Replace this with your own data model type
 export interface TableNotificationCrawlerItem {
-  name: string;
-  id: number;
+  instanceId: number;
+  type: string;
+  notifName: string;
+  dateTime: string;
+  details: string;
 }
 
-// TODO: replace this with real data from your application
-const EXAMPLE_DATA: TableNotificationCrawlerItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'},
-];
+const DATA: TableNotificationCrawlerItem[] = [];
 
 /**
  * Data source for the TableNotificationCrawler view. This class should
@@ -39,7 +21,7 @@ const EXAMPLE_DATA: TableNotificationCrawlerItem[] = [
  * (including sorting, pagination, and filtering).
  */
 export class TableNotificationCrawlerDataSource extends DataSource<TableNotificationCrawlerItem> {
-  data: TableNotificationCrawlerItem[] = EXAMPLE_DATA;
+  data: TableNotificationCrawlerItem[] = DATA;
 
   constructor(private paginator: MatPaginator, private sort: MatSort) {
     super();
@@ -56,7 +38,7 @@ export class TableNotificationCrawlerDataSource extends DataSource<TableNotifica
     const dataMutations = [
       observableOf(this.data),
       this.paginator.page,
-      this.sort.sortChange
+      //this.sort.sortChange
     ];
 
     // Set the paginator's length
@@ -94,11 +76,14 @@ export class TableNotificationCrawlerDataSource extends DataSource<TableNotifica
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case 'notifName': return compare(a.notifName, b.notifName, isAsc);
+        case 'dateTime': return compare(+a.dateTime, +b.dateTime, isAsc);
         default: return 0;
       }
     });
+  }
+  public add(element: TableNotificationCrawlerItem) {
+    this.data.push(element);
   }
 }
 

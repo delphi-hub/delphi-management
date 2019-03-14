@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
+import {MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule} from '@angular/material';
 
 import { TableNotificationCrawlerComponent } from './table-notification-crawler.component';
+import {TableOverviewComponent} from "../table-overview/table-overview.component";
 
 describe('TableNotificationCrawlerComponent', () => {
   let component: TableNotificationCrawlerComponent;
@@ -16,6 +17,10 @@ describe('TableNotificationCrawlerComponent', () => {
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
+        MatIconModule,
+      ],
+      providers: [
+        TableOverviewComponent
       ]
     }).compileComponents();
   }));
