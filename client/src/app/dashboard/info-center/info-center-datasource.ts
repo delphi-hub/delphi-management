@@ -5,6 +5,7 @@ import { SocketService } from 'src/app/api/api/socket.service';
 import { Instance } from 'src/app/model/models/instance';
 import { DatePipe } from '@angular/common';
 import { EventTypeEnum } from 'src/app/model/models/socketMessage';
+import { StoreService } from 'src/app/model/store.service';
 
 export interface InfoCenterItem {
   instanceId: number;
@@ -27,11 +28,18 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
   private instanceRemovedSubscription: Subscription;
   private data: InfoCenterItem[];
   public numberEvents = 0;
+  private instance: Instance;
 
-  constructor(private socketService: SocketService, private paginator: MatPaginator, private sort: MatSort) {
+  constructor(private storeService: StoreService, private socketService: SocketService,
+    private paginator: MatPaginator, private sort: MatSort, private compType: string, private instanceId: string) {
     super();
     this.data = [];
-
+    if (this.instanceId) {
+      this.instance = this.storeService.getState().instances[this.instanceId];
+      if (!this.instance) {
+        this.instanceId = null;
+      }
+    }
     this.infoCenterSubject = new BehaviorSubject<InfoCenterItem[]>([]);
 
     this.paginator.page.subscribe(() => { this.infoCenterSubject.next(this.getPagedData()); });
@@ -39,21 +47,39 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
 
     this.instanceAddedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).
       subscribe((newInstance: Instance) => {
-        const newEntry = this.transformEventToNotificaton(newInstance, 'new Instance added', 'add_circle');
-        this.applyUpdate(newEntry);
+        if (this.applyFilter(newInstance)) {
+          const newEntry = this.transformEventToNotificaton(newInstance, 'new Instance added', 'add_circle');
+          this.applyUpdate(newEntry);
+        }
       });
 
       this.instanceRemovedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).
         subscribe((removeInstance: Instance) => {
-          const newEntry = this.transformEventToNotificaton(removeInstance, 'Instance removed', 'delete_sweep');
-          this.applyUpdate(newEntry);
+          if (this.applyFilter(removeInstance)) {
+            const newEntry = this.transformEventToNotificaton(removeInstance, 'Instance removed', 'delete_sweep');
+            this.applyUpdate(newEntry);
+          }
         });
 
       this.instanceChangedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.StateChangedEvent).
         subscribe((changeInstance: Instance) => {
-          const newEntry = this.transformEventToNotificaton(changeInstance, 'Instance changed', 'link');
-          this.applyUpdate(newEntry);
+          if (this.applyFilter(changeInstance)) {
+            const newEntry = this.transformEventToNotificaton(changeInstance, 'Instance changed', 'link');
+            this.applyUpdate(newEntry);
+          }
         });
+  }
+
+  applyFilter(instance: Instance): boolean {
+    if (!this.instanceId && !this.compType) {
+      return true;
+    } else {
+      if (this.instanceId) {
+        return instance.id === this.instance.id;
+      } else {
+        return instance.componentType === this.compType;
+      }
+    }
   }
 
   /**
