@@ -5,7 +5,7 @@ name := "delphi-management"
 organization := "de.upb"
 
 
-version := "0.9.0"
+version := "0.9.5"
 
 
 scalaVersion := "2.12.4"

@@ -1,0 +1,16 @@
+
+<h2 mat-dialog-title>Add Label</h2>
+<div mat-dialog-content>
+	<form class="mat-dialog-content" #formControl="ngForm">
+		<div class="form">
+			<mat-form-field color="primary">
+				<input matInput #input class="form-control" (keydown.enter)="onKeydown($event)" placeholder="Label name" [(ngModel)]="labelName" name="labelName" required> 
+				<mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+			 </mat-form-field>
+		</div>
+	</form>
+</div>
+<mat-dialog-actions>
+	<button mat-raised-button color="primary" [disabled]="!formControl.valid" [mat-dialog-close]="1" id="confirmButton" (click)="onConfirmAddLabel()">Add</button>
+	<button mat-raised-button (click)="onCloseCancelLabel()">Cancel</button>
+</mat-dialog-actions>

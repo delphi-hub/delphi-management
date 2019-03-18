@@ -17,12 +17,16 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LandingPageComponent } from './landing-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material-module/material.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  declarations: []
+  declarations: [LandingPageComponent]
 })
 export class LandingPageModule { }

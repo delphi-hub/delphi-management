@@ -21,26 +21,39 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HelpComponent } from './help/help.component';
-
+import { LandingPageModule } from './landing-page/landing-page.module';
+import { JwtModule } from '@auth0/angular-jwt';
+import { TOKEN_IDENT } from './api/auth.service';
+import { BASE_PATH, AUTH } from './api/variables';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingPageComponent,
     HelpComponent
   ],
   imports: [
     DashboardModule,
     AppRoutingModule,
     BrowserModule,
-    HttpClientModule
+    LandingPageModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: jwtGetter,
+        whitelistedDomains: [`${BASE_PATH}`],
+        blacklistedRoutes: [`${BASE_PATH}${AUTH}`],
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
 
 })
-export class AppModule { }
+export class AppModule {
+}
+export function jwtGetter() {
+  return localStorage.getItem(TOKEN_IDENT)
+}

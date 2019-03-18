@@ -22,15 +22,14 @@ import akka.actor.{ActorRef, ActorSystem}
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.libs.concurrent.CustomExecutionContext
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSAuthScheme, WSClient}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
 import actors.{ClientSocketActor, PublishSocketMessageActor}
 import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import authorization.AuthProvider
-import play.api.libs.json.Json
-
+import scala.concurrent.{Future, ExecutionContext}
+import authorization.{AuthProvider, AuthAction}
+import play.api.libs.json.{Json, JsValue}
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -55,7 +54,7 @@ class MyExecutionContextImpl @Inject()(implicit system: ActorSystem)
 
 class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Materializer, myExecutionContext: MyExecutionContext,
                                            val controllerComponents: ControllerComponents,
-                                           ws: WSClient, config: Configuration)
+                                           ws: WSClient, config: Configuration, authAction: AuthAction)
   extends BaseController {
 
 
@@ -64,12 +63,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
 
-  /**This method maps list of instances with specific componentType.
+
+  /** This method maps list of instances with specific componentType.
     *
     * @param componentType
     * @return
     */
-  def instances(componentType: String): Action[AnyContent] = Action.async {
+  def instances(componentType: String): Action[AnyContent] = authAction.async {
     ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
@@ -87,13 +87,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }
   }
 
-  /**Called to fetch network graph of current registry. Contains a list of all instances and all links
+  /** Called to fetch network graph of current registry. Contains a list of all instances and all links
     * currently registered.
     *
     * @return
     */
 
-  def getNetwork(): Action[AnyContent] = Action.async {
+  def getNetwork(): Action[AnyContent] = authAction.async {
     ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
@@ -114,7 +114,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
 
-  def numberOfInstances(componentType: String): Action[AnyContent] = Action.async {
+  def numberOfInstances(componentType: String): Action[AnyContent] = authAction.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
@@ -137,7 +137,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
 
-  def handleRequest(action: String, instanceID: String): Action[AnyContent] = Action.async { request =>
+  def handleRequest(action: String, instanceID: String): Action[AnyContent] = authAction.async { request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + action)
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post("")
@@ -146,7 +146,14 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
-  def reconnect(from: Int, to: Int): Action[AnyContent] = Action.async { request =>
+  /**
+    *  This method is called to assign a new instance to the instance with specified ID.
+    * @param from
+    * @param to
+    * @return
+    */
+
+  def reconnect(from: Int, to: Int): Action[AnyContent] = authAction.async { request =>
 
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
     )
@@ -161,6 +168,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
+
   /**
     * This function is for handling an POST request for adding an instance to the Scala web server
     * (E.g. .../instances/deploy
@@ -169,12 +177,70 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @param name
     */
 
-  def postInstance(compType: String, name: String): Action[AnyContent] = Action.async
+  def postInstance(compType: String, name: String): Action[AnyContent] = authAction.async {
+    request =>
+      ws.url(instanceRegistryUri + "/instances/deploy")
+        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
+        .map { response =>
+          response.status match {
+            // scalastyle:off magic.number
+            case 202 =>
+              // scalastyle:on magic.number
+              Ok(response.body)
+            case x: Any =>
+              new Status(x)
+          }
+        }(myExecutionContext)
+  }
+
+  /**
+    * This function sends JWT token and Username:Password encoded into the headers to Instance Registry
+    * Instance registry returns a valid JWT token.
+    *
+    * @return
+    */
+
+  def authentication(): Action[AnyContent] = Action.async {
+    request =>
+      //val json = request.body.asJson.get
+
+
+      val jsonBody: Option[JsValue] = request.body.asJson
+
+      jsonBody.map { json =>
+
+        val username = (json \ "username").as[String]
+        val password = (json \ "password").as[String]
+
+        ws.url(instanceRegistryUri + "/users" + "/authenticate")
+          .withAuth(username, password, WSAuthScheme.BASIC)
+          .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
+          .post("")
+          .map { response =>
+            if (response.status == 200) {
+              Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+            } else {
+              new Status(response.status)
+            }
+          }
+      }.getOrElse{ Future(BadRequest("Invalid body"))}
+
+    }
+
+  /**
+    * This function is used to add a label to specific instance.
+    * @param instanceID ID of the instance on which label is to be added
+    * @param label
+    * @return
+    */
+
+  def labelInstance(instanceID: String, label: String): Action[AnyContent] = authAction.async
   {
     request =>
-    ws.url(instanceRegistryUri + "/instances/deploy")
+    ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label")
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
+      .post(Json.obj("Label" -> label))
       .map { response =>
         response.status match {
           // scalastyle:off magic.number

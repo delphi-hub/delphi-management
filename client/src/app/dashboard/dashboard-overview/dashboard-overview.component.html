@@ -25,13 +25,14 @@
             <button mat-icon-button matTooltip="Graph View" routerLink="/dashboard/graphView" routerLinkActive="active">
                 <mat-icon [ngClass]="'mat-36'" aria-label="table_chart">table_chart</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Table View" routerLink="/dashboard/tableOverview" routerLinkActive="active">
+            <button mat-icon-button matTooltip="Table View" routerLink="/dashboard/tableOverview"
+                routerLinkActive="active">
                 <mat-icon [ngClass]="'mat-36'" aria-label="list">list</mat-icon>
-            </button>            
+            </button>
         </div>
     </div>
     <div class="row">
-        <div class=" col-md-8 col-sm-12">
+        <div class="col-md-8 col-sm-12">
             <div class="row">
                 <app-graph-view></app-graph-view>
             </div>
@@ -39,7 +40,7 @@
         <div class="col-md-4 col-sm-4">
             <div class="row">
                 <div class=" col-md-12 col-sm-2">
-                    <app-infor-center></app-infor-center>
+                    <app-info-center></app-info-center>
                 </div>
                 <div class=" col-md-8 col-sm-2 topSpace">
                     <app-statuscard></app-statuscard>

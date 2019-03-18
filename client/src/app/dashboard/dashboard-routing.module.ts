@@ -28,14 +28,15 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
 import {HelpComponent} from '../help/help.component';
 import { GraphViewComponent } from './graph-view/graph-view/graph-view.component';
 import { InstanceDetailsComponent } from './instance-details/instance-details.component';
-import { TableAllComponent } from './table-all/table-all.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
+import { AuthGuard } from '../AuthGuard';
 
 
 const dashboardRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',

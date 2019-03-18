@@ -25,13 +25,14 @@
  import play.api.libs.json.Json
  import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
  import play.core.PlayVersion
+ import authorization.AuthAction
+ import play.api.Configuration
 
-
- class SystemInfoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+ class SystemInfoController @Inject()(val controllerComponents: ControllerComponents, config: Configuration, authAction: AuthAction) extends BaseController {
    implicit val systemInfoWrites = Json.writes[SystemInfo]
    implicit val systemInfoReads = Json.reads[SystemInfo]
 
-  def getInfo: Action[AnyContent] = Action {
+  def getInfo: Action[AnyContent] = authAction {
 
     val info = SystemInfo(hostName = getHostName(), javaVersion = getJvmVersion(), platformName = getPlatformName(), scalaVersion = getScalaVersion())
     val infoJson = Json.toJson(info)
@@ -44,12 +45,9 @@
      }
    }
 
-
-
-   private def getHostName(): String = {
+    private def getHostName(): String = {
        InetAddress.getLocalHost().getHostName()
    }
-
 
    private def getPlatformName(): String = {
        val os = "os.name";

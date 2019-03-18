@@ -16,31 +16,47 @@
 package authorization
 
 
+
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
 import play.api.Configuration
 
-  object AuthProvider {
 
-    var Token = "" // scalastyle:ignore
 
-    /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
-      *
-      * @param validFor
+  object AuthProvider  {
+
+      var Token = "" // scalastyle:ignore
+
+      /** This method generates JWT token for registering Delphi-Management at the Instance-Registry
+        *
+        * @param validFor
+        * @return
+        */
+
+      def generateJwt(validFor: Long = 1)(implicit configuration: Configuration): String = {
+        val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
+        if (Token == "" || !Jwt.isValid(Token, jwtSecretKey, Seq(JwtAlgorithm.HS256))) {
+          val claim = JwtClaim()
+            .issuedNow
+            .expiresIn(validFor * 300)
+            .startsNow
+            . +("user_id", configuration.get[String]("play.http.instance"))
+            . +("user_type", "Admin")
+
+          Token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
+        }
+        Token
+      }
+
+    /**
+      *  This method receives a token and validates if it is valid
+      * @param token
+      * @param configuration
       * @return
       */
 
-    def generateJwt(validFor: Long = 1)(implicit configuration: Configuration): String = {
+    def validateJwt(token: String)(implicit configuration: Configuration): Boolean = {
       val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
-      if (Token == "" || !Jwt.isValid(Token, jwtSecretKey, Seq(JwtAlgorithm.HS256))) {
-        val claim = JwtClaim()
-          .issuedNow
-          .expiresIn(validFor * 300)
-          .startsNow
-          . +("user_id",  configuration.get[String]("play.http.instance"))
-          . +("user_type", "Admin")
-
-        Token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
-      }
-      Token
+      Jwt.isValid(token, jwtSecretKey, Seq(JwtAlgorithm.HS256)) // Decode the token using the secret key
     }
+
   }
