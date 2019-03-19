@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Instance} from './models/instance';
 import {BehaviorSubject, Observable} from 'rxjs';
+import { InfoCenterItem } from '../dashboard/info-center/info-center-datasource';
 
 export enum Actions {
   ADD = 'ADD',
@@ -11,6 +12,7 @@ export enum Actions {
 export interface State {
   instances: { [id: number]: Instance };
   instancesByType: { [compType: string]: Array<number> };
+  events: { [id: number]: InfoCenterItem };
 }
 export interface StateUpdate {
   state: State;
@@ -21,7 +23,7 @@ export interface Change {
   elements?: Array<Instance>;
 }
 
-export const EMPTY_STATE = {instances: {}, instancesByType: {'Crawler': [], 'WebApi': [], 'WebApp': [], 'ElasticSearch': []}};
+export const EMPTY_STATE = {instances: {}, instancesByType: {'Crawler': [], 'WebApi': [], 'WebApp': [], 'ElasticSearch': []}, events: {}};
 
 /**
  * This service is used to manage the shared state used in the whole application.
@@ -94,11 +96,7 @@ export class StoreService {
    * Retruns an observable which notifies the subscriber about any changes to the state.
    */
   public getStoreObservable(): Observable<StateUpdate> {
-    return new Observable ((observer) => {
-      this.stateUpdateSubject.subscribe(observer);
-      observer.next(this.stateUpdateSubject.value);
-    });
-
+    return this.stateUpdateSubject.asObservable();
   }
 
   /**
