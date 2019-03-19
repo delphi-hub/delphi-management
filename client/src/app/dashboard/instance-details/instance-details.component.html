@@ -23,11 +23,11 @@
         <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
     </div>
     <div class="row">
-        <app-info-center instanceId="instanceId"></app-info-center>
+        <app-info-center [instanceId]="instanceId"></app-info-center>
     </div>
     <div class="row">
       <div class="col-md-8 col-sm-12">
-          <app-graph-view subnetElementId="instanceId"></app-graph-view>
+          <app-graph-view [subnetElementId]="instanceId"></app-graph-view>
       </div>
     </div>
   </div>
