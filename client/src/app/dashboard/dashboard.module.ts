@@ -44,7 +44,6 @@ import { TableOverviewComponent } from './table-overview/table-overview.componen
 import { InfoCenterComponent } from './info-center/info-center.component';
 import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '@angular/material';
 import { LabelDialogComponent } from './label-dialog/label-dialog.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { TableNotificationWebapiComponent } from './table-notification-webapi/table-notification-webapi.component';
 import { TableNotificationWebappComponent } from './table-notification-webapp/table-notification-webapp.component';
 import { TableNotificationCrawlerComponent } from './table-notification-crawler/table-notification-crawler.component';
@@ -86,7 +85,7 @@ import { TableNotificationCrawlerComponent } from './table-notification-crawler/
     LabelDialogComponent,
     TableNotificationWebapiComponent,
     TableNotificationWebappComponent,
-    TableNotificationCrawlerComponent
+    TableNotificationCrawlerComponent,
     InfoCenterComponent,
     LabelDialogComponent
   ],
