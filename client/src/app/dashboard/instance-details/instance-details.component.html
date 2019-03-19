@@ -18,16 +18,17 @@
  */ -->
 
 <div class="container-fluid">
-  <div class="row">
-    <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
-  </div>
-  <div class="row">
-      <app-info-center [instanceId]="instance.id"></app-info-center>
-  </div>
-  <div class="row">
-    <div class="col-md-8 col-sm-12">
-      <app-graph-view [subnetElementId]="instance.id"></app-graph-view>
+  <div *ngIf="instance">
+    <div class="row">
+        <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
+    </div>
+    <div class="row">
+        <app-info-center instanceId="instanceId"></app-info-center>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-sm-12">
+          <app-graph-view subnetElementId="instanceId"></app-graph-view>
+      </div>
     </div>
   </div>
-
 </div>

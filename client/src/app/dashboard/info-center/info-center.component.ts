@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild, OnDestroy, Input} from '@angular/core';
+import {Component, ViewChild, Input, AfterViewInit, OnInit} from '@angular/core';
 import {MatPaginator, MatSort, MatTable} from '@angular/material';
-import {InfoCenterDataSource } from './info-center-datasource';
+import {InfoCenterDataSource, InfoCenterItem } from './info-center-datasource';
 import {SocketService} from '../../api/api/socket.service';
 import { StoreService } from 'src/app/model/store.service';
 
@@ -13,7 +13,7 @@ import { StoreService } from 'src/app/model/store.service';
 export class InfoCenterComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild(MatTable) table: MatTable<InfoCenterItem>;
   @Input()compType: string;
   @Input()instanceId: string;
   dataSource: InfoCenterDataSource;

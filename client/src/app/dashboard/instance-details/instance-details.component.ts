@@ -29,7 +29,7 @@ import { ActivatedRoute } from '@angular/router';
 export class InstanceDetailsComponent implements OnInit {
 
   instance: Instance;
-
+  instanceId: string;
 
   constructor(private storeService: StoreService, private route: ActivatedRoute) { }
 
@@ -39,6 +39,7 @@ export class InstanceDetailsComponent implements OnInit {
       if (instanceId) {
         const instance = this.storeService.getState().instances[+instanceId];
         if (instance) {
+          this.instanceId = instanceId;
           this.instance = instance;
         }
       }
