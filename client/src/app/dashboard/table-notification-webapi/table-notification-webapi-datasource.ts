@@ -67,7 +67,7 @@ export class TableNotificationWebapiDataSource extends DataSource<TableNotificat
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getSortedData(data: TableNotificationWebapiItem[]) {
-    if (!this.sort.active || this.sort.direction === '') {
+    if (!this.sort.active ||this.sort.direction === '') {
       return data;
     }
 
