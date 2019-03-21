@@ -1,10 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
-import { SocketService } from 'src/app/api/api/socket.service';
 import { Instance } from 'src/app/model/models/instance';
-import { DatePipe } from '@angular/common';
-import { EventTypeEnum } from 'src/app/model/models/socketMessage';
 import { StoreService } from 'src/app/model/store.service';
 import { EventService } from 'src/app/model/event.service';
 
@@ -29,7 +26,7 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
   public numberEvents = 0;
   private instance: Instance;
 
-  constructor(private storeService: StoreService, private socketService: SocketService, private paginator: MatPaginator,
+  constructor(private storeService: StoreService, private paginator: MatPaginator,
       private sort: MatSort, private compType: string, private instanceId: string, private eventService: EventService) {
     super();
 
@@ -87,6 +84,8 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    */
   disconnect() {
     this.eventSubscription.unsubscribe();
+    this.paginator.page.unsubscribe();
+    this.sort.sortChange.unsubscribe();
     this.infoCenterSubject.complete();
   }
 
@@ -95,8 +94,11 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getPagedData() {
-    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-    return [...this.data].splice(startIndex, this.paginator.pageSize);
+    if (this.paginator && this.paginator.pageIndex && this.paginator.pageSize) {
+      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+      return [...this.data].splice(startIndex, this.paginator.pageSize);
+    }
+    return [...this.data];
   }
 
   /**
