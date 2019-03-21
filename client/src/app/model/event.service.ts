@@ -35,6 +35,10 @@ export class EventService {
     });
   }
 
+  public getEventObservable() {
+    return this.eventState.asObservable();
+  }
+
   private transformEventToNotificaton(instance: Instance, prevInstance: Instance, action: Actions): InfoCenterItem {
     // TODO: calculate difference between new and previous instance and update details text accordingly
     const datePipe = new DatePipe('en-US');
