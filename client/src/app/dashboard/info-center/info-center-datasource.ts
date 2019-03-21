@@ -41,7 +41,7 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
 
     this.paginator.page.subscribe(() => { this.infoCenterSubject.next(this.getPagedData()); });
     this.sort.sortChange.subscribe(() => {this.data = this.getSortedData(this.data); this.infoCenterSubject.next(this.getPagedData()); });
-
+    this.paginator.initialized.subscribe(() => { this.infoCenterSubject.next(this.getPagedData()); });
     this.eventSubscription = this.eventService.getEventObservable().subscribe((newNotifs: InfoCenterItem[]) => {
       this.applyUpdate(newNotifs);
     });
@@ -94,7 +94,9 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getPagedData() {
-    if (this.paginator && this.paginator.pageIndex && this.paginator.pageSize) {
+    console.log('here2', this.paginator, this.paginator.pageIndex !== undefined, this.paginator.pageSize !== undefined);
+    if (this.paginator && this.paginator.pageIndex !== undefined && this.paginator.pageSize !== undefined) {
+      console.log('here', this.paginator);
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return [...this.data].splice(startIndex, this.paginator.pageSize);
     }
