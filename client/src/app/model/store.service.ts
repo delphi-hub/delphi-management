@@ -16,6 +16,7 @@ export interface State {
 }
 export interface StateUpdate {
   state: State;
+  prevState: State;
   change: Change;
 }
 export interface Change {
@@ -89,7 +90,7 @@ export class StoreService {
   }
 
   constructor() {
-    this.stateUpdateSubject = new BehaviorSubject<StateUpdate>({state: EMPTY_STATE, change: {type: Actions.NONE}});
+    this.stateUpdateSubject = new BehaviorSubject<StateUpdate>({state: EMPTY_STATE, prevState: EMPTY_STATE, change: {type: Actions.NONE}});
   }
 
   /**
@@ -116,11 +117,11 @@ export class StoreService {
     const newState: State = instances.reduce((accumulator: State, currentValue: Instance) => {
       return StoreService.addNewInstanceToState(accumulator, currentValue);
     }, EMPTY_STATE);
-
-    const changed = calculateDiff ? StoreService.stateHasChanged(this.stateUpdateSubject.value.state, instances) : true;
+    const prevState = this.stateUpdateSubject.value.state;
+    const changed = calculateDiff ? StoreService.stateHasChanged(prevState, instances) : true;
 
     if (changed) {
-      this.stateUpdateSubject.next({state: newState, change: {type: Actions.ADD, elements: instances}});
+      this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.ADD, elements: instances}});
     }
   }
 
@@ -128,9 +129,10 @@ export class StoreService {
    * Adds the given @param instance to the state.
    */
   public addInstanceToState(instance: Instance) {
-    const newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
+    const prevState = this.stateUpdateSubject.value.state;
+    const newState = StoreService.addNewInstanceToState(prevState, instance);
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.ADD, elements: [instance]}});
+    this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.ADD, elements: [instance]}});
   }
 
   /**
@@ -139,20 +141,24 @@ export class StoreService {
    */
   public changeInstancesState(instances: Array<Instance>) {
     let newState: State;
+    const prevState = this.stateUpdateSubject.value.state;
     for (const instance of instances) {
        newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
     }
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.CHANGE, elements: instances}});
+    this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.CHANGE, elements: instances}});
   }
 
   /**
    * Removes the given @param instance from the state.
    */
   public removeFromState(instance: Instance) {
-    const newState = StoreService.removeInstanceFromState(this.stateUpdateSubject.value.state, instance);
+
+    const prevState = this.stateUpdateSubject.value.state;
+    const newState = StoreService.removeInstanceFromState(prevState, instance);
+
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.DELETE, elements: [instance]}});
+    this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.DELETE, elements: [instance]}});
   }
 
 }
