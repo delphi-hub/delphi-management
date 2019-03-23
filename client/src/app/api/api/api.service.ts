@@ -20,6 +20,7 @@
 import {CustomHttpUrlEncodingCodec} from '../encoder';
 import {Instance} from '../../model/models/instance';
 import {SysInfo} from '../../model/models/sysInfo';
+import {User} from '../../model/models/user';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -28,6 +29,8 @@ import {
   BASE_PATH,
   INSTANCES,
   NUMBER_OF_INSTANCES,
+  USERS,
+  NEW_USER,
   SYS_INFO,
   NEW_INSTANCE,
   START_INSTANCE,
@@ -37,6 +40,7 @@ import {
   DELETE_INSTANCE,
   NEW_LABEL_INSTANCE,
   INSTANCE_NETWORK,
+  DELETE_USER,
   RECONNECT,
   AUTH
 } from '../variables';
@@ -204,6 +208,52 @@ export class ApiService {
     return this.postLabel(NEW_LABEL_INSTANCE, instanceId, labelName);
   }
 
+  public postUser(userName: string, secret: string, userType: string, observe: any = 'body', reportProgress: boolean = false): Observable<User> {
+    console.log("all parameters for adding user",userName, secret, userType );
+    return this.userAdd(userName, secret, userType);
+  }
+
+  private userAdd( username: string, secret: string, userType: string): any {
+    console.log("all parameters for adding user",username, secret, userType );
+    let headers = this.defaultHeaders;
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<User>(`${this.basePath}${NEW_USER}`, {
+      userName: username,
+      secret: secret,
+      userType: userType
+    },
+      {
+        withCredentials: this.configuration.withCredentials,
+        headers: headers
+      }
+    );
+  }
+
+  public deleteUser(userId: string) {
+    return this.deleteAction(DELETE_USER, userId);
+  }
+
+  private deleteAction(endpoint: string, idUser: string, observe: any = 'body', reportProgress: boolean = false) {
+    let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+
+    if (idUser === null || idUser === undefined) {
+      throw new Error('Required ID User parameter');
+    } else {
+      queryParam = queryParam.set('userID', <any>idUser);
+    }
+
+    return this.commonConf(endpoint, queryParam, observe, reportProgress);
+  }
+
+
   private get<T>(endpoint: string, componentType?: string) {
 
     let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
@@ -299,6 +349,31 @@ export class ApiService {
     }
 
     return this.commonConf(endpoint, queryParam, observe, reportProgress);
+  }
+
+  public getUsers(observe: any = 'body', reportProgress: boolean = false): Observable<Array<User>> {
+    return this.getList(USERS);
+  }
+
+  private getList<T>(endpoint: string) {
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.get<T>(`${this.basePath}${endpoint}`,
+      {
+        withCredentials: this.configuration.withCredentials,
+        headers: headers
+      }
+    );
   }
 
 

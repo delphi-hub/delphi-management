@@ -29,12 +29,17 @@ export const STOP_INSTANCE = 'api/stopInstance';
 export const PAUSE_INSTANCE = 'api/pauseInstance';
 export const RESUME_INSTANCE = 'api/resumeInstance';
 export const DELETE_INSTANCE = 'api/deleteInstance';
+export const USERS = '/api/users';
+export const NEW_USER = '/api/postUser';
 export const RECONNECT = 'api/reconnectInstance';
 export const AUTH = 'api/authenticate';
 export const NEW_LABEL_INSTANCE = 'api/labelInstance';
+export const DELETE_USER = 'api/deleteUser';
 export const COLLECTION_FORMATS = {
     'csv': ',',
     'tsv': '   ',
     'ssv': ' ',
     'pipes': '|'
 };
+
+
