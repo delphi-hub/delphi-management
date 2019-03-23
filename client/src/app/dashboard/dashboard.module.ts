@@ -78,8 +78,8 @@ import { LabelDialogComponent } from './label-dialog/label-dialog.component';
     DeleteDialogComponent,
     AddDialogComponent,
     InstanceDetailsComponent,
-    TableOverviewComponent,
     InfoCenterComponent,
+    TableOverviewComponent,
     LabelDialogComponent
   ],
   entryComponents: [

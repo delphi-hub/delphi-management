@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, OnDestroy} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, OnDestroy, Input} from '@angular/core';
 import * as cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 import {GraphViewService, ElementUpdate} from '../graph-view.service';
@@ -9,6 +9,7 @@ import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.compone
 import { ComponentTypeEnum, ComponentType } from 'src/app/model/models/instance';
 import { GraphConfig } from '../GraphConfig';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-graph-view',
@@ -17,14 +18,15 @@ import { Subscription } from 'rxjs';
 })
 export class GraphViewComponent implements OnInit, OnDestroy {
   @ViewChild('cy') cyDiv: ElementRef;
+
+  @Input() subnetElementId = -1;
+
   private cy: cytoscape.Core;
   private config: GraphConfig;
   private elementSubscription: Subscription;
   private elementRemoveSubscription: Subscription;
 
-  constructor(private graphViewService: GraphViewService, public dialog: MatDialog) {
-
-  }
+  constructor(private graphViewService: GraphViewService, public dialog: MatDialog, private router: Router) {}
 
 
   ngOnInit() {
@@ -32,12 +34,30 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     this.configureCytoscape();
     this.addEdgeDragListener();
     this.addChangeListener();
+    this.addClickListener();
   }
 
   ngOnDestroy() {
     this.cy.destroy();
     this.elementSubscription.unsubscribe();
     this.elementRemoveSubscription.unsubscribe();
+  }
+
+  private addClickListener() {
+    this.cy.nodes().on('click', (e) => {
+      const clickedNode: cytoscape.NodeSingular = e.target;
+      const instanceId = clickedNode.data('id');
+      this.router.navigate(['/dashboard/instanceDetails/' + instanceId]);
+    });
+  }
+
+  private applySubnetFilter() {
+    if (this.subnetElementId !== -1) {
+      const subentElement = this.cy.getElementById('' + this.subnetElementId);
+      const neighborhood = subentElement.neighborhood().add(subentElement);
+      const elesToRemove = this.cy.elements().difference(neighborhood);
+      this.cy.remove(elesToRemove);
+    }
   }
 
   /**
@@ -63,8 +83,10 @@ export class GraphViewComponent implements OnInit, OnDestroy {
             default: return 'orange';
           }
         });
+        this.applySubnetFilter();
         const layout = this.cy.layout(this.config.layout);
         layout.run();
+        this.addClickListener();
       }
     });
 
@@ -183,7 +205,8 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     if (!Object.getPrototypeOf(this.cy).edgehandles) {
       cytoscape.use(edgehandles);
     }
-
-    (this.cy as any).edgehandles(this.config.edgeDragConfig);
+    if (this.subnetElementId === -1) {
+      (this.cy as any).edgehandles(this.config.edgeDragConfig);
+    }
   }
 }

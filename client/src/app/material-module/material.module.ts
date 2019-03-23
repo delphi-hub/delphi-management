@@ -9,7 +9,9 @@ import { MatInputModule,
   MatPaginatorModule,
   MatCheckboxModule,
   MatDialogModule,
-  MatFormFieldModule} from '@angular/material';
+  MatFormFieldModule,
+  MatSortModule,
+  } from '@angular/material';
 import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
@@ -26,7 +28,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSortModule
   ],
   exports: [
     CommonModule,
@@ -40,7 +43,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSortModule
   ]
 })
 export class MaterialModule { }

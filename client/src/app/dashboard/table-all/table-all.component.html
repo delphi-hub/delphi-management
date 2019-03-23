@@ -20,9 +20,11 @@
 </div>
 <ng-template #tableBlock>
     <div class="container">
-        <mat-form-field>
-            <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
+        <div *ngIf="!hideControlElements">
+            <mat-form-field>
+                <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
         <table class="mat-elevation-z8 mat-table" mat-table multiTemplateDataRows [dataSource]="dataSource">
             <ng-container matColumnDef="ID">
                 <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
@@ -126,9 +128,10 @@
     </table>
     </div>
 </ng-template>
+<div *ngIf="!hideControlElements">
+    <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 
-<mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-
-<div class="button-row">
-    <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
+    <div class="button-row">
+        <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
+    </div>
 </div>

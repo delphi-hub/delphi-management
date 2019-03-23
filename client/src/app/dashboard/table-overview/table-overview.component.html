@@ -17,16 +17,41 @@
 -->
 
 <div class="container">
-    <h4> WebApi Details</h4>
-    <div class="row">
-        <app-table-all type="WebApi" [dataArray]="webapiDetails"> </app-table-all>
-    </div>
-    <h4> Web Application Details </h4>
-    <div class="row">
-        <app-table-all type="WebApp" [dataArray]="webappDetails"> </app-table-all>
-    </div>
-    <h4> Crawler Details</h4>
-    <div class="row">
-        <app-table-all type="Crawler" [dataArray]="crawlerDetails"> </app-table-all>
-  </div>
+  <table>
+
+    <tr>
+      <td>
+      <h4> WebApi Details</h4>
+      <div class="row">
+          <app-table-all type="WebApi" [dataArray]="webapiDetails"> </app-table-all>
+      </div>
+    </td>
+    <td>
+        <app-info-center [compType]="'WebApi'"></app-info-center>
+    </td>
+    </tr>
+    <tr>
+        <td>
+      <h4> Web Application Details </h4>
+      <div class="row">
+          <app-table-all type="WebApp" [dataArray]="webappDetails"> </app-table-all>
+
+      </div>
+      </td>
+      <td>
+          <app-info-center [compType]="'WebApp'"></app-info-center>
+      </td>
+      </tr>
+      <tr>
+        <td>
+            <h4> Crawler Details</h4>
+            <div class="row">
+                <app-table-all type="Crawler" [dataArray]="crawlerDetails"> </app-table-all>
+          </div>
+        </td>
+        <td>
+            <app-info-center [compType]="'Crawler'"></app-info-center>
+        </td>
+      </tr>
+  </table>
 </div>

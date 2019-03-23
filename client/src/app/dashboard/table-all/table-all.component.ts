@@ -43,6 +43,8 @@ import { ApiService } from 'src/app/api/api/api.service';
 export class TableAllComponent implements OnInit {
     @Input() type: Instance['componentType'];
 
+    @Input() hideControlElements = false;
+
     @Input() set dataArray(dataArray: Instance[]) {
 
         if (this.dataSource == null) {
@@ -61,7 +63,6 @@ export class TableAllComponent implements OnInit {
             }
         }
     }
-    @Input() compType: string;
 
 
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action', 'Details'];
