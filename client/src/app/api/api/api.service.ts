@@ -17,10 +17,10 @@
  */
 
 
-import {CustomHttpUrlEncodingCodec} from '../encoder';
-import {Instance} from '../../model/models/instance';
-import {SysInfo} from '../../model/models/sysInfo';
-import {User} from '../../model/models/user';
+import { CustomHttpUrlEncodingCodec } from '../encoder';
+import { Instance } from '../../model/models/instance';
+import { SysInfo } from '../../model/models/sysInfo';
+import { User } from '../../model/models/user';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -96,7 +96,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<number> {
+  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
@@ -173,7 +173,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false)  {
+  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
 
@@ -204,17 +204,26 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public labelInstance( instanceId: string, labelName: string, observe: any = 'body', reportProgress: boolean = false) {
+  public labelInstance(instanceId: string, labelName: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postLabel(NEW_LABEL_INSTANCE, instanceId, labelName);
   }
 
+  /**
+   * Create a User
+   * @param userName
+   * @param secret
+   * @param userType
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+
   public postUser(userName: string, secret: string, userType: string, observe: any = 'body', reportProgress: boolean = false): Observable<User> {
-    console.log("all parameters for adding user",userName, secret, userType );
+    console.log("all parameters for adding user", userName, secret, userType);
     return this.userAdd(userName, secret, userType);
   }
 
-  private userAdd( username: string, secret: string, userType: string): any {
-    console.log("all parameters for adding user",username, secret, userType );
+  private userAdd(username: string, secret: string, userType: string): any {
+    console.log("all parameters for adding user", username, secret, userType);
     let headers = this.defaultHeaders;
     // to determine the Accept header
     const httpHeaderAccepts: string[] = [
@@ -240,6 +249,13 @@ export class ApiService {
   public deleteUser(userId: string) {
     return this.deleteAction(DELETE_USER, userId);
   }
+
+  /**
+  * Delete a User
+  * @param idUser
+  * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+  * @param reportProgress flag to report request and response progress.
+  */
 
   private deleteAction(endpoint: string, idUser: string, observe: any = 'body', reportProgress: boolean = false) {
     let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });

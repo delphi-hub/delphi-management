@@ -265,6 +265,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
+  /**
+    * This function is used to add a User.
+    * Username, Secret and UserType are sent in the body post
+    * Instance registry returns a valid userID
+    * @return
+    */
+
    def postUser(): Action[AnyContent] = Action.async {
     request =>
       val jsonBody: Option[JsValue] = request.body.asJson
@@ -287,6 +294,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }.getOrElse{ Future(BadRequest("Invalid body"))}
   }
 
+/**
+    * This function is used to delete a user.
+    * @param userID ID of the user that is to be deleted
+    * @return
+    */
   def deleteUser( userID: String): Action[AnyContent] = authAction.async { 
     request =>
     ws.url(instanceRegistryUri + "/users/" + userID + "/remove")
