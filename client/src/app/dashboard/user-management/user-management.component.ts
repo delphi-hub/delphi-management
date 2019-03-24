@@ -45,18 +45,22 @@ export class UserManagementComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
 
+    /**
+    * Function to GET all the users.
+    */
+
     this.apiService.getUsers().subscribe(userResponse => {
       console.log("users list", userResponse);
       this.dataSource.data = userResponse;
     });
   }
 
-   /**
-   * Function for adding a User. 
-   * @param UserName
-   * @param Secret
-   * @param UserType
-   */
+  /**
+  * Function for adding a User. 
+  * @param UserName
+  * @param Secret
+  * @param UserType
+  */
 
   openAddUser() {
     const dialogRefUser = this.dialog.open(UserAddComponent, {

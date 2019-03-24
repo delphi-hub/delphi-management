@@ -87,6 +87,10 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }
   }
 
+  /** This method lists all Users.
+    * @return
+    */
+
   def users(): Action[AnyContent] = Action.async{
     ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
