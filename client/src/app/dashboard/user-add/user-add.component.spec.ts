@@ -1,18 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed, inject, fakeAsync } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../api/api/api.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { UserAddComponent } from './user-add.component';
 
 describe('UserAddComponent', () => {
   let component: UserAddComponent;
   let fixture: ComponentFixture<UserAddComponent>;
+  let select: HTMLElement;
+  let debugElement: DebugElement;
   const mockDialogRef = {
     close: jasmine.createSpy('close')
   };
@@ -21,7 +26,7 @@ describe('UserAddComponent', () => {
     TestBed.configureTestingModule({
       declarations: [UserAddComponent],
       imports: [ HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatIconModule,
-       MatInputModule, MatDialogModule, FormsModule, MatFormFieldModule ],
+       MatInputModule, MatDialogModule, FormsModule, MatFormFieldModule, MatSelectModule ],
       providers: [{
         provide: MatDialogRef,
         useValue: mockDialogRef
@@ -37,16 +42,15 @@ describe('UserAddComponent', () => {
   let component: UserAddComponent;
     fixture = TestBed.createComponent(UserAddComponent);
     component = fixture.componentInstance;
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
+    select = fixture.debugElement.query(By.css('mat-select')).nativeElement;
   });
 
-  it('should check for confirm button inside the Add dialog', () => {
-    component.onConfirmAddUser();
-    expect(mockDialogRef.close).toHaveBeenCalled();
-  });
+  it(`should create`, async(inject([HttpTestingController, ApiService],
+    (apiService: ApiService) => {
+      expect(apiService).toBeTruthy();
+    })));
+});
 
-it('should check for button inside the Add dialog', () => {
-  component.onCloseCancelUser();
-  expect(mockDialogRef.close).toHaveBeenCalled();
-});
-});
+
