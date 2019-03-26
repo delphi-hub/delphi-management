@@ -14,7 +14,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserAddComponent } from './user-add.component';
 
 describe('UserAddComponent', () => {
-  let component: UserAddComponent;
   let fixture: ComponentFixture<UserAddComponent>;
   let select: HTMLElement;
   let debugElement: DebugElement;

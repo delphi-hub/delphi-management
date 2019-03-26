@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
 
 
-export interface usertypes {
+export interface UserTypes {
   value: string;
   viewValue: string;
 }
@@ -17,11 +17,11 @@ export class UserAddComponent implements OnInit {
   constructor(public thisDialogRefUser: MatDialogRef<UserAddComponent>) { }
   userName: String;
   secret: String;
-  userType: usertypes[] = [
+  userType: UserTypes[] = [
     {value: 'Admin', viewValue: 'Admin'},
     {value: 'User', viewValue: 'User'}
   ];
-  
+
 
   formControl = new FormControl('', [
     Validators.required
@@ -42,7 +42,6 @@ export class UserAddComponent implements OnInit {
   }
 
   onConfirmAddUser(): void {
-    console.log("username",this.userName);
 
     this.thisDialogRefUser.close({
       status: 'Add',

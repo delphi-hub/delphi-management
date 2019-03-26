@@ -33,7 +33,7 @@ describe('UserManagementComponent', () => {
       }]
     })
       .compileComponents();
-  
+
     TestBed.overrideModule(BrowserDynamicTestingModule, {
       set: {
         entryComponents: [AddDialogComponent, DeleteDialogComponent],
