@@ -50,7 +50,6 @@ export class UserManagementComponent implements OnInit {
     */
 
     this.apiService.getUsers().subscribe(userResponse => {
-      console.log("users list", userResponse);
       this.dataSource.data = userResponse;
     });
   }
@@ -72,12 +71,14 @@ export class UserManagementComponent implements OnInit {
       if (dialogResultUser === 'CancelAdd') {
         dialogRefUser.close();
       } else {
-        console.log('User_new', dialogResultUser);
-        this.apiService.postUser(dialogResultUser.userName, dialogResultUser.secret, dialogResultUser.userType.values).subscribe((userResult: User) => {
-          this.dataSource.data.push(userResult);
-        }, err => {
+        this.apiService.postUser(dialogResultUser.userName, dialogResultUser.secret, dialogResultUser.userType.values)
+        .subscribe(() => {
+          this.apiService.getUsers().subscribe(userResponse => {
+            this.dataSource.data = userResponse;
+          });
+        }, (err) => {
 
-          console.log('error receiving data for crawler');
+          console.log('error during post user', err);
         });
       }
     });
@@ -89,18 +90,17 @@ export class UserManagementComponent implements OnInit {
     */
 
   openDeleteUser(i: number, user: User, id: string) {
-    console.log("index to remove", i);
     const dialogRefUser = this.dialog.open(DeleteUserComponent, {
       width: '250px',
       data: { userName: user.userName }
     });
 
     dialogRefUser.afterClosed().subscribe(result => {
-      console.log("user id for delete", id);
       if (result !== 'Cancel') {
-        this.apiService.deleteUser(id).subscribe((deleteUserResult: HttpEvent<number>) => {
-          console.log("test", id);
-          this.removeAt(i);
+        this.apiService.deleteUser(id).subscribe(() => {
+          this.apiService.getUsers().subscribe(userResponse => {
+            this.dataSource.data = userResponse;
+          });
         }, err => {
           console.log('error delete Instance', err);
           if (err.status === 400) {
@@ -113,7 +113,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   removeAt(index: number) {
-    console.log("index to remove", index);
     this.dataSource.data.splice(index, 1);
   }
 

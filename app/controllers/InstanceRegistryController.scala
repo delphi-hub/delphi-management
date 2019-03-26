@@ -313,7 +313,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
           // scalastyle:off magic.number
           case 202 =>
           // scalastyle:on magic.number
-            Ok(response.body)
+            Ok(Json.obj("msg" -> response.body))
           case x: Any =>
             new Status(x)
         }
