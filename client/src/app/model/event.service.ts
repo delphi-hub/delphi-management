@@ -40,9 +40,20 @@ export class EventService {
 
   private transformEventToNotificaton(instance: Instance, prevInstance: Instance, action: Actions): InfoCenterItem {
     // TODO: calculate difference between new and previous instance and update details text accordingly
+    const details = this.getChange(instance, prevInstance, action);
+
     const datePipe = new DatePipe('en-US');
     const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
     return {instanceId: instance.id, type: ACTION_NOTIF_MAP[action].type,
-      notifName: ACTION_NOTIF_MAP[action].description, dateTime: actualDate, details: instance.name};
+      notifName: ACTION_NOTIF_MAP[action].description, dateTime: actualDate, details: details};
+  }
+
+  private getChange(instance: Instance, prevInstance: Instance, action: Actions): string {
+    if (prevInstance && action === Actions.CHANGE) {
+      if (instance.instanceState !== prevInstance.instanceState) {
+        return 'Instance state changed from ' + prevInstance.instanceState + ' to ' + instance.instanceState;
+      }
+    }
+    return instance.name;
   }
 }
