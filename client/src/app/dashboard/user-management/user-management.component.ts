@@ -55,7 +55,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   /**
-  * Function for adding a User. 
+  * Function for adding a User.
   * @param UserName
   * @param Secret
   * @param UserType
@@ -85,7 +85,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   /**
-    * Function for deleting a user. 
+    * Function for deleting a user.
     * @param userID
     */
 
