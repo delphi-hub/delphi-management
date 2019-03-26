@@ -22,7 +22,6 @@ export class EventService {
     this.eventState = new BehaviorSubject<InfoCenterItem[]>([]);
 
     this.storeService.getStoreObservable().subscribe((change: StateUpdate) => {
-      console.log('changes to state', change);
       // don't create an event for the intial state creation
       // all actions expect none have instances
       if (change.change.type !== Actions.NONE && change.change.elements) {

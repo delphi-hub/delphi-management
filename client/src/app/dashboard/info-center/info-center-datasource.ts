@@ -94,9 +94,8 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getPagedData() {
-    console.log('here2', this.paginator, this.paginator.pageIndex !== undefined, this.paginator.pageSize !== undefined);
+
     if (this.paginator && this.paginator.pageIndex !== undefined && this.paginator.pageSize !== undefined) {
-      console.log('here', this.paginator);
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return [...this.data].splice(startIndex, this.paginator.pageSize);
     }
