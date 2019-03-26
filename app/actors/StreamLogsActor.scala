@@ -10,11 +10,11 @@ import scala.collection.mutable.HashSet
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-object SteamLogsActor {
-  def props(out: ActorRef, publisher: ActorRef): Props = Props(new ClientSocketActor(out, publisher))
+object StreamLogsActor {
+  def props(out: ActorRef, publisher: ActorRef): Props = Props(new StreamLogsActor(out, publisher))
 }
 
-class SteamLogsActor(out: ActorRef, publisher: ActorRef) extends Actor with EventJsonSupport {
+class StreamLogsActor(out: ActorRef, publisher: ActorRef) extends Actor with EventJsonSupport {
 
   val logEvents: HashSet[EventType] = HashSet.empty[EventType]
 
