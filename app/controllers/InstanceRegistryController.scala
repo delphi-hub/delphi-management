@@ -87,6 +87,22 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     }
   }
 
+  /** This method lists all Users.
+    * @return
+    */
+
+  def users(): Action[AnyContent] = authAction.async{
+    ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .get().map { response =>
+  Logger.debug(response.body)
+      if (response.status == 200) {
+        Ok(response.body)
+      } else {
+        new Status(response.status)
+      }
+    }(myExecutionContext)
+  }
+
   /** Called to fetch network graph of current registry. Contains a list of all instances and all links
     * currently registered.
     *
@@ -252,4 +268,57 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
+
+  /**
+    * This function is used to add a User.
+    * Username, Secret and UserType are sent in the body post
+    * Instance registry returns a valid userID
+    * @return
+    */
+
+   def postUser(): Action[AnyContent] = authAction.async {
+    request =>
+      val jsonBody: Option[JsValue] = request.body.asJson
+       jsonBody.map { json =>
+        val userName = (json \ "userName").as[String]
+        val secret = (json \ "secret").as[String]
+        val userType = (json \ "userType").as[String]
+        ws.url(instanceRegistryUri + "/users" + "/add")
+        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .post(json)
+        .map { response =>
+           if (response.status == 200) {
+              Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+            } else {
+              Logger.info(s"$ws")
+              Logger.debug(s"$ws")
+              new Status(response.status)
+            }
+        }
+    }.getOrElse{ Future(BadRequest("Invalid body"))}
+  }
+
+/**
+    * This function is used to delete a user.
+    * @param userID ID of the user that is to be deleted
+    * @return
+    */
+  def deleteUser( userID: String): Action[AnyContent] = authAction.async {
+    request =>
+    ws.url(instanceRegistryUri + "/users/" + userID + "/remove")
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .post("")
+      .map { response =>
+      response.status match {
+          // scalastyle:off magic.number
+          case 202 =>
+          // scalastyle:on magic.number
+            Ok(Json.obj("msg" -> response.body))
+          case x: Any =>
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
+
 }
+

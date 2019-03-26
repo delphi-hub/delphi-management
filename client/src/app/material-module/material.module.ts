@@ -9,10 +9,11 @@ import { MatInputModule,
   MatPaginatorModule,
   MatCheckboxModule,
   MatDialogModule,
-  MatFormFieldModule,
-  MatSortModule,
+  MatFormFieldModule
   } from '@angular/material';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatSelectModule} from '@angular/material/select';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [],
@@ -29,7 +30,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
-    MatSortModule
+    MatSelectModule,
+    MatToolbarModule
   ],
   exports: [
     CommonModule,
@@ -44,7 +46,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
-    MatSortModule
+    MatSelectModule,
+    MatToolbarModule
   ]
 })
 export class MaterialModule { }

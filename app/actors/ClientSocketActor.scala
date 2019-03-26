@@ -24,7 +24,7 @@ class ClientSocketActor(out: ActorRef, publisher: ActorRef) extends Actor with E
 
   override def preStart() {
     Logger.debug("pre start called in client" + self)
-    out ! "successfully registered"
+    out ! Json.obj("msg" -> "successfully registered").toString()
   }
 
   override def postStop() {

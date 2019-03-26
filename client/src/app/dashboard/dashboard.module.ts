@@ -44,6 +44,8 @@ import { TableOverviewComponent } from './table-overview/table-overview.componen
 import { InfoCenterComponent } from './info-center/info-center.component';
 import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '@angular/material';
 import { LabelDialogComponent } from './label-dialog/label-dialog.component';
+import { UserAddComponent } from './user-add/user-add.component';
+import { DeleteUserComponent } from './delete-user/delete-user.component';
 
 @NgModule({
   imports: [
@@ -80,10 +82,12 @@ import { LabelDialogComponent } from './label-dialog/label-dialog.component';
     InstanceDetailsComponent,
     InfoCenterComponent,
     TableOverviewComponent,
-    LabelDialogComponent
+    LabelDialogComponent,
+    UserAddComponent,
+    DeleteUserComponent
   ],
   entryComponents: [
-    DeleteDialogComponent, AddDialogComponent, LabelDialogComponent
+    DeleteDialogComponent, AddDialogComponent, LabelDialogComponent, UserAddComponent, DeleteUserComponent
   ],
   providers: [],
 })

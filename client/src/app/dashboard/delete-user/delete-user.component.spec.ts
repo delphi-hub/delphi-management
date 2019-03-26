@@ -9,18 +9,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ApiService } from '../../api/api/api.service';
-import { DeleteDialogComponent } from './delete-dialog.component';
+import { DeleteUserComponent } from './delete-user.component';
 
-describe('DeleteDialogComponent', () => {
-  let component: DeleteDialogComponent;
-  let fixture: ComponentFixture<DeleteDialogComponent>;
+describe('DeleteUserComponent', () => {
+  let component: DeleteUserComponent;
+  let fixture: ComponentFixture<DeleteUserComponent>;
 
   const mockDialogRef = {
     close: jasmine.createSpy('close')
   };
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DeleteDialogComponent],
+      declarations: [DeleteUserComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatTableModule,
         MatInputModule, MatPaginatorModule, MatFormFieldModule, MatIconModule, MatDialogModule],
       providers: [{
@@ -35,23 +35,23 @@ describe('DeleteDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteDialogComponent);
+    fixture = TestBed.createComponent(DeleteUserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it(`should create Delete dialog Component`, async(inject([HttpTestingController, ApiService],
+  it(`should create Delete user Component`, async(inject([HttpTestingController, ApiService],
     (httpClient: HttpTestingController, apiService: ApiService) => {
       expect(apiService).toBeTruthy();
     })));
 
-  it('should check for confirm button inside the Delete dialog', () => {
-    component.onCloseConfirm();
+  it('should check for confirm button inside the User Delete', () => {
+    component.confirmDeleteUser();
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 
-  it('should check for cancel button inside the Delete dialog', () => {
-    component.onCloseCancel();
+  it('should check for cancel button inside the User Delete', () => {
+    component.cancelDeleteUser();
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 });
