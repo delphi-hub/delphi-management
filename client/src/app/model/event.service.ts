@@ -39,7 +39,7 @@ export class EventService {
   }
 
   private transformEventToNotificaton(instance: Instance, prevInstance: Instance, action: Actions): InfoCenterItem {
-    // TODO: calculate difference between new and previous instance and update details text accordingly
+
     const details = this.getChange(instance, prevInstance, action);
 
     const datePipe = new DatePipe('en-US');
