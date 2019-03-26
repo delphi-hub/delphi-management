@@ -282,8 +282,8 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
        jsonBody.map { json =>
         val userName = (json \ "userName").as[String]
         val secret = (json \ "secret").as[String]
-        val userType = (json \ "userType").as[String]        
-        ws.url(instanceRegistryUri + "/users" +"/add")
+        val userType = (json \ "userType").as[String]
+        ws.url(instanceRegistryUri + "/users" + "/add")
         .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
         .post(json)
         .map { response =>
@@ -303,7 +303,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @param userID ID of the user that is to be deleted
     * @return
     */
-  def deleteUser( userID: String): Action[AnyContent] = authAction.async { 
+  def deleteUser( userID: String): Action[AnyContent] = authAction.async {
     request =>
     ws.url(instanceRegistryUri + "/users/" + userID + "/remove")
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
