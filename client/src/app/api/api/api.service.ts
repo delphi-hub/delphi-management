@@ -217,13 +217,12 @@ export class ApiService {
    * @param reportProgress flag to report request and response progress.
    */
 
-  public postUser(userName: string, secret: string, userType: string, observe: any = 'body', reportProgress: boolean = false): Observable<User> {
-    console.log("all parameters for adding user", userName, secret, userType);
+  public postUser(userName: string, secret: string, userType: string, observe: any = 'body', reportProgress: boolean = false)
+  : Observable<User> {
     return this.userAdd(userName, secret, userType);
   }
 
-  private userAdd(username: string, secret: string, userType: string): any {
-    console.log("all parameters for adding user", username, secret, userType);
+  private userAdd(username: string, secret: string, userType: string): Observable<User> {
     let headers = this.defaultHeaders;
     // to determine the Accept header
     const httpHeaderAccepts: string[] = [
