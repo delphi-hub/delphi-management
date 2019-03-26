@@ -1,7 +1,7 @@
 package actors
 import akka.actor._
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
-import actors.PublishSocketMessageActor.{AddOutActor, PublishMessage, StopMessage}
+import actors.PublishSocketMessageActor.{ PublishMessage, StopMessage}
 import akka.http.scaladsl.Http
 import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
@@ -32,15 +32,13 @@ class PublishLogsActor(irBasePath: String, mat: Materializer, actorSys: ActorSys
       Flow.fromSinkAndSourceMat(
         Sink.foreach[Message]{ msg =>
           self ! msg},
-        Source(List(TextMessage("one"), TextMessage("two")))
+        Source(List(TextMessage("Logs")))
           .concatMat(Source.maybe[Message])(Keep.right))(Keep.right)
 
 
     Http()(actorSys).singleWebSocketRequest(
       WebSocketRequest("ws://" + irBasePath + "/logs"),
       flow)(mat)
-
-
   }
 
   override def postStop() {
@@ -69,5 +67,4 @@ class PublishLogsActor(irBasePath: String, mat: Materializer, actorSys: ActorSys
         })
       }
   }
-
 }

@@ -25,11 +25,12 @@ import play.api.libs.concurrent.CustomExecutionContext
 import play.api.libs.ws.{WSAuthScheme, WSClient}
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
-import actors.{ClientSocketActor, PublishSocketMessageActor}
+import actors.{ClientSocketActor, PublishLogsActor, PublishSocketMessageActor, StreamLogsActor}
 import play.api.mvc._
-import scala.concurrent.{Future, ExecutionContext}
-import authorization.{AuthProvider, AuthAction}
-import play.api.libs.json.{Json, JsValue}
+
+import scala.concurrent.{ExecutionContext, Future}
+import authorization.{AuthAction, AuthProvider}
+import play.api.libs.json.{JsValue, Json}
 
 
 trait MyExecutionContext extends ExecutionContext
@@ -59,6 +60,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
 
   lazy val pubActor: Option[ActorRef] = Some(system.actorOf(PublishSocketMessageActor.props(instanceRegistryBasePath, mat, system), "publish-actor"))
+  lazy val logActor: Option[ActorRef] = Some(system.actorOf(PublishLogsActor.props(instanceRegistryBasePath, mat, system), "log-publish-actor"))
 
   val instanceRegistryUri = config.get[String]("app.instanceRegistryUri")
   val instanceRegistryBasePath = config.get[String]("app.instanceRegistryBasePath")
@@ -83,6 +85,14 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     request => {
       ActorFlow.actorRef { out =>
         ClientSocketActor.props(out, pubActor.get)
+      }
+    }
+  }
+
+  def logsStream: WebSocket = WebSocket.accept[String, String] {
+    request => {
+      ActorFlow.actorRef { out =>
+        StreamLogsActor.props(out, logActor.get)
       }
     }
   }

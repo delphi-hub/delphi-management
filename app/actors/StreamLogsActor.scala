@@ -1,6 +1,6 @@
 package actors
 import akka.actor._
-import actors.PublishSocketMessageActor.{AddOutActor, PublishMessage}
+import actors.PublishLogsActor.{AddOutActor, PublishMessage}
 import models.EventEnums.EventType
 import models.{EventJsonSupport, SocketMessage}
 import play.api.Logger
