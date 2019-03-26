@@ -91,7 +91,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
 
-  def users(): Action[AnyContent] = Action.async{
+  def users(): Action[AnyContent] = authAction.async{
     ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .get().map { response =>
   Logger.debug(response.body)
@@ -276,7 +276,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
 
-   def postUser(): Action[AnyContent] = Action.async {
+   def postUser(): Action[AnyContent] = authAction.async {
     request =>
       val jsonBody: Option[JsValue] = request.body.asJson
        jsonBody.map { json =>
