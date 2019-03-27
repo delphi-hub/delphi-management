@@ -1,3 +1,49 @@
-<p>
-In the near future we will provide the possibility to actively manage the users.
-</p>
+<h2> User Management</h2>
+
+<div class="container">
+    <mat-form-field>
+        <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+
+        <mat-table #table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="email"> {{element.id}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="userName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> User Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.userName}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="userType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.userType}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                <mat-cell *matCellDef="let element; let row; let i=index;">
+                    <button mat-icon-button (click)="openDeleteUser(i,row, element.id)">
+                        <mat-icon aria-label="delete">delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <mat-toolbar>
+        <mat-toolbar-row style="float:right;">
+
+            <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+            <button mat-raised-button color="primary" id="addUser" (click)="openAddUser()">Add User</button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>

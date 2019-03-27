@@ -24,6 +24,7 @@ import { TableOverviewComponent } from './table-overview.component';
 import { MaterialModule } from '../../material-module/material.module';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { ModelService } from 'src/app/model/model.service';
+import { MatSortModule } from '@angular/material';
 import { InfoCenterComponent } from '../info-center/info-center.component';
 
 describe('TableOverviewComponent', () => {
@@ -33,7 +34,7 @@ describe('TableOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TableOverviewComponent, TableAllComponent, InfoCenterComponent],
-      imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule,
+      imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule, MatSortModule,
         MaterialModule]
     })
     .compileComponents();
