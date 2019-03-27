@@ -323,7 +323,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
  def deleteLabel(instanceID: String, label: String): Action[AnyContent] = Action.async
   {
     request =>
-    ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label/"+ label+ "/delete")
+    ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label/" + label + "/delete")
       .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
       .post("")
       .map { response =>
