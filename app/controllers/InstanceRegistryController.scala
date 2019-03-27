@@ -320,5 +320,22 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
+ def deleteLabel(instanceID: String, label: String): Action[AnyContent] = Action.async
+  {
+    request =>
+    ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label/"+ label+ "/delete")
+      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .post("")
+      .map { response =>
+        response.status match {
+          // scalastyle:off magic.number
+          case 202 =>
+          // scalastyle:on magic.number
+            Ok(response.body)
+          case x: Any =>
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
 }
 

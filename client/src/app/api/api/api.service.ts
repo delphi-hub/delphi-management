@@ -41,6 +41,7 @@ import {
   NEW_LABEL_INSTANCE,
   INSTANCE_NETWORK,
   DELETE_USER,
+  DELETE_LABEL,
   RECONNECT,
   AUTH
 } from '../variables';
@@ -195,6 +196,17 @@ export class ApiService {
    */
   public deleteInstance(instanceId: string) {
     return this.postAction(DELETE_INSTANCE, instanceId);
+  }
+
+    /**
+   * Delete a label
+   * @param InstanceId
+   * @param labelName
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteLabel(instanceId: string, labelName: string) {
+    return this.postLabel(DELETE_LABEL, instanceId, labelName);
   }
 
   /**
