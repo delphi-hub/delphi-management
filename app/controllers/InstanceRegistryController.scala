@@ -320,7 +320,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
- def deleteLabel(instanceID: String, label: String): Action[AnyContent] = Action.async
+ def deleteLabel(instanceID: String, label: String): Action[AnyContent] = authAction.async
   {
     request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label/" + label + "/delete")
