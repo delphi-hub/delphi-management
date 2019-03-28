@@ -17,18 +17,21 @@
  * limitations under the License.
  */ -->
 
-<div class="container-fluid">
+ <div class="container-fluid">
+  <h4>Details</h4>
   <div *ngIf="instance">
     <div class="row">
+      <div  class="col-md-8 col-sm-12">
         <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
     </div>
-    <div class="row">
+    <div class="col-md-4 col-sm-12">
         <app-info-center [instanceId]="instanceId"></app-info-center>
     </div>
+    </div>
+  </div>
     <div class="row">
       <div class="col-md-8 col-sm-12">
           <app-graph-view [subnetElementId]="instanceId"></app-graph-view>
       </div>
     </div>
   </div>
-</div>
