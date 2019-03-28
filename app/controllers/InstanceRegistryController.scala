@@ -219,8 +219,6 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def authentication(): Action[AnyContent] = Action.async {
     request =>
-      //val json = request.body.asJson.get
-
 
       val jsonBody: Option[JsValue] = request.body.asJson
 
