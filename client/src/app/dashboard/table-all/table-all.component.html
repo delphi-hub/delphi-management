@@ -106,11 +106,21 @@
             </ng-container>
             <ng-container matColumnDef="labels">
                 <th mat-header-cell *matHeaderCellDef> Labels </th>
-                <td mat-cell *matCellDef="let element"> {{element.labels}}
-                    <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
-                        matTooltip="Add labels">
-                        <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
-                    </button>
+                <td mat-cell *matCellDef="let element">
+                    <mat-chip-list #chipList>
+                        <div *ngIf="element.labels.length === 0; else labelTag">
+                            Labels not available
+                        </div>
+                        <ng-template #labelTag>
+                            <mat-chip *ngFor="let lab of element.labels">{{lab}}
+                                <mat-icon matChipRemove (click)="openLabelDelete(i, row.id, lab)">cancel</mat-icon>
+                            </mat-chip>
+                        </ng-template>
+                        <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
+                            matTooltip="Add labels">
+                            <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
+                        </button>
+                    </mat-chip-list>
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

@@ -46,6 +46,8 @@ import {MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '
 import { LabelDialogComponent } from './label-dialog/label-dialog.component';
 import { UserAddComponent } from './user-add/user-add.component';
 import { DeleteUserComponent } from './delete-user/delete-user.component';
+import { LabelDeleteComponent } from './label-delete/label-delete.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -63,7 +65,8 @@ import { DeleteUserComponent } from './delete-user/delete-user.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatIconModule
+    MatIconModule,
+    MatChipsModule
   ],
   declarations: [
     DashboardCardComponent,
@@ -84,10 +87,11 @@ import { DeleteUserComponent } from './delete-user/delete-user.component';
     TableOverviewComponent,
     LabelDialogComponent,
     UserAddComponent,
-    DeleteUserComponent
+    DeleteUserComponent,
+    LabelDeleteComponent
   ],
   entryComponents: [
-    DeleteDialogComponent, AddDialogComponent, LabelDialogComponent, UserAddComponent, DeleteUserComponent
+    DeleteDialogComponent, AddDialogComponent, LabelDialogComponent, UserAddComponent, DeleteUserComponent, LabelDeleteComponent
   ],
   providers: [],
 })
