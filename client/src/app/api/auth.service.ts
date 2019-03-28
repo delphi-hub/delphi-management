@@ -10,7 +10,7 @@ export const TOKEN_IDENT = 'token';
 })
 export class AuthService {
 
-  constructor(private apiService: ApiService, public helperService: JwtHelperService) {}
+  constructor(private apiService: ApiService, private helperService: JwtHelperService) {}
 
   // TODO: store refresh token
   login(username: string, password: string) {

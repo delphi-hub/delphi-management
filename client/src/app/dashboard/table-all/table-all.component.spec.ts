@@ -28,6 +28,8 @@ import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ApiService } from '../../api/api/api.service';
 import { MaterialModule } from 'src/app/material-module/material.module';
+import { ApiModule } from 'src/app/api/api.module';
+import { JwtModule } from '@auth0/angular-jwt';
 
 
 describe('TableAllComponent', () => {
@@ -38,7 +40,7 @@ describe('TableAllComponent', () => {
     TestBed.configureTestingModule({
       declarations: [TableAllComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule,
-        MaterialModule],
+        MaterialModule, JwtModule.forRoot({}), ApiModule],
       providers: [{
         provide: MatDialogRef,
         useValue: {}
@@ -77,9 +79,4 @@ describe('TableAllComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('mat-form-field').length).toBe(1);
   });
 
-  it('should check for Add Dialog open functionality', async(() => {
-    const openAddDialog = spyOn(component, 'openAddDialog');
-    fixture.debugElement.query(By.css('#addButton')).triggerEventHandler('click', null);
-    expect(openAddDialog).toHaveBeenCalled();
-  }));
 });
