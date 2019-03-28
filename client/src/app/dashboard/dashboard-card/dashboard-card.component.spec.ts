@@ -23,6 +23,7 @@ import { MatTableModule, MatInputModule, MatPaginatorModule} from '@angular/mate
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatIconModule} from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 import { CrawlerComponent } from '../crawler/crawler.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { TableAllComponent } from '../table-all/table-all.component';
@@ -42,7 +43,7 @@ describe('component: DashboardCardComponent', () => {
       imports: [RouterTestingModule.withRoutes([
         { path: 'dashboard/crawler', component: CrawlerComponent}
       ]), HttpClientTestingModule, HttpClientModule, MatTableModule, MatInputModule, MatPaginatorModule,
-        MatFormFieldModule, MatCheckboxModule, MatIconModule],
+        MatFormFieldModule, MatCheckboxModule, MatIconModule, MatChipsModule],
       declarations: [ DashboardCardComponent, CrawlerComponent, DashboardComponent, TableAllComponent,
          HeaderComponent]
     });

@@ -26,11 +26,13 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/mate
 import { TableAllComponent } from './table-all.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { LabelDialogComponent } from '../label-dialog/label-dialog.component';
+import { LabelDeleteComponent } from '../label-delete/label-delete.component';
 import { ApiService } from '../../api/api/api.service';
 import { MaterialModule } from 'src/app/material-module/material.module';
 import { ApiModule } from 'src/app/api/api.module';
 import { JwtModule } from '@auth0/angular-jwt';
-
+import { MatChipsModule } from '@angular/material/chips';
 
 describe('TableAllComponent', () => {
   let component: TableAllComponent;
@@ -40,7 +42,7 @@ describe('TableAllComponent', () => {
     TestBed.configureTestingModule({
       declarations: [TableAllComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule,
-        MaterialModule, JwtModule.forRoot({}), ApiModule],
+        MaterialModule, JwtModule.forRoot({}), ApiModule, MatChipsModule],
       providers: [{
         provide: MatDialogRef,
         useValue: {}
@@ -57,7 +59,7 @@ describe('TableAllComponent', () => {
 
     TestBed.overrideModule(BrowserDynamicTestingModule, {
       set: {
-        entryComponents: [AddDialogComponent, DeleteDialogComponent],
+        entryComponents: [AddDialogComponent, DeleteDialogComponent, LabelDialogComponent, LabelDeleteComponent],
       }
     });
   }));

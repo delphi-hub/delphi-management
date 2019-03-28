@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'src/app/api/api/api.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InfoCenterDataSource } from '../info-center/info-center-datasource';
+import { MatChipsModule } from '@angular/material/chips';
 
 describe('InstanceDetailsComponent', () => {
   let component: InstanceDetailsComponent;
@@ -17,7 +18,7 @@ describe('InstanceDetailsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ InstanceDetailsComponent, InfoCenterComponent, TableAllComponent],
-      imports: [BrowserAnimationsModule, MaterialModule, GraphViewModule, RouterTestingModule, HttpClientTestingModule],
+      imports: [BrowserAnimationsModule, MaterialModule, GraphViewModule, RouterTestingModule, HttpClientTestingModule, MatChipsModule],
       providers: [ApiService]
     })
     .compileComponents();
