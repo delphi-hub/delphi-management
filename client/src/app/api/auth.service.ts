@@ -40,6 +40,10 @@ export class AuthService {
     return !this.helperService.isTokenExpired(this.getToken());
   }
 
+  logout() {
+    return localStorage.removeItem(TOKEN_IDENT);
+  }
+
   getToken(): string {
     return localStorage.getItem(TOKEN_IDENT);
   }
