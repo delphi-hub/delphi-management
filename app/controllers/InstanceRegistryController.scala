@@ -289,7 +289,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         .post(json)
         .map { response =>
            if (response.status == 200) {
-              Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+              Ok(response.body)
             } else {
               Logger.info(s"$ws")
               Logger.debug(s"$ws")
