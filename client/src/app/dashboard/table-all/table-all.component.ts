@@ -24,8 +24,8 @@ import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { LabelDialogComponent } from '../label-dialog/label-dialog.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpEvent } from '@angular/common/http';
-import { ModelService } from 'src/app/model/model.service';
 import { ApiService } from 'src/app/api/api/api.service';
+import { AuthService } from 'src/app/api/auth.service';
 
 
 @Component({
@@ -64,7 +64,6 @@ export class TableAllComponent implements OnInit {
         }
     }
 
-
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action', 'Details'];
     columnsToDisplay: string[] = ['dockerId', 'labels'];
     dataSource: MatTableDataSource<Instance> = new MatTableDataSource<Instance>(this.dataArray);
@@ -74,11 +73,15 @@ export class TableAllComponent implements OnInit {
     expandedID: number;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
-    constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
+    constructor(public dialog: MatDialog, private apiService: ApiService, public authService: AuthService) {
     }
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;
+    }
+
+    public hideActions(ele: Instance) {
+        return !ele.dockerId || !this.authService.userIsAdmin();
     }
 
     /**

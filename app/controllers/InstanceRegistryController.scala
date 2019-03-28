@@ -70,12 +70,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
   def instances(componentType: String): Action[AnyContent] = authAction.async {
-    ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .get().map { response =>
-      // TODO: possible handling of parsing the data can be done here
+    request =>
+      ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        // TODO: possible handling of parsing the data can be done here
 
-      Ok(response.body)
+        Ok(response.body)
     }(myExecutionContext)
   }
 
@@ -92,14 +93,14 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def users(): Action[AnyContent] = authAction.async{
-    ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
-      .get().map { response =>
-  Logger.debug(response.body)
-      if (response.status == 200) {
-        Ok(response.body)
-      } else {
-        new Status(response.status)
-      }
+    request =>
+      ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
+        }
     }(myExecutionContext)
   }
 
@@ -110,15 +111,16 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = authAction.async {
-    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
-      .get().map { response =>
-      // TODO: possible handling of parsing the data can be done here
-      Logger.debug(response.body)
-      if (response.status == 200) {
-        Ok(response.body)
-      } else {
-        new Status(response.status)
-      }
+    request =>
+      ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        // TODO: possible handling of parsing the data can be done here
+        Logger.debug(response.body)
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
+        }
     }(myExecutionContext)
   }
 
@@ -133,15 +135,16 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def numberOfInstances(componentType: String): Action[AnyContent] = authAction.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
-    ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
-      .get().map { response =>
-      // TODO: possible handling of parsing the data can be done here
-      if (response.status == 200) {
-        Ok(response.body)
-      } else {
-        new Status(response.status)
-      }
+    request =>
+      ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        // TODO: possible handling of parsing the data can be done here
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
+        }
     }(myExecutionContext)
   }
 
@@ -229,7 +232,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
         ws.url(instanceRegistryUri + "/users" + "/authenticate")
           .withAuth(username, password, WSAuthScheme.BASIC)
-          .withHttpHeaders(("Delphi-Authorization", s"${request.token}"))
+          .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
           .post("")
           .map { response =>
             if (response.status == 200) {
