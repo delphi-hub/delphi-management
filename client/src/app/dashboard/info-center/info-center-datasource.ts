@@ -1,11 +1,9 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
-import { SocketService } from 'src/app/api/api/socket.service';
 import { Instance } from 'src/app/model/models/instance';
-import { DatePipe } from '@angular/common';
-import { EventTypeEnum } from 'src/app/model/models/socketMessage';
 import { StoreService } from 'src/app/model/store.service';
+import { EventService } from 'src/app/model/event.service';
 
 export interface InfoCenterItem {
   instanceId: number;
@@ -23,16 +21,15 @@ export interface InfoCenterItem {
 export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
   private infoCenterSubject: BehaviorSubject<InfoCenterItem[]>;
 
-  private instanceAddedSubscription: Subscription;
-  private instanceChangedSubscription: Subscription;
-  private instanceRemovedSubscription: Subscription;
+  private eventSubscription: Subscription;
   private data: InfoCenterItem[];
   public numberEvents = 0;
   private instance: Instance;
 
-  constructor(private storeService: StoreService, private socketService: SocketService,
-    private paginator: MatPaginator, private sort: MatSort, private compType: string, private instanceId: string) {
+  constructor(private storeService: StoreService, private paginator: MatPaginator,
+      private sort: MatSort, private compType: string, private instanceId: string, private eventService: EventService) {
     super();
+
     this.data = [];
     if (this.instanceId) {
       this.instance = this.storeService.getState().instances[this.instanceId];
@@ -44,36 +41,17 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
 
     this.paginator.page.subscribe(() => { this.infoCenterSubject.next(this.getPagedData()); });
     this.sort.sortChange.subscribe(() => {this.data = this.getSortedData(this.data); this.infoCenterSubject.next(this.getPagedData()); });
-
-    this.instanceAddedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceAddedEvent).
-      subscribe((newInstance: Instance) => {
-        if (this.applyFilter(newInstance)) {
-          const newEntry = this.transformEventToNotificaton(newInstance, 'new Instance added', 'add_circle');
-          this.applyUpdate(newEntry);
-        }
-      });
-
-      this.instanceRemovedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.InstanceRemovedEvent).
-        subscribe((removeInstance: Instance) => {
-          if (this.applyFilter(removeInstance)) {
-            const newEntry = this.transformEventToNotificaton(removeInstance, 'Instance removed', 'delete_sweep');
-            this.applyUpdate(newEntry);
-          }
-        });
-
-      this.instanceChangedSubscription = this.socketService.subscribeForEvent<Instance>(EventTypeEnum.StateChangedEvent).
-        subscribe((changeInstance: Instance) => {
-          if (this.applyFilter(changeInstance)) {
-            const newEntry = this.transformEventToNotificaton(changeInstance, 'Instance changed', 'link');
-            this.applyUpdate(newEntry);
-          }
-        });
+    this.paginator.initialized.subscribe(() => { this.infoCenterSubject.next(this.getPagedData()); });
+    this.eventSubscription = this.eventService.getEventObservable().subscribe((newNotifs: InfoCenterItem[]) => {
+      this.applyUpdate(newNotifs);
+    });
   }
 
-  applyFilter(instance: Instance): boolean {
+  applyFilter(notifItem: InfoCenterItem): boolean {
     if (!this.instanceId && !this.compType) {
       return true;
     } else {
+      const instance = this.storeService.getState().instances[notifItem.instanceId];
       if (this.instanceId) {
         return instance.id === this.instance.id;
       } else {
@@ -91,8 +69,11 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
     return this.infoCenterSubject.asObservable();
   }
 
-  private applyUpdate(newEntry: InfoCenterItem) {
-    this.data = this.getSortedData([newEntry, ...this.data]);
+  private applyUpdate(newEntry: InfoCenterItem[]) {
+
+    const filteredEntries = newEntry.filter((entry => this.applyFilter(entry)));
+
+    this.data = this.getSortedData([...filteredEntries]);
     this.numberEvents = this.data.length;
     this.infoCenterSubject.next(this.getPagedData());
   }
@@ -102,9 +83,9 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    * any open connections or free any held resources that were set up during connect.
    */
   disconnect() {
-    this.instanceAddedSubscription.unsubscribe();
-    this.instanceChangedSubscription.unsubscribe();
-    this.instanceRemovedSubscription.unsubscribe();
+    this.eventSubscription.unsubscribe();
+    this.paginator.page.unsubscribe();
+    this.sort.sortChange.unsubscribe();
     this.infoCenterSubject.complete();
   }
 
@@ -113,8 +94,12 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getPagedData() {
-    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-    return [...this.data].splice(startIndex, this.paginator.pageSize);
+
+    if (this.paginator && this.paginator.pageIndex !== undefined && this.paginator.pageSize !== undefined) {
+      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+      return [...this.data].splice(startIndex, this.paginator.pageSize);
+    }
+    return [...this.data];
   }
 
   /**
@@ -135,13 +120,6 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
         default: return 0;
       }
     });
-  }
-
-  private transformEventToNotificaton(instance: Instance, notifName: string, type: string): InfoCenterItem {
-    const datePipe = new DatePipe('en-US');
-    const actualDate = datePipe.transform(Date.now(), 'dd/MM/yyyy hh:mm:ss:SSS');
-    return {instanceId: instance.id, type: type,
-      notifName: notifName, dateTime: actualDate, details: instance.name};
   }
 
 }
