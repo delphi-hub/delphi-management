@@ -28,6 +28,8 @@ import { GraphViewModule} from '../graph-view/graph-view.module';
 import { MatSortModule } from '@angular/material';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ApiModule } from 'src/app/api/api.module';
+import { JwtModule } from '@auth0/angular-jwt';
 
 
 describe('DashboardOverviewComponent', () => {
@@ -37,7 +39,9 @@ describe('DashboardOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DashboardOverviewComponent, DashboardCardComponent, StatusCardComponent, InfoCenterComponent],
-      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule, GraphViewModule, MatSortModule, NoopAnimationsModule]
+      imports: [RouterModule, HttpClientModule, RouterTestingModule, MaterialModule, GraphViewModule, MatSortModule, ApiModule,
+        JwtModule.forRoot({}),
+        NoopAnimationsModule]
     })
     .compileComponents();
   }));

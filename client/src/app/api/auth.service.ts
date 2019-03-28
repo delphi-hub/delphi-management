@@ -10,7 +10,7 @@ export const TOKEN_IDENT = 'token';
 })
 export class AuthService {
 
-  constructor(private apiService: ApiService, public helperService: JwtHelperService) {}
+  constructor(private apiService: ApiService, private helperService: JwtHelperService) {}
 
   // TODO: store refresh token
   login(username: string, password: string) {
@@ -38,6 +38,10 @@ export class AuthService {
     // TODO: for dev purpose it will be sufficient to return true here and thereby skipp
     // the authorization in the complete application
     return !this.helperService.isTokenExpired(this.getToken());
+  }
+
+  logout() {
+    return localStorage.removeItem(TOKEN_IDENT);
   }
 
   getToken(): string {

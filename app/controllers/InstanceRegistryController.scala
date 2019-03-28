@@ -70,12 +70,13 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     * @return
     */
   def instances(componentType: String): Action[AnyContent] = authAction.async {
-    ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .get().map { response =>
-      // TODO: possible handling of parsing the data can be done here
+    request =>
+      ws.url(instanceRegistryUri).addQueryStringParameters("ComponentType" -> componentType)
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        // TODO: possible handling of parsing the data can be done here
 
-      Ok(response.body)
+        Ok(response.body)
     }(myExecutionContext)
   }
 
@@ -92,14 +93,14 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def users(): Action[AnyContent] = authAction.async{
-    ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .get().map { response =>
-  Logger.debug(response.body)
-      if (response.status == 200) {
-        Ok(response.body)
-      } else {
-        new Status(response.status)
-      }
+    request =>
+      ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
+        }
     }(myExecutionContext)
   }
 
@@ -110,15 +111,16 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = authAction.async {
-    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .get().map { response =>
-      // TODO: possible handling of parsing the data can be done here
-      Logger.debug(response.body)
-      if (response.status == 200) {
-        Ok(response.body)
-      } else {
-        new Status(response.status)
-      }
+    request =>
+      ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        // TODO: possible handling of parsing the data can be done here
+        Logger.debug(response.body)
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
+        }
     }(myExecutionContext)
   }
 
@@ -133,15 +135,16 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def numberOfInstances(componentType: String): Action[AnyContent] = authAction.async {
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
-    ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
-      .get().map { response =>
-      // TODO: possible handling of parsing the data can be done here
-      if (response.status == 200) {
-        Ok(response.body)
-      } else {
-        new Status(response.status)
-      }
+    request =>
+      ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+        .get().map { response =>
+        // TODO: possible handling of parsing the data can be done here
+        if (response.status == 200) {
+          Ok(response.body)
+        } else {
+          new Status(response.status)
+        }
     }(myExecutionContext)
   }
 
@@ -155,7 +158,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = authAction.async { request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + action)
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post("")
       .map { response =>
         new Status(response.status)
@@ -173,7 +176,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
     )
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post(Json.obj("AssignedInstanceId" -> to))
       .map { response =>
         response.status match {
@@ -196,7 +199,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def postInstance(compType: String, name: String): Action[AnyContent] = authAction.async {
     request =>
       ws.url(instanceRegistryUri + "/instances/deploy")
-        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
         .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
         .map { response =>
           response.status match {
@@ -233,7 +236,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
           .post("")
           .map { response =>
             if (response.status == 200) {
-              Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+              Ok(response.body)
             } else {
               new Status(response.status)
             }
@@ -253,7 +256,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   {
     request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label")
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post(Json.obj("Label" -> label))
       .map { response =>
         response.status match {
@@ -282,11 +285,11 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         val secret = (json \ "secret").as[String]
         val userType = (json \ "userType").as[String]
         ws.url(instanceRegistryUri + "/users" + "/add")
-        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
         .post(json)
         .map { response =>
            if (response.status == 200) {
-              Ok(Json.obj("token" -> response.body, "refreshToken" -> ""))
+              Ok(response.body)
             } else {
               Logger.info(s"$ws")
               Logger.debug(s"$ws")
@@ -304,7 +307,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def deleteUser( userID: String): Action[AnyContent] = authAction.async {
     request =>
     ws.url(instanceRegistryUri + "/users/" + userID + "/remove")
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post("")
       .map { response =>
       response.status match {
@@ -318,5 +321,22 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
       }(myExecutionContext)
   }
 
+ def deleteLabel(instanceID: String, label: String): Action[AnyContent] = authAction.async
+  {
+    request =>
+    ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label/" + label + "/delete")
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
+      .post("")
+      .map { response =>
+        response.status match {
+          // scalastyle:off magic.number
+          case 202 =>
+          // scalastyle:on magic.number
+            Ok(response.body)
+          case x: Any =>
+            new Status(x)
+        }
+      }(myExecutionContext)
+  }
 }
 
