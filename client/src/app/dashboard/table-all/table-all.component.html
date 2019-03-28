@@ -22,7 +22,7 @@
     <div class="container">
         <div *ngIf="!hideControlElements">
             <mat-form-field>
-                <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                <input id="filterData" matInput [ngClass]="'fieldAlign'" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
             </mat-form-field>
         </div>
         <table class="mat-elevation-z8 mat-table" mat-table multiTemplateDataRows [dataSource]="dataSource">
