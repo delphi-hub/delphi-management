@@ -125,9 +125,7 @@ export class TableAllComponent implements OnInit {
 
     deletedialogRef.afterClosed().subscribe(result => {
         if (result !== 'Cancel') {
-            this.apiService.deleteLabel(id, label).subscribe((deleteResult: HttpEvent<number>) => {
-                this.removeAt(i);
-            }, err => {
+            this.apiService.deleteLabel(id, label).subscribe((deleteResult: HttpEvent<number>) => {}, err => {
                 console.log('error delete label', err);
             });
         }
