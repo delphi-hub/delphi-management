@@ -62,7 +62,6 @@ export class GraphViewService {
     this.elementRemover = new BehaviorSubject<Array<string>>([]);
 
     this.modelService.getObservableForInstances().subscribe((change: InstanceChange) => {
-      console.log('received notification in graph view service', change);
       if (change.elements !== undefined) {
         if (change.type === Actions.DELETE) {
           this.removeElements(change.elements);
@@ -74,7 +73,6 @@ export class GraphViewService {
   }
 
   public reconnect(from: string, to: string) {
-    console.log('trying to reconnect', from, to);
     this.apiService.postReconnect(Number(from), Number(to)).subscribe((res) => {
       console.log('reconnect returned with result', res);
     });
@@ -86,9 +84,8 @@ export class GraphViewService {
   }
 
   private handleElements(type: Actions, instances: Array<Instance>) {
-    console.log('received new instance in graph view service', instances);
+
     const eles: Array<cytoscape.ElementDefinition> = this.createCytoscapeElements(instances);
-    console.log('parsed instance to eles', eles);
     this.elementProvider.next({type: type, elements: eles});
   }
 
@@ -135,7 +132,6 @@ export class GraphViewService {
     return new Observable((observer) => {
       // calculate init value
       const allInstances = Object.values(this.storeService.getState().instances);
-      console.log('all instances', allInstances);
       const cyElements = this.createCytoscapeElements(allInstances);
       observer.next({type: Actions.ADD, elements: cyElements});
       this.elementProvider.subscribe(observer);
