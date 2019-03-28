@@ -92,7 +92,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def users(): Action[AnyContent] = authAction.async{
-    ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+    ws.url(instanceRegistryUri + "/users").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .get().map { response =>
   Logger.debug(response.body)
       if (response.status == 200) {
@@ -110,7 +110,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     */
 
   def getNetwork(): Action[AnyContent] = authAction.async {
-    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+    ws.url(instanceRegistryUri + "/instances/network").withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       Logger.debug(response.body)
@@ -134,7 +134,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
     // TODO: handle what should happen if the instance registry is not reachable.
     // TODO: create constants for the urls
     ws.url(instanceRegistryUri + "/count").addQueryStringParameters("ComponentType" -> componentType)
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .get().map { response =>
       // TODO: possible handling of parsing the data can be done here
       if (response.status == 200) {
@@ -155,7 +155,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
   def handleRequest(action: String, instanceID: String): Action[AnyContent] = authAction.async { request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + action)
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post("")
       .map { response =>
         new Status(response.status)
@@ -173,7 +173,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
     ws.url(instanceRegistryUri + "/instances/" + from + "/assignInstance"
     )
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post(Json.obj("AssignedInstanceId" -> to))
       .map { response =>
         response.status match {
@@ -196,7 +196,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def postInstance(compType: String, name: String): Action[AnyContent] = authAction.async {
     request =>
       ws.url(instanceRegistryUri + "/instances/deploy")
-        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
         .post(Json.obj("ComponentType" -> compType, "InstanceName" -> name))
         .map { response =>
           response.status match {
@@ -229,7 +229,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
 
         ws.url(instanceRegistryUri + "/users" + "/authenticate")
           .withAuth(username, password, WSAuthScheme.BASIC)
-          .withHttpHeaders(("Delphi-Authorization", s"${AuthProvider.generateJwt()}"))
+          .withHttpHeaders(("Delphi-Authorization", s"${request.token}"))
           .post("")
           .map { response =>
             if (response.status == 200) {
@@ -253,7 +253,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   {
     request =>
     ws.url(instanceRegistryUri + "/instances/" + instanceID + "/label")
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post(Json.obj("Label" -> label))
       .map { response =>
         response.status match {
@@ -282,7 +282,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         val secret = (json \ "secret").as[String]
         val userType = (json \ "userType").as[String]
         ws.url(instanceRegistryUri + "/users" + "/add")
-        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+        .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
         .post(json)
         .map { response =>
            if (response.status == 200) {
@@ -304,7 +304,7 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
   def deleteUser( userID: String): Action[AnyContent] = authAction.async {
     request =>
     ws.url(instanceRegistryUri + "/users/" + userID + "/remove")
-      .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateJwt()}"))
+      .withHttpHeaders(("Authorization", s"Bearer ${request.token}"))
       .post("")
       .map { response =>
       response.status match {

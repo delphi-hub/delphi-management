@@ -40,7 +40,7 @@ import play.api.Configuration
             .expiresIn(validFor * 300)
             .startsNow
             . +("user_id", configuration.get[String]("play.http.instance"))
-            . +("user_type", "Admin")
+            . +("user_type", "Component")
 
           Token = Jwt.encode(claim, jwtSecretKey, JwtAlgorithm.HS256)
         }
