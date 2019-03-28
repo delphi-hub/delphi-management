@@ -35,3 +35,7 @@ table {
   overflow: auto;
   max-height: 500px;
 }
+
+.fill-space {
+  flex: 1 1 auto;
+}
