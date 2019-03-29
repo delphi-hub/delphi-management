@@ -26,6 +26,7 @@ import { TableAllComponent } from '../table-all/table-all.component';
 import { ModelService } from 'src/app/model/model.service';
 import { MatSortModule } from '@angular/material';
 import { InfoCenterComponent } from '../info-center/info-center.component';
+import { JwtModule } from '@auth0/angular-jwt';
 import { MatChipsModule } from '@angular/material/chips';
 
 describe('TableOverviewComponent', () => {
@@ -36,6 +37,7 @@ describe('TableOverviewComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ TableOverviewComponent, TableAllComponent, InfoCenterComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule, MatSortModule,
+        JwtModule.forRoot({}),
         MaterialModule, MatChipsModule]
     })
     .compileComponents();

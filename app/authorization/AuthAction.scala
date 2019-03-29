@@ -25,13 +25,15 @@ import play.api.Configuration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
+// The following is based on https://auth0.com/blog/build-and-secure-a-scala-play-framework-api/
 // A custom request type to hold our JWT claims, we can pass these on to the
 // handling action
-//case class UserRequest[A](jwt: JwtClaim, token: String, request: Request[A]) extends WrappedRequest[A](request)
+
+case class UserRequest[A](token: String, request: Request[A]) extends WrappedRequest[A](request)
 
 // Our custom action implementation
 class AuthAction @Inject()(bodyParser: BodyParsers.Default)(implicit ec: ExecutionContext, config: Configuration)
-  extends ActionBuilder[Request, AnyContent] {
+  extends ActionBuilder[UserRequest, AnyContent] {
 
   override def parser: BodyParser[AnyContent] = bodyParser
   override protected def executionContext: ExecutionContext = ec
@@ -41,10 +43,10 @@ class AuthAction @Inject()(bodyParser: BodyParsers.Default)(implicit ec: Executi
 
   // Called when a request is invoked. We should validate the bearer token here
   // and allow the request to proceed if it is valid.
-  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+  override def invokeBlock[A](request: Request[A], block: UserRequest[A] => Future[Result]): Future[Result] =
     extractBearerToken(request) map { token =>
       if(AuthProvider.validateJwt(token)) {
-        block(request)   // token was valid - proceed!
+        block(UserRequest(token,request))  // token was valid - proceed!
       } else {
         Future.successful(Results.Unauthorized("Invalid"))  // token was invalid - return 401
       }

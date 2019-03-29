@@ -10,6 +10,7 @@ import { ComponentTypeEnum, ComponentType } from 'src/app/model/models/instance'
 import { GraphConfig } from '../GraphConfig';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/api/auth.service';
 
 @Component({
   selector: 'app-graph-view',
@@ -26,7 +27,8 @@ export class GraphViewComponent implements OnInit, OnDestroy {
   private elementSubscription: Subscription;
   private elementRemoveSubscription: Subscription;
 
-  constructor(private graphViewService: GraphViewService, public dialog: MatDialog, private router: Router) {}
+  constructor(private graphViewService: GraphViewService, public dialog: MatDialog, private router: Router,
+    private authService: AuthService) {}
 
 
   ngOnInit() {
@@ -202,10 +204,10 @@ export class GraphViewComponent implements OnInit, OnDestroy {
     this.config.cytoscapeConfig.container = this.cyDiv.nativeElement;
 
     this.cy = cytoscape(this.config.cytoscapeConfig);
-    if (!Object.getPrototypeOf(this.cy).edgehandles) {
+    if (!Object.getPrototypeOf(this.cy).edgehandles && this.authService.userIsAdmin()) {
       cytoscape.use(edgehandles);
     }
-    if (this.subnetElementId === -1) {
+    if (this.subnetElementId === -1 && this.authService.userIsAdmin()) {
       (this.cy as any).edgehandles(this.config.edgeDragConfig);
     }
   }
