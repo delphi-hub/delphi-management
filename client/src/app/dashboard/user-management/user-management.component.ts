@@ -19,7 +19,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../model/models/user';
 import { ApiService } from 'src/app/api/api/api.service';
-import { HttpEvent } from '@angular/common/http';
 import { MatPaginator, MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { UserAddComponent } from '../user-add/user-add.component';
 import { DeleteUserComponent } from '../delete-user/delete-user.component';

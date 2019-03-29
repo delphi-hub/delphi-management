@@ -30,6 +30,8 @@ import { LabelDialogComponent } from '../label-dialog/label-dialog.component';
 import { LabelDeleteComponent } from '../label-delete/label-delete.component';
 import { ApiService } from '../../api/api/api.service';
 import { MaterialModule } from 'src/app/material-module/material.module';
+import { ApiModule } from 'src/app/api/api.module';
+import { JwtModule } from '@auth0/angular-jwt';
 import { MatChipsModule } from '@angular/material/chips';
 
 describe('TableAllComponent', () => {
@@ -40,7 +42,7 @@ describe('TableAllComponent', () => {
     TestBed.configureTestingModule({
       declarations: [TableAllComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule,
-        MaterialModule, MatChipsModule],
+        MaterialModule, JwtModule.forRoot({}), ApiModule, MatChipsModule],
       providers: [{
         provide: MatDialogRef,
         useValue: {}
@@ -79,9 +81,4 @@ describe('TableAllComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('mat-form-field').length).toBe(1);
   });
 
-  it('should check for Add Dialog open functionality', async(() => {
-    const openAddDialog = spyOn(component, 'openAddDialog');
-    fixture.debugElement.query(By.css('#addButton')).triggerEventHandler('click', null);
-    expect(openAddDialog).toHaveBeenCalled();
-  }));
 });

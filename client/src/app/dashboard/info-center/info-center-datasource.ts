@@ -52,10 +52,14 @@ export class InfoCenterDataSource extends DataSource<InfoCenterItem> {
       return true;
     } else {
       const instance = this.storeService.getState().instances[notifItem.instanceId];
-      if (this.instanceId) {
-        return instance.id === this.instance.id;
+      if (instance) {
+        if (this.instanceId) {
+          return instance.id === this.instance.id;
+        } else {
+          return instance.componentType === this.compType;
+        }
       } else {
-        return instance.componentType === this.compType;
+        return false;
       }
     }
   }

@@ -15,7 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div *ngIf="dataSource.data.length == 0; else tableBlock">
+  <div *ngIf="dataSource.data.length == 0; else tableBlock">
     There are currently no instances running.
 </div>
 <ng-template #tableBlock>
@@ -55,8 +55,8 @@
                 <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef> Action </mat-header-cell>
                 <mat-cell [ngClass]="'customWidthClass customWidthClassNew'"
                     *matCellDef="let element; let i=index; let row;">
-                    <div *ngIf="!element.dockerId; else actions">
-                        Instance not hosted with docker.
+                    <div *ngIf="hideActions(element); else actions">
+                        Actions not available.
                     </div>
                     <ng-template #actions>
                         <button [disabled]="!(element.instanceState==='Stopped')" mat-icon-button
@@ -113,13 +113,15 @@
                         </div>
                         <ng-template #labelTag>
                             <mat-chip *ngFor="let lab of element.labels">{{lab}}
-                                <mat-icon matChipRemove (click)="openLabelDelete(i, row.id, lab)">cancel</mat-icon>
+                                <mat-icon matChipRemove (click)="openLabelDelete(row.id, lab)">cancel</mat-icon>
                             </mat-chip>
                         </ng-template>
+                        <div *ngIf="authService.userIsAdmin()">
                         <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
                             matTooltip="Add labels">
                             <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
                         </button>
+                        </div>
                     </mat-chip-list>
                 </td>
             </ng-container>
@@ -140,8 +142,9 @@
 </ng-template>
 <div *ngIf="!hideControlElements">
     <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-
+    <div *ngIf="authService.userIsAdmin()">
     <div class="button-row">
         <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
     </div>
+</div>
 </div>

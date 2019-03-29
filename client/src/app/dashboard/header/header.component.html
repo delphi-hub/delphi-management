@@ -32,7 +32,7 @@
  </div>
   <div class="navbar-expand ml-auto navbar-nav">
     <div class="navbar-nav"> 
-      <a class="nav-item nav-link" routerLink="/dashboard/userProfile"><i class="fa fa-user-circle"></i></a>
+      <a class="nav-item nav-link" (click)="authService.logout()" routerLink="/landingpage"> Logout</a>
     </div>
   </div>
 </nav>
