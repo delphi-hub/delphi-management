@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Add User</h2>
+<div mat-dialog-content>
+	<form class="mat-dialog-content" #formControl="ngForm">
+		<div class="form">
+			<mat-form-field color="primary">
+				<input matInput #input class="form-control" placeholder="UserName" [(ngModel)]="userName" name="userName" required>
+				<mat-error *ngIf="formControl.invalid">{{getErrorMessageName()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field color="primary">
+				<input matInput #input class="form-control" placeholder="Password" [(ngModel)]="secret" name="secret" required>
+				<mat-error *ngIf="formControl.invalid">{{getErrorMessageUsertype()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="User Type" [(ngModel)]="userType.values" name="userType" required>
+          <mat-option *ngFor="let userType of userType" [value]="userType.value">
+            {{userType.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+		</div>
+	</form>
+</div>
+<mat-dialog-actions>
+	<button mat-raised-button color="primary" [disabled]="!formControl.valid" [mat-dialog-close]="1" id="confirmUser" (click)="onConfirmAddUser()">Add</button>
+	<button mat-raised-button (click)="onCloseCancelUser()">Cancel</button>
+</mat-dialog-actions>

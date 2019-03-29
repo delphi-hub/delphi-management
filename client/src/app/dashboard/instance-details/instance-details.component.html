@@ -18,60 +18,17 @@
  */ -->
 
 <div class="container-fluid">
-  <div class="row">
-    <h4 [ngClass]="'titleAlign'">Title</h4>
-  </div>
-  <div class="row rowAlign">
-    <div class="col-md-3 col-sm-12 detailsFormat">
-      <mat-grid-list cols="2" rowHeight="5:1">
-        <div [ngClass]="'alignTitle'">
-          <h4>Instance Details</h4>
-        </div>
-        <mat-grid-tile>
-          <p>Name:</p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p><b>Instance name goes here!!</b></p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p>Host:</p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p><b>Host name goes here!!</b></p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p>Port Number:</p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p><b>Port number goes here!!</b></p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p>DockerId:</p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p><b>Docker Id goes here!!</b></p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p>Labels:</p>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <p><b>Labels goes here!!</b></p>
-        </mat-grid-tile>
-      </mat-grid-list>
+  <div *ngIf="instance">
+    <div class="row">
+        <app-table-all type="instance.componentType" [hideControlElements]="true" [dataArray]="[instance]"> </app-table-all>
     </div>
-    <div class="col-md-6 col-sm-12">
-      <h4>Operations</h4>
-      <div [ngClass]="'bgOperation'">
-        <p>The console terminal data goes here!!</p>
+    <div class="row">
+        <app-info-center [instanceId]="instanceId"></app-info-center>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-sm-12">
+          <app-graph-view [subnetElementId]="instanceId"></app-graph-view>
       </div>
     </div>
-  </div>
-  <div class="row">
-
-    <div class="col-md-10 col-sm-12">
-      <h4 [ngClass]="'detailAlign'">Notifications</h4>
-      
-    </div>
-
   </div>
 </div>

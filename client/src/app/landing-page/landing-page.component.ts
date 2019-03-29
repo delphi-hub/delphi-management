@@ -50,9 +50,6 @@ export class LandingPageComponent implements OnInit {
         '';
   }
   login() {
-    console.log('MY LOGIN FORM', this.loginForm);
-    console.log('nuser', this.loginForm.value.username);
-   // console.log('user', this.username, this.password);
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(() => {
       this.router.navigate(['/dashboard']);
     });

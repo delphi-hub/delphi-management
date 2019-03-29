@@ -20,9 +20,11 @@
 </div>
 <ng-template #tableBlock>
     <div class="container">
-        <mat-form-field>
-            <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
+        <div *ngIf="!hideControlElements">
+            <mat-form-field>
+                <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
         <table class="mat-elevation-z8 mat-table" mat-table multiTemplateDataRows [dataSource]="dataSource">
             <ng-container matColumnDef="ID">
                 <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
@@ -104,11 +106,21 @@
             </ng-container>
             <ng-container matColumnDef="labels">
                 <th mat-header-cell *matHeaderCellDef> Labels </th>
-                <td mat-cell *matCellDef="let element"> {{element.labels}}
-                    <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
-                        matTooltip="Add labels">
-                        <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
-                    </button>
+                <td mat-cell *matCellDef="let element">
+                    <mat-chip-list #chipList>
+                        <div *ngIf="element.labels.length === 0; else labelTag">
+                            Labels not available
+                        </div>
+                        <ng-template #labelTag>
+                            <mat-chip *ngFor="let lab of element.labels">{{lab}}
+                                <mat-icon matChipRemove (click)="openLabelDelete(i, row.id, lab)">cancel</mat-icon>
+                            </mat-chip>
+                        </ng-template>
+                        <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
+                            matTooltip="Add labels">
+                            <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
+                        </button>
+                    </mat-chip-list>
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
@@ -126,9 +138,10 @@
     </table>
     </div>
 </ng-template>
+<div *ngIf="!hideControlElements">
+    <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 
-<mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-
-<div class="button-row">
-    <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
+    <div class="button-row">
+        <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
+    </div>
 </div>

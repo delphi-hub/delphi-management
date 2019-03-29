@@ -17,9 +17,10 @@
  */
 
 
-import {CustomHttpUrlEncodingCodec} from '../encoder';
-import {Instance} from '../../model/models/instance';
-import {SysInfo} from '../../model/models/sysInfo';
+import { CustomHttpUrlEncodingCodec } from '../encoder';
+import { Instance } from '../../model/models/instance';
+import { SysInfo } from '../../model/models/sysInfo';
+import { User } from '../../model/models/user';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -28,6 +29,8 @@ import {
   BASE_PATH,
   INSTANCES,
   NUMBER_OF_INSTANCES,
+  USERS,
+  NEW_USER,
   SYS_INFO,
   NEW_INSTANCE,
   START_INSTANCE,
@@ -37,6 +40,8 @@ import {
   DELETE_INSTANCE,
   NEW_LABEL_INSTANCE,
   INSTANCE_NETWORK,
+  DELETE_USER,
+  DELETE_LABEL,
   RECONNECT,
   AUTH
 } from '../variables';
@@ -92,7 +97,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<number> {
+  public getNumberOfInstances(componentType: string, observe: any = 'body', reportProgress: boolean = false): Observable<number> {
     return this.get(NUMBER_OF_INSTANCES, componentType);
   }
 
@@ -169,7 +174,7 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false)  {
+  public pauseInstance(instanceId: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postAction(PAUSE_INSTANCE, instanceId);
   }
 
@@ -193,6 +198,17 @@ export class ApiService {
     return this.postAction(DELETE_INSTANCE, instanceId);
   }
 
+    /**
+   * Delete a label
+   * @param InstanceId
+   * @param labelName
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public deleteLabel(instanceId: string, labelName: string) {
+    return this.postLabel(DELETE_LABEL, instanceId, labelName);
+  }
+
   /**
    * Create an Instance
    * @param instanceId
@@ -200,9 +216,70 @@ export class ApiService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public labelInstance( instanceId: string, labelName: string, observe: any = 'body', reportProgress: boolean = false) {
+  public labelInstance(instanceId: string, labelName: string, observe: any = 'body', reportProgress: boolean = false) {
     return this.postLabel(NEW_LABEL_INSTANCE, instanceId, labelName);
   }
+
+  /**
+   * Create a User
+   * @param userName
+   * @param secret
+   * @param userType
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+
+  public postUser(userName: string, secret: string, userType: string, observe: any = 'body', reportProgress: boolean = false)
+  : Observable<User> {
+    return this.userAdd(userName, secret, userType);
+  }
+
+  private userAdd(username: string, secret: string, userType: string): Observable<User> {
+    let headers = this.defaultHeaders;
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.post<User>(`${this.basePath}${NEW_USER}`, {
+      userName: username,
+      secret: secret,
+      userType: userType
+    },
+      {
+        withCredentials: this.configuration.withCredentials,
+        headers: headers
+      }
+    );
+  }
+
+  public deleteUser(userId: string) {
+    return this.deleteAction(DELETE_USER, userId);
+  }
+
+  /**
+  * Delete a User
+  * @param idUser
+  * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+  * @param reportProgress flag to report request and response progress.
+  */
+
+  private deleteAction(endpoint: string, idUser: string, observe: any = 'body', reportProgress: boolean = false) {
+    let queryParam = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+
+    if (idUser === null || idUser === undefined) {
+      throw new Error('Required ID User parameter');
+    } else {
+      queryParam = queryParam.set('userID', <any>idUser);
+    }
+
+    return this.commonConf(endpoint, queryParam, observe, reportProgress);
+  }
+
 
   private get<T>(endpoint: string, componentType?: string) {
 
@@ -299,6 +376,31 @@ export class ApiService {
     }
 
     return this.commonConf(endpoint, queryParam, observe, reportProgress);
+  }
+
+  public getUsers(observe: any = 'body', reportProgress: boolean = false): Observable<Array<User>> {
+    return this.getList(USERS);
+  }
+
+  private getList<T>(endpoint: string) {
+
+    let headers = this.defaultHeaders;
+
+    // to determine the Accept header
+    const httpHeaderAccepts: string[] = [
+      'application/json'
+    ];
+    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    return this.httpClient.get<T>(`${this.basePath}${endpoint}`,
+      {
+        withCredentials: this.configuration.withCredentials,
+        headers: headers
+      }
+    );
   }
 
 

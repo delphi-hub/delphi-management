@@ -102,15 +102,7 @@ export class ModelService {
    * instance stored in the state.
    */
   public getObservableForInstances() {
-    return new Observable<InstanceChange>((observer) => {
-      this.instanceSubject.subscribe(observer);
-      observer.next(this.instanceSubject.value);
-
-      return () => {
-        // TODO: see console log
-        console.log('observer completed, implement unsubscribe logic !');
-      };
-    });
+    return this.instanceSubject.asObservable();
   }
 
   /**

@@ -75,7 +75,7 @@ const dashboardRoutes: Routes = [
         component: GraphViewComponent
       },
       {
-        path: 'instanceDetails',
+        path: 'instanceDetails/:instanceId',
         component: InstanceDetailsComponent
       }
     ]

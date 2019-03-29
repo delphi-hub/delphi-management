@@ -8,21 +8,22 @@ import { MatTableModule, MatInputModule, MatPaginatorModule } from '@angular/mat
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 import { ApiService } from '../../api/api/api.service';
-import { DeleteDialogComponent } from './delete-dialog.component';
+import { LabelDeleteComponent } from './label-delete.component';
 
-describe('DeleteDialogComponent', () => {
-  let component: DeleteDialogComponent;
-  let fixture: ComponentFixture<DeleteDialogComponent>;
+describe('LabelDeleteComponent', () => {
+  let component: LabelDeleteComponent;
+  let fixture: ComponentFixture<LabelDeleteComponent>;
 
   const mockDialogRef = {
     close: jasmine.createSpy('close')
   };
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DeleteDialogComponent],
+      declarations: [LabelDeleteComponent],
       imports: [HttpClientTestingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule, MatTableModule,
-        MatInputModule, MatPaginatorModule, MatFormFieldModule, MatIconModule, MatDialogModule],
+        MatInputModule, MatPaginatorModule, MatFormFieldModule, MatIconModule, MatDialogModule, MatChipsModule],
       providers: [{
         provide: MatDialogRef,
         useValue: mockDialogRef
@@ -35,23 +36,23 @@ describe('DeleteDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteDialogComponent);
+    fixture = TestBed.createComponent(LabelDeleteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it(`should create Delete dialog Component`, async(inject([HttpTestingController, ApiService],
+  it(`should create Label Delete Component`, async(inject([HttpTestingController, ApiService],
     (httpClient: HttpTestingController, apiService: ApiService) => {
       expect(apiService).toBeTruthy();
     })));
 
-  it('should check for confirm button inside the Delete dialog', () => {
-    component.onCloseConfirm();
+  it('should check for confirm button inside the Label Delete', () => {
+    component.onConfirm();
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 
-  it('should check for cancel button inside the Delete dialog', () => {
-    component.onCloseCancel();
+  it('should check for cancel button inside the Label Delete', () => {
+    component.onCancel();
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 });
