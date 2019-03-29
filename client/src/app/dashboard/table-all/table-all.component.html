@@ -29,8 +29,10 @@
                     </mat-form-field>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add
+                    <div *ngIf="authService.userIsAdmin()">
+                        <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add
                         Instance</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,9 +152,4 @@
 </ng-template>
 <div *ngIf="!hideControlElements">
     <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-    <div *ngIf="authService.userIsAdmin()">
-        <div class="button-row">
-            <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
-        </div>
-    </div>
 </div>
