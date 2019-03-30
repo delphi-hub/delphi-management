@@ -22,10 +22,11 @@ import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { LabelDialogComponent } from '../label-dialog/label-dialog.component';
+import { LabelDeleteComponent } from '../label-delete/label-delete.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpEvent } from '@angular/common/http';
-import { ModelService } from 'src/app/model/model.service';
 import { ApiService } from 'src/app/api/api/api.service';
+import { AuthService } from 'src/app/api/auth.service';
 
 
 @Component({
@@ -42,6 +43,8 @@ import { ApiService } from 'src/app/api/api/api.service';
 })
 export class TableAllComponent implements OnInit {
     @Input() type: Instance['componentType'];
+
+    @Input() hideControlElements = false;
 
     @Input() set dataArray(dataArray: Instance[]) {
 
@@ -61,8 +64,6 @@ export class TableAllComponent implements OnInit {
             }
         }
     }
-    @Input() compType: string;
-
 
     displayedColumns = ['ID', 'name', 'host', 'portNumber', 'instanceState', 'action', 'Details'];
     columnsToDisplay: string[] = ['dockerId', 'labels'];
@@ -73,11 +74,15 @@ export class TableAllComponent implements OnInit {
     expandedID: number;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
-    constructor(public dialog: MatDialog, private apiService: ApiService, private modelService: ModelService) {
+    constructor(public dialog: MatDialog, private apiService: ApiService, public authService: AuthService) {
     }
 
     ngOnInit() {
         this.dataSource.paginator = this.paginator;
+    }
+
+    public hideActions(ele: Instance) {
+        return !ele.dockerId || !this.authService.userIsAdmin();
     }
 
     /**
@@ -111,6 +116,27 @@ export class TableAllComponent implements OnInit {
         });
     }
 
+       /**
+    * Function for deleting a label.
+    * @param InstanceID
+    */
+   openLabelDelete(id: string, label: string) {
+    const deletedialogRef = this.dialog.open(LabelDeleteComponent, {
+        width: '250px',
+        data: { name: label }
+    });
+
+    deletedialogRef.afterClosed().subscribe(result => {
+        if (result !== 'Cancel') {
+            this.apiService.deleteLabel(id, label).subscribe((deleteResult: HttpEvent<number>) => {}, err => {
+                console.log('error delete label', err);
+            });
+        }
+        this.dialogResult = result;
+    });
+}
+
+
     removeAt(index: number) {
         this.dataSource.data.splice(index, 1);
     }
@@ -131,10 +157,9 @@ export class TableAllComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(dialogResult => {
-            if (dialogResult === 'CancelAdd') {
+            if (!dialogResult || dialogResult === 'CancelAdd') {
                 dialogRef.close();
             } else {
-                console.log('dialogResult', dialogResult);
                 this.apiService.postInstance(this.type, dialogResult.name).subscribe((result: Instance) => {
                     this.dataSource.data.push(result);
                 }, err => {
@@ -232,7 +257,7 @@ export class TableAllComponent implements OnInit {
         this.expandedID = row.id;
         this.expandedElement = row;
         const NoId = 'Id not available';
-        const NoIdLabels = ['Labels not available'];
+        const NoIdLabels = [];
         if (row.dockerId !== undefined && row.labels.length !== 0) {
             filteredList = [{ dockerId: row.dockerId, labels: row.labels }];
         } else if (row.dockerId === undefined && row.labels.length !== 0) {

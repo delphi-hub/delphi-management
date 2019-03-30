@@ -5,13 +5,15 @@ import {GraphViewService} from './graph-view.service';
 import {ModelModule} from '../../model/model.module';
 import { ConnectDialogComponent } from './connect-dialog/connect-dialog.component';
 import { MaterialModule } from 'src/app/material-module/material.module';
+import { ApiModule } from 'src/app/api/api.module';
 
 @NgModule({
   declarations: [GraphViewComponent, ConnectDialogComponent],
   imports: [
     CommonModule,
     MaterialModule,
-    ModelModule
+    ModelModule,
+    ApiModule
   ],
   exports: [GraphViewComponent],
   providers: [GraphViewService],

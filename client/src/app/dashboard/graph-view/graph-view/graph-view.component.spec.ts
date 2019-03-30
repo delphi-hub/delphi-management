@@ -7,6 +7,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MaterialModule } from 'src/app/material-module/material.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { JwtModule } from '@auth0/angular-jwt';
 
 describe('GraphViewComponent', () => {
   let component: GraphViewComponent;
@@ -15,7 +17,8 @@ describe('GraphViewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GraphViewComponent],
-      imports: [HttpClientTestingModule, HttpClientModule, ApiModule, MaterialModule]
+      imports: [HttpClientTestingModule, HttpClientModule, ApiModule,
+        MaterialModule, RouterTestingModule, JwtModule.forRoot({})]
     })
       .compileComponents();
 

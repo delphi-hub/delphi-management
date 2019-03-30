@@ -1,0 +1,7 @@
+
+<h2 mat-dialog-title>Delete Instance</h2>
+<mat-dialog-content>Are you sure you want to delete "{{userData.userName}}" user?</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="1" (click)="confirmDeleteUser()">Confirm</button>
+    <button mat-raised-button color="primary" (click)="cancelDeleteUser()">Cancel</button>
+</mat-dialog-actions>

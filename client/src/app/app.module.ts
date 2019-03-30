@@ -55,5 +55,5 @@ import { BASE_PATH, AUTH } from './api/variables';
 export class AppModule {
 }
 export function jwtGetter() {
-  return localStorage.getItem(TOKEN_IDENT)
+  return localStorage.getItem(TOKEN_IDENT);
 }

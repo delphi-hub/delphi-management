@@ -22,7 +22,9 @@
   <div class="navbar-expand mr-auto">
     <div class="navbar-nav">
   <a class="nav-item nav-link" routerLink="/dashboard"><i class="fa fa-fw fa-home"></i> Dashboard</a>
-  <a class="nav-item nav-link" routerLink="/dashboard/userManagement"><i class="fa fa-users"></i> User Management</a>
+  <div *ngIf="authService.userIsAdmin()">
+    <a class="nav-item nav-link" routerLink="/dashboard/userManagement"><i class="fa fa-users"></i> User Management</a>
+  </div>
   <a class="nav-item nav-link" routerLink="/dashboard/help"><i class="fa fa-question-circle"></i> Help</a>
     </div>
 
@@ -30,7 +32,7 @@
  </div>
   <div class="navbar-expand ml-auto navbar-nav">
     <div class="navbar-nav"> 
-      <a class="nav-item nav-link" routerLink="/dashboard/userProfile"><i class="fa fa-user-circle"></i></a>
+      <a class="nav-item nav-link" (click)="authService.logout()" routerLink="/landingpage"> Logout</a>
     </div>
   </div>
 </nav>

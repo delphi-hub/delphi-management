@@ -37,6 +37,7 @@ class ApiRouter @Inject()(irController: InstanceRegistryController, sysControlle
     case GET(p"/instances" ? q"componentType=$componentType") => irController.instances(componentType)
     case GET(p"/systemInfo") => sysController.getInfo()
     case GET(p"/network") => irController.getNetwork()
+    case GET(p"/users") => irController.users()
     case POST(p"/postInstance" ? q"componentType=$componentType"& q"name=$name") => irController.postInstance(componentType, name)
     case POST(p"/startInstance" ? q"instanceID=$instanceID") => irController.handleRequest(action="/start", instanceID)
     case POST(p"/stopInstance" ? q"instanceID=$instanceID") => irController.handleRequest(action="/stop", instanceID)
@@ -46,5 +47,8 @@ class ApiRouter @Inject()(irController: InstanceRegistryController, sysControlle
     case POST(p"/reconnectInstance" ? q"from=$from"& q"to=$to") => irController.reconnect(from.toInt, to.toInt)
     case POST(p"/authenticate") => irController.authentication()
     case POST(p"/labelInstance" ? q"instanceID=$instanceID"& q"label=$label") => irController.labelInstance(instanceID, label)
+    case POST(p"/postUser") => irController.postUser()
+    case POST(p"/deleteUser" ? q"userID=$userID") => irController.deleteUser(userID)
+    case POST(p"/deleteLabel" ? q"instanceID=$instanceID"& q"label=$label") => irController.deleteLabel(instanceID, label)
   }
 }

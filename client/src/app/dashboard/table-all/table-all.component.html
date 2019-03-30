@@ -15,14 +15,33 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<div *ngIf="dataSource.data.length == 0; else tableBlock">
+  <div *ngIf="dataSource.data.length == 0; else tableBlock">
     There are currently no instances running.
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <div *ngIf="authService.userIsAdmin()">
+            <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add
+            Instance</button>
+        </div>
+    </div>
 </div>
 <ng-template #tableBlock>
     <div class="container">
-        <mat-form-field>
-            <input id="filterData" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
+        <div *ngIf="!hideControlElements">
+            <div class="row">
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <mat-form-field>
+                        <input id="filterData" matInput [ngClass]="'fieldAlign'"
+                            (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div *ngIf="authService.userIsAdmin()">
+                        <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add
+                        Instance</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <table class="mat-elevation-z8 mat-table" mat-table multiTemplateDataRows [dataSource]="dataSource">
             <ng-container matColumnDef="ID">
                 <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
@@ -53,8 +72,8 @@
                 <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef> Action </mat-header-cell>
                 <mat-cell [ngClass]="'customWidthClass customWidthClassNew'"
                     *matCellDef="let element; let i=index; let row;">
-                    <div *ngIf="!element.dockerId; else actions">
-                        Instance not hosted with docker.
+                    <div *ngIf="hideActions(element); else actions">
+                        Actions not available.
                     </div>
                     <ng-template #actions>
                         <button [disabled]="!(element.instanceState==='Stopped')" mat-icon-button
@@ -85,8 +104,7 @@
             <ng-container matColumnDef="Details">
                 <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                 <mat-cell *matCellDef="let element; let row" class="example-element-row"
-                    [class.example-expanded-row]="expandedID === element.id"
-                    (click)="onRowClicked(row)">
+                    [class.example-expanded-row]="expandedID === element.id" (click)="onRowClicked(row)">
                     <button mat-button [ngClass]="'customOutline'">
                         View Details
                     </button>
@@ -104,11 +122,23 @@
             </ng-container>
             <ng-container matColumnDef="labels">
                 <th mat-header-cell *matHeaderCellDef> Labels </th>
-                <td mat-cell *matCellDef="let element"> {{element.labels}}
-                    <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
-                        matTooltip="Add labels">
-                        <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
-                    </button>
+                <td mat-cell *matCellDef="let element">
+                    <mat-chip-list #chipList>
+                        <div *ngIf="element.labels.length === 0; else labelTag">
+                            Labels not available
+                        </div>
+                        <ng-template #labelTag>
+                            <mat-chip *ngFor="let lab of element.labels">{{lab}}
+                                <mat-icon matChipRemove (click)="openLabelDelete(row.id, lab)">cancel</mat-icon>
+                            </mat-chip>
+                        </ng-template>
+                        <div *ngIf="authService.userIsAdmin()">
+                        <button mat-button [disabled]="(element.labels.length === 3)" mat-icon-button (click)="openlabelDialog(row.id)"
+                            matTooltip="Add labels">
+                            <mat-icon aria-label="add_circle_outline">add_circle_outline</mat-icon>
+                        </button>
+                        </div>
+                    </mat-chip-list>
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
@@ -125,10 +155,7 @@
 
     </table>
     </div>
+    <div *ngIf="!hideControlElements">
+        <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+    </div>
 </ng-template>
-
-<mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-
-<div class="button-row">
-    <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add Instance</button>
-</div>

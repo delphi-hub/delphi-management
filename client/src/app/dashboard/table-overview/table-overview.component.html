@@ -16,17 +16,35 @@
   ~ limitations under the License.
 -->
 
-<div class="container">
-    <h4> WebApi Details</h4>
-    <div class="row">
-        <app-table-all type="WebApi" [dataArray]="webapiDetails"> </app-table-all>
+<div class="container-fluid">
+  <h4 [ngClass]="'titleAlign'"> WebApi Details</h4>
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <app-table-all type="WebApi" [dataArray]="webapiDetails"> </app-table-all>
     </div>
-    <h4> Web Application Details </h4>
-    <div class="row">
-        <app-table-all type="WebApp" [dataArray]="webappDetails"> </app-table-all>
+    <div class="col-md-4 col-sm-12">
+      <app-info-center [compType]="'WebApi'"></app-info-center>
     </div>
-    <h4> Crawler Details</h4>
-    <div class="row">
-        <app-table-all type="Crawler" [dataArray]="crawlerDetails"> </app-table-all>
+
   </div>
+  <h4 [ngClass]="'titleAlign'"> Web Application Details </h4>
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <app-table-all type="WebApp" [dataArray]="webappDetails"> </app-table-all>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <app-info-center [compType]="'WebApp'"></app-info-center>
+    </div>
+  </div>
+  <h4 [ngClass]="'titleAlign'"> Crawler Details</h4>
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <app-table-all type="Crawler" [dataArray]="crawlerDetails"> </app-table-all>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <app-info-center [compType]="'Crawler'"></app-info-center>
+    </div>
+
+  </div>
+
 </div>

@@ -23,13 +23,15 @@ import {Configuration} from './configuration';
 
 import {ApiService} from './api/api.service';
 import {SocketService} from './api/socket.service';
+import { AuthService } from './auth.service';
+import { JwtModule, JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
-  imports:      [ CommonModule, HttpClientModule ],
+  imports:      [ CommonModule, HttpClientModule, JwtModule ],
   declarations: [],
   exports:      [],
   providers: [
-    ApiService, SocketService]
+    ApiService, SocketService, AuthService, JwtHelperService]
 })
 export class ApiModule {
   public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {

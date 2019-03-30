@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Instance} from './models/instance';
 import {BehaviorSubject, Observable} from 'rxjs';
+import { InfoCenterItem } from '../dashboard/info-center/info-center-datasource';
 
 export enum Actions {
   ADD = 'ADD',
@@ -11,9 +12,11 @@ export enum Actions {
 export interface State {
   instances: { [id: number]: Instance };
   instancesByType: { [compType: string]: Array<number> };
+  events: { [id: number]: InfoCenterItem };
 }
 export interface StateUpdate {
   state: State;
+  prevState: State;
   change: Change;
 }
 export interface Change {
@@ -21,7 +24,7 @@ export interface Change {
   elements?: Array<Instance>;
 }
 
-export const EMPTY_STATE = {instances: {}, instancesByType: {'Crawler': [], 'WebApi': [], 'WebApp': [], 'ElasticSearch': []}};
+export const EMPTY_STATE = {instances: {}, instancesByType: {'Crawler': [], 'WebApi': [], 'WebApp': [], 'ElasticSearch': []}, events: {}};
 
 /**
  * This service is used to manage the shared state used in the whole application.
@@ -87,18 +90,14 @@ export class StoreService {
   }
 
   constructor() {
-    this.stateUpdateSubject = new BehaviorSubject<StateUpdate>({state: EMPTY_STATE, change: {type: Actions.NONE}});
+    this.stateUpdateSubject = new BehaviorSubject<StateUpdate>({state: EMPTY_STATE, prevState: EMPTY_STATE, change: {type: Actions.NONE}});
   }
 
   /**
    * Retruns an observable which notifies the subscriber about any changes to the state.
    */
   public getStoreObservable(): Observable<StateUpdate> {
-    return new Observable ((observer) => {
-      this.stateUpdateSubject.subscribe(observer);
-      observer.next(this.stateUpdateSubject.value);
-    });
-
+    return this.stateUpdateSubject.asObservable();
   }
 
   /**
@@ -118,11 +117,11 @@ export class StoreService {
     const newState: State = instances.reduce((accumulator: State, currentValue: Instance) => {
       return StoreService.addNewInstanceToState(accumulator, currentValue);
     }, EMPTY_STATE);
-
-    const changed = calculateDiff ? StoreService.stateHasChanged(this.stateUpdateSubject.value.state, instances) : true;
+    const prevState = this.stateUpdateSubject.value.state;
+    const changed = calculateDiff ? StoreService.stateHasChanged(prevState, instances) : true;
 
     if (changed) {
-      this.stateUpdateSubject.next({state: newState, change: {type: Actions.ADD, elements: instances}});
+      this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.ADD, elements: instances}});
     }
   }
 
@@ -130,9 +129,10 @@ export class StoreService {
    * Adds the given @param instance to the state.
    */
   public addInstanceToState(instance: Instance) {
-    const newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
+    const prevState = this.stateUpdateSubject.value.state;
+    const newState = StoreService.addNewInstanceToState(prevState, instance);
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.ADD, elements: [instance]}});
+    this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.ADD, elements: [instance]}});
   }
 
   /**
@@ -141,20 +141,24 @@ export class StoreService {
    */
   public changeInstancesState(instances: Array<Instance>) {
     let newState: State;
+    const prevState = this.stateUpdateSubject.value.state;
     for (const instance of instances) {
        newState = StoreService.addNewInstanceToState(this.stateUpdateSubject.value.state, instance);
     }
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.CHANGE, elements: instances}});
+    this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.CHANGE, elements: instances}});
   }
 
   /**
    * Removes the given @param instance from the state.
    */
   public removeFromState(instance: Instance) {
-    const newState = StoreService.removeInstanceFromState(this.stateUpdateSubject.value.state, instance);
+
+    const prevState = this.stateUpdateSubject.value.state;
+    const newState = StoreService.removeInstanceFromState(prevState, instance);
+
     // maybe calculate diff before
-    this.stateUpdateSubject.next({state: newState, change: {type: Actions.DELETE, elements: [instance]}});
+    this.stateUpdateSubject.next({state: newState, prevState: prevState, change: {type: Actions.DELETE, elements: [instance]}});
   }
 
 }

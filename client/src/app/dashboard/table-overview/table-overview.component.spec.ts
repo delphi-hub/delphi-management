@@ -24,6 +24,10 @@ import { TableOverviewComponent } from './table-overview.component';
 import { MaterialModule } from '../../material-module/material.module';
 import { TableAllComponent } from '../table-all/table-all.component';
 import { ModelService } from 'src/app/model/model.service';
+import { MatSortModule } from '@angular/material';
+import { InfoCenterComponent } from '../info-center/info-center.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { MatChipsModule } from '@angular/material/chips';
 
 describe('TableOverviewComponent', () => {
   let component: TableOverviewComponent;
@@ -31,9 +35,10 @@ describe('TableOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableOverviewComponent, TableAllComponent],
-      imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule,
-        MaterialModule]
+      declarations: [ TableOverviewComponent, TableAllComponent, InfoCenterComponent],
+      imports: [HttpClientTestingModule, HttpClientModule, BrowserAnimationsModule, MatSortModule,
+        JwtModule.forRoot({}),
+        MaterialModule, MatChipsModule]
     })
     .compileComponents();
   }));
