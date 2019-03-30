@@ -17,6 +17,12 @@
   -->
   <div *ngIf="dataSource.data.length == 0; else tableBlock">
     There are currently no instances running.
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <div *ngIf="authService.userIsAdmin()">
+            <button mat-raised-button color="primary" id="addButton" (click)="openAddDialog()">Add
+            Instance</button>
+        </div>
+    </div>
 </div>
 <ng-template #tableBlock>
     <div class="container">
@@ -149,7 +155,7 @@
 
     </table>
     </div>
+    <div *ngIf="!hideControlElements">
+        <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+    </div>
 </ng-template>
-<div *ngIf="!hideControlElements">
-    <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-</div>
