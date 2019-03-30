@@ -75,10 +75,4 @@ describe('TableAllComponent', () => {
       expect(apiService).toBeTruthy();
     })));
 
-  it('should check for apply filter keyup event', () => {
-    spyOn(component, 'applyFilter');
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('mat-form-field').length).toBe(1);
-  });
-
 });
