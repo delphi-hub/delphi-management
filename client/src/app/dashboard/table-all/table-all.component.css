@@ -86,4 +86,7 @@ tr.example-element-row:not(.example-expanded-row):active {
   margin:30px;
 }
 
+.fieldAlign{
+  width: 100%;
+}
 
