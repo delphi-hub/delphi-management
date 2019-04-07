@@ -118,10 +118,20 @@ export class GraphViewService {
   }
 
   private mapLinksToEdges(links: Array<InstanceLink>): Array<cytoscape.ElementDefinition> {
-    const edges: Array<cytoscape.ElementDefinition> = links.map((edgeVal) => {
-      return {data: {id: edgeVal.idFrom + '_' + edgeVal.idTo, source: edgeVal.idFrom, target: edgeVal.idTo, status: edgeVal.linkState}};
+    const edges: Array<cytoscape.ElementDefinition> = links.filter(edgeVal => this.targetsExists(edgeVal)).map((edgeVal) => {
+        return {data: {id: edgeVal.idFrom + '_' + edgeVal.idTo, source: edgeVal.idFrom, target: edgeVal.idTo, status: edgeVal.linkState}};
     });
     return edges;
+  }
+
+  private targetsExists(instanceLink: InstanceLink) {
+
+    const instances = this.storeService.getState().instances;
+    if (instances[instanceLink.idFrom] && instances[instanceLink.idTo]) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public getGraphConfig() {
