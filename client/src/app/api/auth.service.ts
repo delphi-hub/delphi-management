@@ -5,6 +5,8 @@ import {
   map } from 'rxjs/operators';
 
 export const TOKEN_IDENT = 'token';
+export const REFRESH_TOKEN_IDENT = 'refreshToken';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,11 +14,13 @@ export class AuthService {
 
   constructor(private apiService: ApiService, private helperService: JwtHelperService) {}
 
-  // TODO: store refresh token
   login(username: string, password: string) {
     return this.apiService.login(username, password).
     pipe(
-      map(token => localStorage.setItem(TOKEN_IDENT, token.token)
+      map(token => {
+                    localStorage.setItem(TOKEN_IDENT, token.token);
+                    localStorage.setItem(REFRESH_TOKEN_IDENT, token.refreshToken);
+                  }
       ));
   }
 
@@ -35,13 +39,16 @@ export class AuthService {
   }
 
   isValid(): boolean {
-    // TODO: for dev purpose it will be sufficient to return true here and thereby skipp
-    // the authorization in the complete application
     return !this.helperService.isTokenExpired(this.getToken());
   }
 
   logout() {
-    return localStorage.removeItem(TOKEN_IDENT);
+    localStorage.removeItem(TOKEN_IDENT);
+    localStorage.removeItem(REFRESH_TOKEN_IDENT);
+  }
+
+  getRefreshToken(): string {
+    return localStorage.getItem(REFRESH_TOKEN_IDENT);
   }
 
   getToken(): string {

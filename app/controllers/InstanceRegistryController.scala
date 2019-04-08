@@ -269,26 +269,30 @@ class InstanceRegistryController @Inject()(implicit system: ActorSystem, mat: Ma
         }
       }(myExecutionContext)
   }
+
   def refreshToken(): Action[AnyContent] = authAction.async
   {
     request =>
-      ws.url(instanceRegistryUri + "/users" + "/refreshToken")
-        .withHttpHeaders(("Authorization", s"Bearer ${AuthProvider.generateRefreshJWT()}"))
-        .post("")
-        .map { response =>
-          response.status match {
-            // scalastyle:off magic.number
-            case 202 =>
-              Ok((response.json \ "token" \ "refreshToken").as[String])
-              //Ok(Json.obj("token" -> "", "refreshToken" -> ""))
-            case  401 =>
-              Unauthorized
-            // scalastyle:on magic.number
-            case x: Any =>
-              new Status(x)
+      val jsonBody: Option[JsValue] = request.body.asJson
+      jsonBody.map { json =>
+        val refreshToken = (json \ "refreshToken").as[String]
+        ws.url(instanceRegistryUri + "/users" + "/refreshToken")
+          .withHttpHeaders(("Authorization", s"Bearer ${refreshToken}"))
+          .post("")
+          .map { response =>
+            response.status match {
+              // scalastyle:off magic.number
+              case 202 =>
+                Ok(response.body)
+              case  401 =>
+                Unauthorized
+              // scalastyle:on magic.number
+              case x: Any =>
+                new Status(x)
+            }
           }
         }(myExecutionContext)
-
+    }
   /**
     * This function is used to add a User.
     * Username, Secret and UserType are sent in the body post

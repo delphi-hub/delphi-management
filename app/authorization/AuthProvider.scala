@@ -58,16 +58,4 @@ import play.api.Configuration
       val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
       Jwt.isValid(token, jwtSecretKey, Seq(JwtAlgorithm.HS256)) // Decode the token using the secret key
     }
-
-    //This method is exactly the same as the generateJWT(). It is just missing the userType. I believe the
-    //above method can also serve the same purpose. I havent tested these methods with /users/refreshToken thats why I cant say for sure.
-    def generateRefreshJWT(validFor: Long= 1)(implicit configuration: Configuration): String = {
-      val jwtSecretKey = configuration.get[String]("play.http.secret.JWTkey")
-      val refreshClaim = JwtClaim()
-        .issuedNow
-        .expiresIn((validFor * 300))
-        .startsNow
-        . +("user_id", configuration.get[String]("play.http.instance"))
-      Jwt.encode(refreshClaim, jwtSecretKey, JwtAlgorithm.HS256)
-    }
   }
