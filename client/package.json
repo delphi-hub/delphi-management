@@ -30,7 +30,7 @@
     "cytoscape-edgehandles": "^3.5.1",
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "material-design-icons": "^3.0.1",
     "popper.js": "^1.14.7",
     "rxjs": "^6.4.0",
@@ -60,5 +60,9 @@
     "ts-node": "^8.0.3",
     "tslint": "^5.14.0",
     "typescript": "^3.2.4"
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.3.",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
