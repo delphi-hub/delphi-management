@@ -18,7 +18,7 @@
 
 package module
 
-import com.google.inject.{AbstractModule}
+import com.google.inject.AbstractModule
 import com.typesafe.config.Config
 import controllers.{MyExecutionContext, MyExecutionContextImpl}
 import net.codingwell.scalaguice.ScalaModule
@@ -55,9 +55,10 @@ class Module extends AbstractModule with ScalaModule {
 
   /**
     * Bind types for injection
+    *
     * @return
     */
-  def configure() {
+  override def configure() {
     bind(classOf[MyExecutionContext]).to(classOf[MyExecutionContextImpl])
   }
 }
