@@ -10,7 +10,7 @@ apt:
     - google-chrome-stable
 
 before_install:
-  -  npm install -g @angular/cli
+  -  npm install -g @angular/cli@^7.3.7
 script:
   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then sbt ++$TRAVIS_SCALA_VERSION test; cd client && npm install && ng build --prod && npm run test -- --no-progress --browsers=ChromeHeadlessCI --source-map=false && cd .. ; fi'
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport coverageAggregate codacyCoverage; cd client && npm install && ng build --prod && npm run test -- --no-progress --browsers=ChromeHeadlessCI --source-map=false && cd .. ; fi'
