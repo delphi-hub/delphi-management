@@ -8,7 +8,7 @@ matrix:
         - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport coverageAggregate codacyCoverage; fi'
       language: node_js
       node_js: 
-        - "8"
+        - "12"
       addons:
         apt:
           sources:
