@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConnectDialogComponent } from './connect-dialog.component';
 import { MaterialModule } from 'src/app/material-module/material.module';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 describe('ConnectDialogComponent', () => {
   let component: ConnectDialogComponent;
