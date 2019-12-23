@@ -18,7 +18,9 @@
 
 import {Instance} from '../../model/models/instance';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AddDialogComponent } from '../add-dialog/add-dialog.component';
 import { LabelDialogComponent } from '../label-dialog/label-dialog.component';
@@ -72,7 +74,7 @@ export class TableAllComponent implements OnInit {
     dialogResult: string;
     expandedElement: Instance;
     expandedID: number;
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
     constructor(public dialog: MatDialog, private apiService: ApiService, public authService: AuthService) {
     }

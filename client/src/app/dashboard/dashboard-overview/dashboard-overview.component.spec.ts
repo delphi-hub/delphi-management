@@ -25,7 +25,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material-module/material.module';
 import { InfoCenterComponent} from '../info-center/info-center.component';
 import { GraphViewModule} from '../graph-view/graph-view.module';
-import { MatSortModule } from '@angular/material';
+import { MatSortModule } from '@angular/material/sort';
 import { DashboardOverviewComponent } from './dashboard-overview.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiModule } from 'src/app/api/api.module';

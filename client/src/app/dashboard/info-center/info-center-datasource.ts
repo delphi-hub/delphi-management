@@ -1,5 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { Instance } from 'src/app/model/models/instance';
 import { StoreService } from 'src/app/model/store.service';

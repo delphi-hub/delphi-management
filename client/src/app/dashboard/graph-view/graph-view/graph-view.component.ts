@@ -4,7 +4,7 @@ import edgehandles from 'cytoscape-edgehandles';
 import {GraphViewService, ElementUpdate} from '../graph-view.service';
 import { Actions } from 'src/app/model/store.service';
 import { LinkStateEnum } from 'src/app/model/models/instanceLink';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 import { ComponentTypeEnum, ComponentType } from 'src/app/model/models/instance';
 import { GraphConfig } from '../GraphConfig';
@@ -18,7 +18,7 @@ import { AuthService } from 'src/app/api/auth.service';
   styleUrls: ['./graph-view.component.css']
 })
 export class GraphViewComponent implements OnInit, OnDestroy {
-  @ViewChild('cy') cyDiv: ElementRef;
+  @ViewChild('cy', {static: true}) cyDiv: ElementRef;
 
   @Input() subnetElementId = -1;
 
