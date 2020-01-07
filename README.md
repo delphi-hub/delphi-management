@@ -1,4 +1,4 @@
-# Delphi Management Console
+# Delphi Management Console <img src="https://github.com/delphi-hub/delphi/raw/master/img/delphi.png" align="right" height=140/>
 
 A management console for the Delphi platform.
 
